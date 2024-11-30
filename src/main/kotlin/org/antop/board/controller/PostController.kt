@@ -49,7 +49,7 @@ class PostController(
         postService.remove(id)
         return HtmxResponse
             .builder()
-            .redirect("/posts/list.html")
+            .redirect("/posts/list1.html")
             .build()
     }
 
