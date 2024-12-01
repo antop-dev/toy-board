@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
+    <style>
+        .content {
+            white-space: pre;
+        }
+    </style>
+</head>
+
+<div>
+    <div>제목 :
+        <th:block th:text="${post.subject}"/>
+    </div>
+    <div>작성자 :
+        <th:block th:text="${post.author}"/>
+    </div>
+    <div>마지막 수정 :
+        <th:block th:text="${post.changeAt}"/>
+    </div>
+    <hr>
+    <p class="content" th:text="${post.content}"></p>
+</div>
+<hr>
+<div>
+    <a th:href="@{/posts/form.html(id=${post.id})}">수정</a>
+    <button type="button" hx:delete="@{/posts/{id}(id=${post.id})}">삭제</button>
+    <a th:href="@{/posts/list.html}">목록</a>
+</div>
+
+<body>
+</body>
+</html>
