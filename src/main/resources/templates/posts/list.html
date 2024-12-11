@@ -6,53 +6,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Posts</title>
     <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
-    <style>
-        table, th, td {
-            border: 1px solid;
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/posts/list.css}">
 </head>
 
 <div th:fragment="posts" class="post-list">
     <h2>Posts</h2>
     <table>
+        <caption class="caption">총 수 :
+            <span class="total" th:text="${pagination.total}"></span></caption>
         <thead>
         <tr>
-            <th>ID</th>
+            <th>번호</th>
             <th>제목</th>
             <th>작성자</th>
             <th>변경일시</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="post : ${posts}">
+        <th:block th:if="${pagination.total == 0}">
             <tr>
-                <td th:text="${post.id}"></td>
+                <td colspan="4">게시물이 없습니다.</td>
+            </tr>
+        </th:block>
+        <th:block th:if="${pagination.total > 0}" th:each="item : ${pagination.items}">
+            <tr>
+                <td th:text="${item.seq}"></td>
                 <td>
-                    <a th:href="@{/posts/{id}.html(id=${post.id})}" th:text="${post.subject}"></a>
+                    <a th:href="@{/posts/{id}.html(id=${item.data.id},page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
+                       th:text="${item.data.subject}"></a>
                 </td>
-                <td th:text="${post.author}"></td>
-                <td th:text="${post.changeAt}"></td>
+                <td th:text="${item.data.author}"></td>
+                <td th:text="${item.data.changeAt}"></td>
             </tr>
         </th:block>
         </tbody>
     </table>
 
-    <hr>
+    <section class="pagination">
+        <ul>
+            <li th:if="${pagination.hasPrev}">
+                <a th:href="@{/posts/list.html(page=${pagination.prev},size=${pagination.size},keyword=${keyword})}">&lt;</a>
+            </li>
+            <li th:each="p : ${pagination.pages}">
+                <span th:if="${p == pagination.page}" th:text="${p}" class="current"></span>
+                <a th:unless="${p == pagination.page}" th:text="${p}"
+                   th:href="@{/posts/list.html(page=${p},size=${pagination.size},keyword=${keyword})}"></a>
+            </li>
+            <li th:if="${pagination.hasNext}">
+                <a th:href="@{/posts/list.html(page=${pagination.next},size=${pagination.size},keyword=${keyword})}">&gt;</a>
+            </li>
+        </ul>
+    </section>
 
     <form method="get" th:action="@{/posts/list.html}">
-        <label for="keyword">검색</label> : <input type="text" id="keyword" name="keyword" placeholder="검색어" size="15" th:value="${param.keyword}">
+        <input type="hidden" name="offset" th:value="${pagination.page}">
+        <input type="hidden" name="limit" th:value="${pagination.size}">
+        <label for="keyword">검색</label> :
+        <input type="text" id="keyword" name="keyword" placeholder="검색어" size="15" th:value="${keyword}">
         <button type="submit">검색</button>
     </form>
-    <a th:href="@{/posts/form.html}">등록</a>
+    <a th:href="@{/posts/form.html(page=${pagination.page},size=${pagination.size},keyword=${keyword})}">등록</a>
     <a th:href="@{/posts/list.html}">목록</a>
 </div>
 

@@ -2,6 +2,7 @@ package org.antop.board.controller
 
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
+import org.antop.board.common.Pagination
 import org.antop.board.dto.PostEditDto
 import org.antop.board.dto.PostSaveDto
 import org.antop.board.service.PostService
@@ -22,10 +23,21 @@ class PostController(
     @GetMapping("/list.html")
     fun list(
         model: Model,
+        paging: Pagination.Request,
         @RequestParam keyword: String?,
     ): String {
-        val posts = postService.list(keyword)
-        model.addAttribute("posts", posts)
+        val resp = postService.list(keyword, paging.page, paging.size)
+
+        val pagination =
+            Pagination.Ui(
+                items = resp.items,
+                page = paging.page,
+                size = paging.size,
+                total = resp.total,
+            )
+
+        model.addAttribute("keyword", keyword)
+        model.addAttribute("pagination", pagination)
         return "posts/list"
     }
 
@@ -33,12 +45,15 @@ class PostController(
     fun view(
         model: Model,
         @PathVariable id: Long,
+        keyword: String?,
+        paging: Pagination.Request,
     ): String {
-        val post = postService.get(id)
-        return post?.let {
-            model.addAttribute("post", it)
-            "posts/view"
-        } ?: "errors/404"
+        val post = postService.get(id) ?: return "errors/404"
+        model.addAttribute("post", post)
+        model.addAttribute("page", paging.page)
+        model.addAttribute("size", paging.size)
+        model.addAttribute("keyword", keyword)
+        return "posts/view"
     }
 
     @HxRequest
@@ -57,12 +72,18 @@ class PostController(
     fun form(
         model: Model,
         @RequestParam(required = false) id: Long?,
+        keyword: String?,
+        paging: Pagination.Request,
     ): String {
         val post = id?.let { postService.get(it) }
         model.addAttribute("post", post)
 
         val isSave = post == null
         model.addAttribute("isSave", isSave)
+
+        model.addAttribute("page", paging.page)
+        model.addAttribute("size", paging.size)
+        model.addAttribute("keyword", keyword)
 
         return "posts/form"
     }
@@ -80,10 +101,11 @@ class PostController(
                 content = content,
                 author = author,
             )
-        postService.save(postSaveDto)
+        val postDto = postService.save(postSaveDto)
         return HtmxResponse
             .builder()
-            .redirect("/posts/list.html")
+            // 글 등록 후 작성한 게시글로 이동
+            .redirect("/posts/${postDto.id}.html")
             .build()
     }
 

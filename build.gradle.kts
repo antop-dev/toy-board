@@ -29,6 +29,8 @@ val htmxSpringBootVersion: String by project
 val kotlinxDatetimeVersion: String by project
 val exposedVersion: String by project
 val prettytimeVersion: String by project
+val jsoupVersion: String by project
+val commonsTextVersion: String by project
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -61,6 +63,8 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.jsoup:jsoup:$jsoupVersion")
+    testImplementation("org.apache.commons:commons-text:$commonsTextVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
