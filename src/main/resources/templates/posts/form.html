@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
+    <title>게시글 폼</title>
     <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
 </head>
 
@@ -21,7 +21,7 @@
     </p>
     <div>
         <button type="submit" th:text="${isSave} ? '등록': '수정'"></button>
-        <a th:href="@{/posts/list.html}">목록</a>
+        <a th:href="@{/posts/list.html(page=${page},size=${size},keyword=${keyword})}">목록</a>
     </div>
 </form>
 <body>

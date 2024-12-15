@@ -1,6 +1,7 @@
 package org.antop.board.service
 
 import kotlinx.datetime.LocalDateTime
+import org.antop.board.common.Pagination
 import org.antop.board.dto.PostDto
 import org.antop.board.dto.PostEditDto
 import org.antop.board.dto.PostSaveDto
@@ -10,6 +11,7 @@ import org.antop.board.model.Post
 import org.antop.board.model.Posts
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.or
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,24 +22,43 @@ class PostService {
     /**
      * 게시물 조회
      */
-    fun list(keyword: String?): List<PostDto> =
-        Post
-            .find {
-                keyword?.let {
-                    Posts.subject
-                        .like("%$keyword%")
-                        .or(Posts.author.like("%$keyword%"))
-                } ?: Op.TRUE
-            }.orderBy(Posts.id to SortOrder.DESC)
-            .map { toDto(it) }
+    fun list(
+        keyword: String?,
+        page: Long,
+        pageSize: Int,
+    ): Pagination.Response<PostDto> {
+        // 검색 조건
+        val op =
+            keyword?.let {
+                Posts.subject
+                    .like("%$keyword%")
+                    .or(Posts.author.like("%$keyword%"))
+            } ?: Op.TRUE
+
+        val total = Post.count(op)
+        val posts =
+            when {
+                (total > 0) ->
+                    Post
+                        .find(op)
+                        .orderBy(Posts.id to SortOrder.DESC)
+                        .offset((page - 1) * pageSize)
+                        .limit(pageSize)
+                        .map { toDto(it) }
+
+                else -> listOf()
+            }
+
+        return Pagination.Response(
+            items = posts,
+            total = total,
+        )
+    }
 
     /**
      * 게시물 한건 조회
      */
-    fun get(id: Long): PostDto? =
-        Post.findById(id)?.let {
-            toDto(it)
-        }
+    fun get(id: Long): PostDto? = Post.findById(id)?.let { toDto(it) }
 
     /**
      * 게시물 저장
@@ -76,7 +97,7 @@ class PostService {
     }
 
     /**
-     * Entitiy → DTO 변환
+     * Entity → DTO 변환
      */
     private fun toDto(post: Post): PostDto =
         PostDto(

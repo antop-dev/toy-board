@@ -4,15 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post</title>
+    <title th:text="${post.subject}"></title>
     <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
-    <style>
-        .content {
-            white-space: pre;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/posts/view.css}">
 </head>
-
+<body>
 <div>
     <div>제목 :
         <th:block th:text="${post.subject}"/>
@@ -28,11 +24,10 @@
 </div>
 <hr>
 <div>
-    <a th:href="@{/posts/form.html(id=${post.id})}">수정</a>
+    <a th:href="@{/posts/form.html(id=${post.id},page=${page},size=${size},keyword=${keyword})}">수정</a>
     <button type="button" hx:delete="@{/posts/{id}(id=${post.id})}">삭제</button>
-    <a th:href="@{/posts/list.html}">목록</a>
+    <a th:href="@{/posts/list.html(page=${page},size=${size},keyword=${keyword})}">목록</a>
 </div>
 
-<body>
 </body>
 </html>
