@@ -28,4 +28,7 @@ class Post(
     /** 마지막 변경일시 */
     val changeAt: LocalDateTime
         get() = modifiedAt ?: createdAt
+
+    /** 조회수 */
+    var hits by Posts.hits
 }

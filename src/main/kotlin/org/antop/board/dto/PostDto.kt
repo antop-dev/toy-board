@@ -6,4 +6,5 @@ data class PostDto(
     val content: String,
     val author: String,
     val changeAt: String,
+    val hits: Long,
 )
