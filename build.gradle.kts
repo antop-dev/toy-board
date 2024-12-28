@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.serialization") version "1.9.25"
     id("org.springframework.boot") version "3.4.0"
     id("io.spring.dependency-management") version "1.1.6"
 }
@@ -29,8 +30,12 @@ val htmxSpringBootVersion: String by project
 val kotlinxDatetimeVersion: String by project
 val exposedVersion: String by project
 val prettytimeVersion: String by project
+val jqueryVersion: String by project
+val bootstrapVersion: String by project
+val bootstrapTagsInputVersion: String by project
 val jsoupVersion: String by project
 val commonsTextVersion: String by project
+val kotlinxSerialization: String by project
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -52,11 +57,16 @@ dependencies {
     implementation("io.github.wimdeblauwe:htmx-spring-boot-thymeleaf:$htmxSpringBootVersion")
     // https://www.ocpsoft.org/prettytime/
     implementation("org.ocpsoft.prettytime:prettytime:$prettytimeVersion")
+    // https://kotlinlang.org/docs/serialization.html
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerialization")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     // https://htmx.org/
     runtimeOnly("org.webjars.npm:htmx.org:$htmxVersion")
+    runtimeOnly("org.webjars.npm:jquery:$jqueryVersion")
+    runtimeOnly("org.webjars.npm:bootstrap:$bootstrapVersion")
+    runtimeOnly("org.webjars.npm:github-com-bootstrap-tagsinput-bootstrap-tagsinput:$bootstrapTagsInputVersion")
     // https://mariadb.com/kb/en/about-mariadb-connector-j/
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 

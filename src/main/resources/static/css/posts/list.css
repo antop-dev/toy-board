@@ -13,6 +13,12 @@ table caption {
 th, td {
     padding: 10px;
 }
+span.tag {
+    display: inline;
+    background-color: #d1d1d1;
+    padding: 0 5px;
+    margin-right: 5px;
+}
 
 .pagination ul {
     display: flex;

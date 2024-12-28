@@ -2,6 +2,7 @@ package org.antop.board.service
 
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.Pagination
+import org.antop.board.common.exposed.jsonSearch
 import org.antop.board.dto.PostDto
 import org.antop.board.dto.PostEditDto
 import org.antop.board.dto.PostSaveDto
@@ -32,7 +33,9 @@ class PostService {
             keyword?.let {
                 Posts.subject
                     .like("%$keyword%")
-                    .or(Posts.author.like("%$keyword%"))
+                    .or(Posts.author like "%$keyword%")
+                    .or(Posts.content like "%$keyword%")
+                    .or(Posts.tags jsonSearch keyword)
             } ?: Op.TRUE
 
         val total = Post.count(op)
@@ -71,6 +74,7 @@ class PostService {
                 content = saveDto.content
                 author = saveDto.author
                 createdAt = LocalDateTime.now()
+                tags = saveDto.tags
             }
         return toDto(post)
     }
@@ -85,6 +89,7 @@ class PostService {
             it.content = editDto.content
             it.author = editDto.author
             it.modifiedAt = LocalDateTime.now()
+            it.tags = editDto.tags
         }
     }
 
@@ -106,5 +111,6 @@ class PostService {
             content = post.content,
             author = post.author,
             changeAt = post.changeAt.pretty(),
+            tags = post.tags,
         )
 }
