@@ -5,19 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 폼</title>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.7.1/dist/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.3.3/dist/js/bootstrap.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/webjars/github-com-bootstrap-tagsinput-bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet"
+          th:href="@{/webjars/github-com-bootstrap-tagsinput-bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css}">
+    <link rel="stylesheet" th:href="@{/css/posts/form.css}">
 </head>
 
 <h2>등록 폼</h2>
 <form hx:post="${isSave} ? @{/posts} : @{/posts/{id}(id=${post.id})}">
     <p>
-        <label for="subject">제목</label> : <input type="text" id="subject" name="subject" size="50" th:value="${post?.subject}">
+        <label for="subject">제목</label> : <input type="text" id="subject" name="subject" size="50"
+                                                 th:value="${post?.subject}">
     </p>
     <p>
         <label for="author">작성자</label> : <input type="text" id="author" name="author" th:value="${post?.author}">
     </p>
     <p>
-        <label for="content">내용</label> : <br><textarea id="content" name="content" th:text="${post?.content}" cols="50" rows="10"></textarea>
+        <label for="tags">태그</label> :
+        <select multiple id="tags" name="tags">
+            <option th:each="tag : ${post?.tags}" th:value="${tag}" th:text="${tag}"></option>
+        </select>
+    </p>
+    <p>
+        <label for="content">내용</label> : <br><textarea id="content" name="content" th:text="${post?.content}" cols="50"
+                                                        rows="10"></textarea>
     </p>
     <div>
         <button type="submit" th:text="${isSave} ? '등록': '수정'"></button>
@@ -26,4 +42,7 @@
 </form>
 <body>
 </body>
+<script>
+    $('#tags').tagsinput();
+</script>
 </html>

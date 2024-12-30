@@ -29,6 +29,9 @@ class Post(
     val changeAt: LocalDateTime
         get() = modifiedAt ?: createdAt
 
+    /** 태그 */
+    var tags: Set<String> by Posts.tags
+
     /** 조회수 */
     var hits by Posts.hits
 }

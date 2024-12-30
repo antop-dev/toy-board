@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${post.subject}"></title>
     <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
-    <link rel="stylesheet" th:href="@{/css/posts/view.css}">
 </head>
 <body>
 <div>
     <div>제목 :
         <th:block th:text="${post.subject}"/>
+    </div>
+    <div th:if="${!post.tags.isEmpty()}" class="tags">
+        태그 :
+        <span class="tag" th:each="tag : ${post.tags}">
+            <a th:href="@{/posts/list.html(keyword=${tag})}" th:text="'#' + ${tag}"></a>
+        </span>
     </div>
     <div>작성자 :
         <th:block th:text="${post.author}"/>

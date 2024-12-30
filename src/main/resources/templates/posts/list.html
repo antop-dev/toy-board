@@ -33,8 +33,15 @@
             <tr>
                 <td th:text="${item.seq}"></td>
                 <td>
-                    <a th:href="@{/posts/{id}.html(id=${item.data.id},page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
-                       th:text="${item.data.subject}"></a>
+                    <div class="subject">
+                        <a th:href="@{/posts/{id}.html(id=${item.data.id},page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
+                           th:text="${item.data.subject}"></a>
+                    </div>
+                    <div th:if="${!item.data.tags.isEmpty()}" class="tags">
+                        <span class="tag" th:each="tag : ${item.data.tags}">
+                            <a th:href="@{/posts/list.html(keyword=${tag})}" th:text="'#' + ${tag}"></a>
+                        </span>
+                    </div>
                 </td>
                 <td th:text="${item.data.author}"></td>
                 <td th:text="${item.data.hits}"></td>

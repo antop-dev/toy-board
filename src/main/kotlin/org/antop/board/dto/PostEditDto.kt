@@ -5,4 +5,5 @@ data class PostEditDto(
     val subject: String,
     val content: String,
     val author: String,
+    val tags: Set<String>,
 )

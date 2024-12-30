@@ -107,12 +107,14 @@ class PostController(
         @RequestParam subject: String,
         @RequestParam content: String,
         @RequestParam author: String,
+        @RequestParam tags: Set<String>,
     ): HtmxResponse {
         val postSaveDto =
             PostSaveDto(
                 subject = subject,
                 content = content,
                 author = author,
+                tags = tags,
             )
         val postDto = postService.save(postSaveDto)
         return HtmxResponse
@@ -129,6 +131,7 @@ class PostController(
         @RequestParam subject: String,
         @RequestParam content: String,
         @RequestParam author: String,
+        @RequestParam tags: Set<String>,
     ): HtmxResponse {
         val editDto =
             PostEditDto(
@@ -136,6 +139,7 @@ class PostController(
                 subject = subject,
                 content = content,
                 author = author,
+                tags = tags,
             )
         postService.edit(editDto)
         return HtmxResponse
