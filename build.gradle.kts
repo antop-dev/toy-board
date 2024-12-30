@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.serialization") version "1.9.25"
     id("org.springframework.boot") version "3.4.0"
     id("io.spring.dependency-management") version "1.1.6"
+    id("org.sonarqube") version "6.0.1.5171"
 }
 
 group = "org.antop"
@@ -87,4 +88,12 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "antop-dev_toy-board")
+        property("sonar.organization", "antop-dev")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
