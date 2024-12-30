@@ -9,4 +9,5 @@ object Posts : LongIdTable(name = "posts", columnName = "post_id") {
     val author = varchar("author", 100)
     val createdAt = datetime("created")
     val modifiedAt = datetime("modified").nullable()
+    val hits = long("hits").default(0L)
 }

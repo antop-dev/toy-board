@@ -106,5 +106,6 @@ class PostService {
             content = post.content,
             author = post.author,
             changeAt = post.changeAt.pretty(),
+            hits = post.hits,
         )
 }
