@@ -2,7 +2,7 @@ package org.antop.board.service
 
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.Pagination
-import org.antop.board.common.exposed.jsonSearch
+import org.antop.board.common.exposed.jsonContains
 import org.antop.board.dto.PostDto
 import org.antop.board.dto.PostEditDto
 import org.antop.board.dto.PostSaveDto
@@ -35,7 +35,7 @@ class PostService {
                     .like("%$keyword%")
                     .or(Posts.author like "%$keyword%")
                     .or(Posts.content like "%$keyword%")
-                    .or(Posts.tags jsonSearch keyword)
+                    .or(Posts.tags jsonContains keyword)
             } ?: Op.TRUE
 
         val total = Post.count(op)
