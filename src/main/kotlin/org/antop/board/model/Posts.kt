@@ -11,4 +11,5 @@ object Posts : LongIdTable(name = "posts", columnName = "post_id") {
     val createdAt = datetime("created")
     val modifiedAt = datetime("modified").nullable()
     val tags = jsonArray("tags")
+    val hits = long("hits").default(0L)
 }

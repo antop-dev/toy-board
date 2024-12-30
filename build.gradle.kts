@@ -50,6 +50,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:$exposedVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     // view
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     // https://github.com/wimdeblauwe/htmx-spring-boot

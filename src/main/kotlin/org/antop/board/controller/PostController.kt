@@ -2,9 +2,11 @@ package org.antop.board.controller
 
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
+import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.common.Pagination
 import org.antop.board.dto.PostEditDto
 import org.antop.board.dto.PostSaveDto
+import org.antop.board.service.PostHitsService
 import org.antop.board.service.PostService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/posts")
 class PostController(
     private val postService: PostService,
+    private val postHitsService: PostHitsService,
 ) {
     @GetMapping("/list.html")
     fun list(
@@ -47,9 +50,19 @@ class PostController(
         @PathVariable id: Long,
         keyword: String?,
         paging: Pagination.Request,
+        request: HttpServletRequest,
     ): String {
+        // 게시글 조회
         val post = postService.get(id) ?: return "errors/404"
-        model.addAttribute("post", post)
+        // 조회수 증가
+        val visitorId = request.remoteAddr
+        val hits = postHitsService.incrementHits(post, visitorId)
+        val updated =
+            when {
+                hits > post.hits -> post.copy(hits = hits)
+                else -> post
+            }
+        model.addAttribute("post", updated)
         model.addAttribute("page", paging.page)
         model.addAttribute("size", paging.size)
         model.addAttribute("keyword", keyword)

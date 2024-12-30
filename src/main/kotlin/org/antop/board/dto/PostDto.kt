@@ -7,4 +7,5 @@ data class PostDto(
     val author: String,
     val changeAt: String,
     val tags: Set<String> = setOf(),
+    val hits: Long,
 )

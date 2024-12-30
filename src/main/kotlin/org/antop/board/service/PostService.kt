@@ -112,5 +112,6 @@ class PostService {
             author = post.author,
             changeAt = post.changeAt.pretty(),
             tags = post.tags,
+            hits = post.hits,
         )
 }
