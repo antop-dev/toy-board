@@ -2,11 +2,11 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
-### Spring 3
+### Spring 4
 
 파일 업로드를 구현했다.
 
-![sprint3-db](./assets/sprint3-db.png)
+![sprint3-db](./assets/sprint4-db.png)
 
 ```mariadb
 create table files
@@ -31,13 +31,13 @@ alter table post_files add foreign key (post_id) references posts (post_id) on d
 alter table post_files add foreign key (file_id) references files (file_id) on delete cascade;
 ```
 
-### Sprint 2
+### Sprint 3
 
 조회 수와 태그 목록 기능을 개발했다.
 
 조회 수 중복 증가 방지를 위해 레디스를 사용 했다. 업데이트는 비관적 락(`select for update`)을 사용해 업데이트 했다.
 
-![sprint2-db](./assets/sprint2-db.png)
+![sprint2-db](./assets/sprint3-db.png)
 
 ```mariadb
 /* 조회수 컬럼 추가 */
@@ -45,6 +45,10 @@ alter table posts add column hits bigint default 0 not null comment '조회수';
 /* 태그 컬럼 추가 */
 alter table posts add column tags json default '[]' not null comment '태그' check (json_valid(`tags`));
 ```
+
+### Sprint 2
+
+오프셋(`offset`) 방식의 페이징과 검색 기능을 개발했다.
 
 ### Sprint 1
 
