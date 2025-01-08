@@ -25,17 +25,13 @@ repositories {
     mavenCentral()
 }
 
-val htmxVersion: String by project
 val htmxSpringBootVersion: String by project
 val kotlinxDatetimeVersion: String by project
 val exposedVersion: String by project
 val prettytimeVersion: String by project
-val jqueryVersion: String by project
-val bootstrapVersion: String by project
-val bootstrapTagsInputVersion: String by project
 val jsoupVersion: String by project
 val commonsTextVersion: String by project
-val kotlinxSerialization: String by project
+val kotlinxSerializationVersion: String by project
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -59,15 +55,16 @@ dependencies {
     // https://www.ocpsoft.org/prettytime/
     implementation("org.ocpsoft.prettytime:prettytime:$prettytimeVersion")
     // https://kotlinlang.org/docs/serialization.html
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerialization")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    // https://github.com/oshai/kotlin-logging
+    implementation("io.github.oshai:kotlin-logging:7.0.3")
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation("commons-io:commons-io:2.18.0")
+    // https://tika.apache.org/
+    implementation("org.apache.tika:tika-core:3.0.0")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    // https://htmx.org/
-    runtimeOnly("org.webjars.npm:htmx.org:$htmxVersion")
-    runtimeOnly("org.webjars.npm:jquery:$jqueryVersion")
-    runtimeOnly("org.webjars.npm:bootstrap:$bootstrapVersion")
-    runtimeOnly("org.webjars.npm:github-com-bootstrap-tagsinput-bootstrap-tagsinput:$bootstrapTagsInputVersion")
     // https://mariadb.com/kb/en/about-mariadb-connector-j/
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 

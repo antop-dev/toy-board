@@ -1,10 +1,10 @@
-package org.antop.board.service
+package org.antop.board.post.service
 
 import kotlinx.datetime.LocalDateTime
-import org.antop.board.dto.PostDto
-import org.antop.board.extensions.now
-import org.antop.board.extensions.set
-import org.antop.board.model.Post
+import org.antop.board.common.extensions.now
+import org.antop.board.common.extensions.set
+import org.antop.board.post.dto.PostDto
+import org.antop.board.post.model.Post
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

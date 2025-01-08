@@ -5,3 +5,11 @@ spring:
     name: toy-board
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 30MB
+
+app:
+  file-upload:
+    path: /Users/antop/test

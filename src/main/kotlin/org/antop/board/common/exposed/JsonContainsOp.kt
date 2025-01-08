@@ -27,4 +27,4 @@ class JsonContainsOp(
     }
 }
 
-infix fun <T> ExpressionWithColumnType<T>.jsonContains(keyword: String) = JsonContainsOp(this, keyword)
+infix fun <T> ExpressionWithColumnType<T>.jsonContains(v: String) = JsonContainsOp(this, v)

@@ -1,13 +1,13 @@
-package org.antop.board.controller
+package org.antop.board.post.controller
 
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.common.Pagination
-import org.antop.board.dto.PostEditDto
-import org.antop.board.dto.PostSaveDto
-import org.antop.board.service.PostHitsService
-import org.antop.board.service.PostService
+import org.antop.board.post.dto.PostEditDto
+import org.antop.board.post.dto.PostSaveDto
+import org.antop.board.post.service.PostHitsService
+import org.antop.board.post.service.PostService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -62,6 +62,7 @@ class PostController(
                 hits > post.hits -> post.copy(hits = hits)
                 else -> post
             }
+
         model.addAttribute("post", updated)
         model.addAttribute("page", paging.page)
         model.addAttribute("size", paging.size)
@@ -93,7 +94,6 @@ class PostController(
 
         val isSave = post == null
         model.addAttribute("isSave", isSave)
-
         model.addAttribute("page", paging.page)
         model.addAttribute("size", paging.size)
         model.addAttribute("keyword", keyword)
@@ -108,6 +108,7 @@ class PostController(
         @RequestParam content: String,
         @RequestParam author: String,
         @RequestParam tags: Set<String>,
+        @RequestParam("file") files: List<String> = listOf(),
     ): HtmxResponse {
         val postSaveDto =
             PostSaveDto(
@@ -115,6 +116,8 @@ class PostController(
                 content = content,
                 author = author,
                 tags = tags,
+                // 첨부파일이 다 업로드 안된 상태에서 저장을 하면
+                files = files.mapNotNull { it.takeIf { it.isNotEmpty() } },
             )
         val postDto = postService.save(postSaveDto)
         return HtmxResponse
@@ -132,6 +135,7 @@ class PostController(
         @RequestParam content: String,
         @RequestParam author: String,
         @RequestParam tags: Set<String>,
+        @RequestParam("file") files: List<String> = listOf(),
     ): HtmxResponse {
         val editDto =
             PostEditDto(
@@ -140,6 +144,7 @@ class PostController(
                 content = content,
                 author = author,
                 tags = tags,
+                files = files.mapNotNull { it.takeIf { it.isNotEmpty() } },
             )
         postService.edit(editDto)
         return HtmxResponse
