@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${post.subject}"></title>
-    <script type="text/javascript" th:src="@{/webjars/htmx.org/2.0.3/dist/htmx.min.js}"></script>
+    <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
 </head>
 <body>
 <div>
@@ -25,10 +25,18 @@
         <th:block th:text="${post.hits}"/>
     </div>
     <div>마지막 수정 :
-        <th:block th:text="${post.changeAt}"/>
+        <th:block th:text="${post.changed}"/>
     </div>
     <hr>
     <p class="content" th:text="${post.content}"></p>
+    <th:block th:if="${!post.files.isEmpty()}">
+        첨부파일 :
+        <ul>
+            <li th:each="file : ${post.files}">
+                <a th:href="@{/files/{id}(id=${file.id})}" th:text="${file.name}"></a>
+            </li>
+        </ul>
+    </th:block>
 </div>
 <hr>
 <div>

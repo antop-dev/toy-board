@@ -1,4 +1,4 @@
-package org.antop.board.extensions
+package org.antop.board.common.extensions
 
 import org.springframework.data.redis.core.ValueOperations
 import java.util.concurrent.TimeUnit

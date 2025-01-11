@@ -1,4 +1,4 @@
-package org.antop.board.extensions
+package org.antop.board.common.extensions
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
