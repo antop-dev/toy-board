@@ -2,6 +2,9 @@ package org.antop.board.file.controller
 
 import org.antop.board.file.dto.FileUploadDto
 import org.antop.board.file.service.FileService
+import org.springframework.core.io.InputStreamResource
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -50,7 +53,19 @@ class FilepondController(
     @GetMapping
     fun load(
         @RequestParam("load") fileId: String,
-    ) = fileDownloadController.download(fileId).apply {
-        headers["X-Content-Transfer-Id"] = fileId
+    ): ResponseEntity<InputStreamResource> {
+        val response = fileDownloadController.download(fileId)
+        return when (response.statusCode) {
+            HttpStatus.OK -> { // 헤더값 하나 추가
+                ResponseEntity
+                    .ok()
+                    .headers(response.headers)
+                    .headers {
+                        it["X-Content-Transfer-Id"] = fileId
+                    }.body(response.body)
+            }
+
+            else -> response
+        }
     }
 }
