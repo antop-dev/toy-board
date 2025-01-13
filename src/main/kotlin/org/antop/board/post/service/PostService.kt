@@ -17,11 +17,9 @@ import org.antop.board.post.mapper.toDtoForList
 import org.antop.board.post.model.Post
 import org.antop.board.post.model.PostFiles
 import org.antop.board.post.model.Posts
-import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -36,7 +34,7 @@ class PostService {
         page: Long,
         pageSize: Int,
     ): Pagination.Response<PostDto> {
-        val total = countClause(keyword)
+        val total = countQuery(keyword)
         val posts = if (total > 0) selectClause(keyword, page, pageSize) else listOf()
         return Pagination.Response(
             items = posts.map { it.toDtoForList() },
@@ -44,10 +42,11 @@ class PostService {
         )
     }
 
-    fun countClause(keyword: String?): Long =
+    private fun countQuery(keyword: String?): Long =
         joinClause()
-            .selectAll()
+            .select(Posts.id)
             .where { createOp(keyword) }
+            .withDistinct()
             .count()
 
     private fun selectClause(
@@ -58,14 +57,15 @@ class PostService {
         joinClause()
             .select(Posts.fields)
             .where { createOp(keyword) }
+            .withDistinct()
             .offset((page - 1) * pageSize)
             .limit(pageSize)
             .map { Post.wrapRow(it) }
 
     private fun joinClause() =
         Posts
-            .join(PostFiles, JoinType.LEFT, additionalConstraint = { Posts.id eq PostFiles.post })
-            .join(Files, JoinType.LEFT, additionalConstraint = { PostFiles.file eq Files.id })
+            .leftJoin(PostFiles)
+            .leftJoin(Files)
 
     private fun createOp(keyword: String?) =
         keyword?.let {
