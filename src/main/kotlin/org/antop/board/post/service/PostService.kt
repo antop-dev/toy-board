@@ -19,6 +19,7 @@ import org.antop.board.post.model.PostFiles
 import org.antop.board.post.model.Posts
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.or
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,7 +36,7 @@ class PostService {
         pageSize: Int,
     ): Pagination.Response<PostDto> {
         val total = countQuery(keyword)
-        val posts = if (total > 0) selectClause(keyword, page, pageSize) else listOf()
+        val posts = if (total > 0) selectQuery(keyword, page, pageSize) else listOf()
         return Pagination.Response(
             items = posts.map { it.toDtoForList() },
             total = total,
@@ -49,7 +50,7 @@ class PostService {
             .withDistinct()
             .count()
 
-    private fun selectClause(
+    private fun selectQuery(
         keyword: String?,
         page: Long,
         pageSize: Int,
@@ -58,6 +59,7 @@ class PostService {
             .select(Posts.fields)
             .where { createOp(keyword) }
             .withDistinct()
+            .orderBy(Posts.id to SortOrder.DESC)
             .offset((page - 1) * pageSize)
             .limit(pageSize)
             .map { Post.wrapRow(it) }
