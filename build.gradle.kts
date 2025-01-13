@@ -66,8 +66,11 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    // https://mariadb.com/kb/en/about-mariadb-connector-j/
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+    // https://h2database.com
+    implementation("com.h2database:h2")
+    // https://github.com/codemonstur/embedded-redis
+    implementation("com.github.codemonstur:embedded-redis:1.4.3")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
