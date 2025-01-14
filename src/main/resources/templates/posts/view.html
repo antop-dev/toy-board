@@ -5,44 +5,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${post.subject}"></title>
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <link rel="stylesheet" th:href="@{/css/posts/view.css}">
     <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
 </head>
 <body>
-<div>
-    <div>제목 :
-        <th:block th:text="${post.subject}"/>
-    </div>
-    <div th:if="${!post.tags.isEmpty()}" class="tags">
-        태그 :
-        <span class="tag" th:each="tag : ${post.tags}">
-            <a th:href="@{/posts/list.html(keyword=${tag})}" th:text="'#' + ${tag}"></a>
-        </span>
-    </div>
-    <div>작성자 :
-        <th:block th:text="${post.author}"/>
-    </div>
-    <div>조회수 :
-        <th:block th:text="${post.hits}"/>
-    </div>
-    <div>마지막 수정 :
-        <th:block th:text="${post.changed}"/>
-    </div>
-    <hr>
-    <p class="content" th:text="${post.content}"></p>
-    <th:block th:if="${!post.files.isEmpty()}">
-        첨부파일 :
-        <ul>
-            <li th:each="file : ${post.files}">
-                <a th:href="@{/files/{id}(id=${file.id})}" th:text="${file.name}"></a>
-            </li>
-        </ul>
-    </th:block>
-</div>
-<hr>
-<div>
-    <a th:href="@{/posts/form.html(id=${post.id},page=${page},size=${size},keyword=${keyword})}">수정</a>
-    <button type="button" hx:delete="@{/posts/{id}(id=${post.id})}">삭제</button>
-    <a th:href="@{/posts/list.html(page=${page},size=${size},keyword=${keyword})}">목록</a>
+
+<div class="container pt-5 pb-5">
+    <section>
+        <!--/* 제목 */-->
+        <h2 th:text="${post.subject}"/>
+        <div class="mt-4">
+            <div>
+                <!--/* 작성자 */-->
+                <em class="fs-5" th:text="${post.author}"/>
+                <!--/* 변경일시 */-->
+                <span class="ms-3">
+                    <i class="bi bi-calendar-week"></i>
+                    <span th:title="${#temporals.format(post.changed, 'yyyy.MM.dd HH:mm:ss')}" th:text="${post.changedPretty}"/>
+                </span>
+                <!--/* 조회수 */-->
+                <span class="ms-3">
+                    <i class="bi bi-eye"></i>
+                    <th:block th:text="${post.hits}"/>
+                </span>
+            </div>
+        </div>
+    </section>
+    <section class="mt-2 pt-3 border-top border-3 border-dark">
+        <div class="mt-4 content"  th:text="${post.content}"/>
+        <div class="mt-4">
+            <i class="bi bi-tag"></i>
+            <a class="tag me-1" th:each="tag : ${post.tags}" th:href="@{/posts/list.html(keyword=${tag})}" th:text="'#' + ${tag}"/>
+        </div>
+    </section>
+    <section class="mt-4">
+        <div th:each="file : ${post.files}">
+            <i class="bi bi-download"></i>
+            <a class="text-decoration-none" th:href="@{/files/{id}(id=${file.id})}" th:text="${file.name}"/>
+        </div>
+    </section>
+    <section class="pt-3 mt-4 border-top border-1 border-dark d-flex">
+        <div class="ms-auto">
+            <a th:href="@{/posts/form.html(id=${post.id},page=${page},size=${size},keyword=${keyword})}" class="btn btn-outline-secondary rounded-0">
+                <i class="bi bi-pencil"></i> 수정
+            </a>
+            <button class="btn btn-outline-danger rounded-0" hx:delete="@{/posts/{id}(id=${post.id})}">
+                <i class="bi bi-trash"></i> 삭제
+            </button>
+            <a th:href="@{/posts/list.html(page=${page},size=${size},keyword=${keyword})}" class="btn btn-outline-dark rounded-0">
+                <i class="bi bi-list-columns"></i> 목록
+            </a>
+        </div>
+    </section>
 </div>
 
 </body>

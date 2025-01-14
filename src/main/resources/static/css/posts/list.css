@@ -1,39 +1,11 @@
-table, th, td {
-    border: 1px solid;
-}
+@import "common.css";
 
-table {
-    border-collapse: collapse;
-}
-
-table caption {
-    text-align: left;
-}
-
-th, td {
-    padding: 10px;
-}
-span.tag {
-    display: inline;
-    background-color: #d1d1d1;
-    padding: 0 5px;
-    margin-right: 5px;
-}
-
-.pagination ul {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0;
-    margin: 5px 0;
-    list-style: none;
-}
-
-.pagination li {
-    padding: 0;
-    margin: 0 5px;
-}
-
-.pagination li .current {
-    font-weight: bold;
-    color: #ff0000;
+.tag {
+    padding: 5px 6px 4px 6px;
+    border-radius: 4px;
+    background: #F5F5F5;
+    color: #777;
+    font-size: 14px;
+    white-space: nowrap;
+    text-decoration: none;
 }
