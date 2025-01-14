@@ -1,3 +1,16 @@
+@import "common.css";
+
+
 .content {
     white-space: pre;
+}
+
+.tag {
+    padding: 5px 6px 4px 6px;
+    border-radius: 4px;
+    background: #F5F5F5;
+    color: #777;
+    font-size: 14px;
+    white-space: nowrap;
+    text-decoration: none;
 }
