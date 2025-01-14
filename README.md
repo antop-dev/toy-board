@@ -2,13 +2,19 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
-### Spring 4
+### Sprint 5
+
+완전한 로컬 환경에서 실행 가능하도록 구성
+* 외부 MariaDB → H2 Tcp Database Server
+* 외부 Redis → [Embedded Redis Server](https://github.com/codemonstur/embedded-redis)
+
+### Sprint 4
 
 파일 업로드를 구현했다.
 
 ![sprint3-db](./assets/sprint4-db.png)
 
-```mariadb
+```mysql
 create table files
 (
     file_id   bigint       not null auto_increment comment '파일 ID',
@@ -39,7 +45,7 @@ alter table post_files add foreign key (file_id) references files (file_id) on d
 
 ![sprint2-db](./assets/sprint3-db.png)
 
-```mariadb
+```mysql
 /* 조회수 컬럼 추가 */
 alter table posts add column hits bigint default 0 not null comment '조회수';
 /* 태그 컬럼 추가 */
@@ -59,7 +65,7 @@ alter table posts add column tags json default '[]' not null comment '태그' ch
 
 ![sprint1-db](./assets/sprint1-db.png)
 
-```mariadb
+```mysql
 create table posts
 (
     post_id  bigint       not null auto_increment comment '게시글 ID',
@@ -72,7 +78,7 @@ create table posts
 );
 ```
 
-```mariadb
+```mysql
 /* 데이터베이스와 계정 생성 */
 create database toy_board;
 create user 'antop'@'%' identified by 'local';

@@ -1,14 +1,21 @@
 server:
   port: 8888
+
 spring:
   application:
     name: toy-board
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 20MB
       max-request-size: 30MB
+  h2:
+    console:
+      enabled: false
+
+management:
+  health:
+    redis:
+      enabled: true
 
 app:
   file-upload:
