@@ -9,6 +9,8 @@
     <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
     <link rel="stylesheet" th:href="@{/libs/bootstrap5-tags-1.7.6/tags-pure.min.css}">
     <link rel="stylesheet" th:href="@{/libs/filepond-4.28.2/filepond.min.css}">
+<!--    <link rel="stylesheet" th:href="@{/libs/ckeditor-5.44.10/ckeditor5.css}">-->
+    <link rel="stylesheet" th:href="@{/libs/ckeditor-5.44.10/ckeditor5-editor.css}">
     <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
     <link rel="stylesheet" th:href="@{/css/posts/form.css}">
     <script type="text/javascript" th:src="@{/libs/jquery-3.7.1/jquery.min.js}"></script>
@@ -16,6 +18,8 @@
     <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/filepond-4.28.2/filepond.js}"></script>
     <script type="text/javascript" th:src="@{/libs/filepond-plugins/file-validate-size-2.2.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ckeditor5.umd.js}"></script>
+    <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ko.umd.js}"></script>
 </head>
 <body>
 
@@ -38,10 +42,13 @@
                 <label for="author">작성자</label>
             </div>
             <div class="form-floating mt-3">
-                <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요."
-                          style="min-height: 200px;"
-                          th:text="${post?.content}"/>
-                <label for="content">내용</label>
+                <div class="editor-container editor-container_classic-editor editor-container_include-word-count"
+                     id="editor-container">
+                    <div class="editor-container__editor">
+                        <textarea name="content" id="editor" th:text="${post?.content}"/>
+                    </div>
+                    <div class="editor_container__word-count" id="editor-word-count"></div>
+                </div>
             </div>
             <div class="form-floating mt-3">
                 <select class="form-select" id="tags" name="tags" multiple>
@@ -85,6 +92,7 @@
 </div>
 <script type="module" th:inline="javascript">
     import Tags from /*[[@{/libs/bootstrap5-tags-1.7.6/tags.min.js}]]*/ "/libs/bootstrap5-tags-1.7.6/tags.min.js";
+
     Tags.init("#tags", {
         separator: " |,|",
         allowNew: true,
@@ -102,6 +110,161 @@
         server: "/filepond",
     });
     FilePond.create(document.getElementById("filepond"));
+    // CKEditor
+    const {
+        ClassicEditor,
+        Alignment,
+        AutoImage,
+        AutoLink,
+        Autosave,
+        Base64UploadAdapter,
+        BlockQuote,
+        Bold,
+        Code,
+        CodeBlock,
+        Essentials,
+        FontBackgroundColor,
+        FontColor,
+        Highlight,
+        ImageBlock,
+        ImageCaption,
+        ImageInline,
+        ImageInsert,
+        ImageInsertViaUrl,
+        ImageResize,
+        ImageStyle,
+        ImageTextAlternative,
+        ImageToolbar,
+        ImageUpload,
+        Indent,
+        IndentBlock,
+        Italic,
+        Link,
+        LinkImage,
+        Paragraph,
+        RemoveFormat,
+        Strikethrough,
+        Subscript,
+        Superscript,
+        Table,
+        TableCaption,
+        TableCellProperties,
+        TableColumnResize,
+        TableProperties,
+        TableToolbar,
+        Underline,
+        WordCount
+    } = CKEDITOR;
+
+    const editorConfig = {
+        toolbar: {
+            items: [
+                'fontColor',
+                'fontBackgroundColor',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                'strikethrough',
+                'subscript',
+                'superscript',
+                'code',
+                'removeFormat',
+                '|',
+                'link',
+                'insertImage',
+                'insertTable',
+                'highlight',
+                'blockQuote',
+                'codeBlock',
+                '|',
+                'alignment',
+                '|',
+                'outdent',
+                'indent'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        plugins: [
+            Alignment,
+            AutoImage,
+            AutoLink,
+            Autosave,
+            Base64UploadAdapter,
+            BlockQuote,
+            Bold,
+            Code,
+            CodeBlock,
+            Essentials,
+            FontBackgroundColor,
+            FontColor,
+            Highlight,
+            ImageBlock,
+            ImageCaption,
+            ImageInline,
+            ImageInsert,
+            ImageInsertViaUrl,
+            ImageResize,
+            ImageStyle,
+            ImageTextAlternative,
+            ImageToolbar,
+            ImageUpload,
+            Indent,
+            IndentBlock,
+            Italic,
+            Link,
+            LinkImage,
+            Paragraph,
+            RemoveFormat,
+            Strikethrough,
+            Subscript,
+            Superscript,
+            Table,
+            TableCaption,
+            TableCellProperties,
+            TableColumnResize,
+            TableProperties,
+            TableToolbar,
+            Underline,
+            WordCount
+        ],
+        image: {
+            toolbar: [
+                'toggleImageCaption',
+                'imageTextAlternative',
+                '|',
+                'imageStyle:inline',
+                'imageStyle:wrapText',
+                'imageStyle:breakText',
+                '|',
+                'resizeImage'
+            ]
+        },
+        licenseKey: "GPL",
+        link: {
+            addTargetToExternalLinks: true,
+            defaultProtocol: 'https://',
+            decorators: {
+                toggleDownloadable: {
+                    mode: 'manual',
+                    label: 'Downloadable',
+                    attributes: {
+                        download: 'file'
+                    }
+                }
+            }
+        },
+        placeholder: '내용을 입력하세요.',
+        table: {
+            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
+        },
+    };
+
+    ClassicEditor.create(document.querySelector('#editor'), editorConfig).then(editor => {
+        const wordCount = editor.plugins.get('WordCount');
+        document.querySelector('#editor-word-count').appendChild(wordCount.wordCountContainer);
+        return editor;
+    });
 </script>
 </body>
 </html>
