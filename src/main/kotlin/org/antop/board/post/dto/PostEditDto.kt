@@ -5,6 +5,6 @@ data class PostEditDto(
     val subject: String,
     val content: String,
     val author: String,
-    val tags: Set<String>,
+    val tags: Set<String>?,
     val files: List<String> = emptyList(),
 )

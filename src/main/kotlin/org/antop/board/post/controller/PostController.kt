@@ -107,7 +107,7 @@ class PostController(
         @RequestParam subject: String,
         @RequestParam content: String,
         @RequestParam author: String,
-        @RequestParam tags: Set<String>,
+        @RequestParam(required = false) tags: Set<String>?,
         @RequestParam("file") files: List<String> = listOf(),
     ): HtmxResponse {
         val postSaveDto =
@@ -134,7 +134,7 @@ class PostController(
         @RequestParam subject: String,
         @RequestParam content: String,
         @RequestParam author: String,
-        @RequestParam tags: Set<String>,
+        @RequestParam(required = false) tags: Set<String>?,
         @RequestParam("file") files: List<String> = listOf(),
     ): HtmxResponse {
         val editDto =

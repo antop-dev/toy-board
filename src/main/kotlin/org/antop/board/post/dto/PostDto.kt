@@ -10,7 +10,7 @@ data class PostDto(
     val author: String,
     val changed: LocalDateTime,
     val changedPretty: String,
-    val tags: Set<String> = setOf(),
+    val tags: Set<String>? = null,
     val hits: Long,
     val files: List<FileDto> = emptyList(),
 )
