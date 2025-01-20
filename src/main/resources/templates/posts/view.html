@@ -42,7 +42,7 @@
         <div class="mt-4 content ck-content">
             <th:block th:utext="${post.content}"/>
         </div>
-        <div class="mt-4">
+        <div class="mt-4" th:if="${post.tags != null}">
             <i class="bi bi-tag"></i>
             <a class="tag me-1" th:each="tag : ${post.tags}" th:href="@{/posts/list.html(keyword=${tag})}"
                th:text="'#' + ${tag}"/>

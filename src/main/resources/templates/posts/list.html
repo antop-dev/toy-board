@@ -60,7 +60,7 @@
             <div class="row justify-content-between pt-1">
                 <!--/* 태그 */-->
                 <div class="col col-md-8">
-                    <div style="margin-left: 60px;">
+                    <div th:if="${item.data.tags != null}" style="margin-left: 60px;">
                         <i class="bi bi-tag"></i>
                         <a class="tag me-1" th:each="tag : ${item.data.tags}" th:href="@{/posts/list.html(keyword=${tag})}" th:text="'#' + ${tag}"/>
                     </div>
