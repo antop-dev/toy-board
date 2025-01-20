@@ -2,13 +2,36 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
-### Sprint 5
+## Sprint 5
 
-완전한 로컬 환경에서 실행 가능하도록 구성
+### 완전한 로컬 환경에서 실행 가능하도록 구성
+
+로컬에서 외부 서버를 사용하지 않고 H2와 Embedded Redis를 사용하여 인터넷이 안되더라도 개발 가능하도록 함 
+
 * 외부 MariaDB → H2 Tcp Database Server
 * 외부 Redis → [Embedded Redis Server](https://github.com/codemonstur/embedded-redis)
 
-### Sprint 4
+### Bootstrap UI 구성
+
+부트스트랩을 사용하여 화면을 이쁘게(?) 꾸밈
+
+* [Bootstrap 5](https://getbootstrap.com/)
+* [Bootstrap Icons](https://icons.getbootstrap.com/)
+* [Tags for Bootstrap 4/5](https://github.com/lekoala/bootstrap5-tags)
+* 나눔고딕 웹폰트
+
+### 위지윅에디터 적용
+
+* [CKEditor5](https://ckeditor.com/ckeditor-5/)
+* [Prism](https://prismjs.com/) : 코드 블럭 하이라이트
+
+### 태그 목록 재구성
+
+```mysql
+alter table posts modify column tags text null comment '태그';
+```
+
+## Sprint 4
 
 파일 업로드를 구현했다.
 
@@ -37,7 +60,7 @@ alter table post_files add foreign key (post_id) references posts (post_id) on d
 alter table post_files add foreign key (file_id) references files (file_id) on delete cascade;
 ```
 
-### Sprint 3
+## Sprint 3
 
 조회 수와 태그 목록 기능을 개발했다.
 
@@ -52,11 +75,11 @@ alter table posts add column hits bigint default 0 not null comment '조회수';
 alter table posts add column tags json default '[]' not null comment '태그' check (json_valid(`tags`));
 ```
 
-### Sprint 2
+## Sprint 2
 
 오프셋(`offset`) 방식의 페이징과 검색 기능을 개발했다.
 
-### Sprint 1
+## Sprint 1
 
 간단한 테이블을 생성하고 기본적인 CRUD를 구현했다.
 

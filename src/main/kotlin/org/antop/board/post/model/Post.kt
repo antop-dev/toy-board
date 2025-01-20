@@ -28,7 +28,7 @@ class Post(
     var author by Posts.author
     var created by Posts.created
     var modified by Posts.modified
-    var tags: Set<String> by Posts.tags
+    var tags: Set<String>? by Posts.tags
     var hits by Posts.hits
     var files by File via PostFiles
 }

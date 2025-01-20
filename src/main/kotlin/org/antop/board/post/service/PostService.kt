@@ -4,7 +4,6 @@ import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.Base62
 import org.antop.board.common.Pagination
 import org.antop.board.common.exposed.contains
-import org.antop.board.common.exposed.jsonContains
 import org.antop.board.common.extensions.now
 import org.antop.board.common.extensions.toSizedIterable
 import org.antop.board.file.model.File
@@ -75,7 +74,7 @@ class PostService {
                 .or(Posts.subject contains it)
                 .or(Posts.author contains it)
                 .or(Posts.content contains it)
-                .or(Posts.tags jsonContains it)
+                .or(Posts.tags contains it)
                 .or(Files.name contains it)
         } ?: Op.TRUE
 
