@@ -1,18 +1,22 @@
 package org.antop.board.file.controller
 
-import org.antop.board.file.dto.FileUploadDto
+import org.antop.board.file.common.FilepondHttpHeaders
 import org.antop.board.file.service.FileService
-import org.springframework.core.io.InputStreamResource
+import org.springframework.core.io.Resource
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.multipart.MultipartFile
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/filepond")
@@ -21,20 +25,39 @@ class FilepondController(
     private val fileService: FileService,
 ) {
     /**
-     * 파일 업로드
+     * 청크 업로드 초기화
      */
     @PostMapping
     fun process(
-        @RequestParam("file") multipart: MultipartFile,
+        @RequestHeader(FilepondHttpHeaders.UPLOAD_NAME) encodedFilename: String,
+        @RequestHeader(FilepondHttpHeaders.UPLOAD_LENGTH) size: Long,
+        @RequestHeader(FilepondHttpHeaders.UPLOAD_TYPE) contentType: String?,
     ): String {
         val request =
-            FileUploadDto(
-                name = multipart.originalFilename ?: multipart.name,
-                size = multipart.size,
-                resource = multipart.resource,
+            FileService.ChunkInitRequest(
+                name = URLDecoder.decode(encodedFilename, StandardCharsets.UTF_8),
+                type = contentType ?: MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                size = size,
             )
-        val file = fileService.upload(request)
-        return file.id
+        return fileService.initChunk(request)
+    }
+
+    /**
+     * 청크 업로드
+     */
+    @PatchMapping
+    fun patch(
+        @RequestParam("patch") fileId: String,
+        @RequestHeader(FilepondHttpHeaders.UPLOAD_OFFSET) offset: Long,
+        @RequestBody payload: Resource,
+    ) {
+        val request =
+            FileService.ChunkUploadRequest(
+                id = fileId,
+                offset = offset,
+                resource = payload,
+            )
+        fileService.uploadChunk(request)
     }
 
     /**
@@ -53,7 +76,7 @@ class FilepondController(
     @GetMapping
     fun load(
         @RequestParam("load") fileId: String,
-    ): ResponseEntity<InputStreamResource> {
+    ): ResponseEntity<Resource> {
         val response = fileDownloadController.download(fileId)
         return when (response.statusCode) {
             HttpStatus.OK -> { // 헤더값 하나 추가
@@ -61,7 +84,7 @@ class FilepondController(
                     .ok()
                     .headers(response.headers)
                     .headers {
-                        it["X-Content-Transfer-Id"] = fileId
+                        it[FilepondHttpHeaders.TRANSFER_ID] = fileId
                     }.body(response.body)
             }
 

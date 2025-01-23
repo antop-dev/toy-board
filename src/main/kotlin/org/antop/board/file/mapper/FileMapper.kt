@@ -10,6 +10,6 @@ fun File.toDto() =
         name = name,
         size = size,
         type = type,
-        path = path,
+        path = directoryPath,
         created = created,
     )

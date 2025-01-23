@@ -1,23 +1,24 @@
 package org.antop.board.file.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import jakarta.annotation.PostConstruct
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.Base62
 import org.antop.board.common.extensions.now
 import org.antop.board.file.config.FileUploadProperties
 import org.antop.board.file.dto.FileDto
-import org.antop.board.file.dto.FileUploadDto
 import org.antop.board.file.mapper.toDto
 import org.antop.board.file.model.File
-import org.apache.commons.io.FilenameUtils
-import org.apache.commons.io.IOUtils
-import org.apache.tika.Tika
+import org.apache.commons.io.FileUtils
+import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import java.io.IOException
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.UUID
+import kotlin.io.path.outputStream
 
 @Service
 @Transactional(readOnly = true)
@@ -26,63 +27,94 @@ class FileService(
 ) {
     private val log = KotlinLogging.logger { }
 
-    @Transactional
-    fun upload(file: FileUploadDto): FileDto {
-        log.info { "uploading file: $file" }
-        // 업로드된 파일 복사
-        val filename = randomFilename(file.name)
-        val uploadPath = fileUploadProperties.path.resolve(filename)
-        val copiedSize = IOUtils.copyLarge(file.resource.inputStream, Files.newOutputStream(uploadPath))
-        if (file.size != copiedSize) {
-            log.warn { "file copied size ${file.size} != $copiedSize" }
-            throw IOException("파일이 정상적으로 복사되지 않았습니다.")
-        }
-        // 디비에 저장
-        val savedFile =
-            File.new {
-                name = file.name
-                size = file.size
-                type = mimeType(uploadPath)
-                path = uploadPath.toString()
-                created = LocalDateTime.now()
-            }
-
-        return savedFile.toDto()
+    @PostConstruct
+    fun init() {
+        Files.createDirectories(fileUploadProperties.path)
     }
 
+    /**
+     * 청크 파일 초기화
+     */
+    @Transactional(propagation = Propagation.NESTED)
+    fun initChunk(request: ChunkInitRequest): String {
+        // 데이터베이스에 저장하여 파일 ID를 확보한다.
+        val file =
+            File
+                .new {
+                    name = request.name
+                    size = request.size
+                    type = request.type
+                    directory = getUploadDirectory().toAbsolutePath().toString()
+                    created = LocalDateTime.now()
+                }
+        // 이미 디렉터리가 있다면 삭제한다.
+        FileUtils.deleteDirectory(file.directoryPath.toFile())
+        return Base62.encode(file.id.value)
+    }
+
+    /**
+     * 청크파일 조각 업로드
+     */
+    @Transactional
+    fun uploadChunk(request: ChunkUploadRequest) {
+        val fileId = Base62.decode(request.id)
+        val file = File.findById(fileId) ?: return
+        if (Files.notExists(file.directoryPath)) {
+            Files.createDirectories(file.directoryPath)
+        }
+        // 청크 조각 복사
+        val chunkPath = file.directoryPath.resolve(request.offset.toString())
+        request.resource.inputStream.transferTo(chunkPath.outputStream())
+        // 마지막 청크 업로드
+        if (request.offset + request.resource.contentLength() >= file.size) {
+            file.complete()
+        }
+    }
+
+    /**
+     * 파일 삭제
+     */
     @Transactional
     fun delete(base62: String) {
         val fileId = Base62.decode(base62)
-        File.findById(fileId)?.let {
-            log.info { "delete file. id = $fileId, path = ${it.path}" }
-            Files.deleteIfExists(Path.of(it.path))
-            it.delete()
-        }
-    }
-
-    fun get(base62: String): FileDto? = File.findById(Base62.decode(base62))?.toDto()
-
-    /**
-     * 파일명을 랜덤하게 생성
-     *
-     * @param originalName 원본 파일명
-     * */
-    private fun randomFilename(originalName: String): String {
-        val uuid = UUID.randomUUID()
-        val ext = FilenameUtils.getExtension(originalName)
-        return buildString {
-            append(uuid)
-            if (ext != null && ext.isNotBlank()) {
-                append(".")
-                append(ext)
-            }
+        File.findById(fileId)?.let { file ->
+            FileUtils.deleteDirectory(file.directoryPath.toFile())
+            log.debug { "Deleted chunk directory ${file.directoryPath}" }
+            file.delete()
         }
     }
 
     /**
-     * 파일의 타입을 추출한다
-     *
-     * @param path 파일 경로
-     * */
-    private fun mimeType(path: Path): String = Tika().detect(path.toFile())
+     * 파일 정보 조회
+     */
+    fun getFile(base62: String): FileDto {
+        val file = File.findById(Base62.decode(base62)) ?: throw FileNotFoundException(base62)
+        if (!file.completed || Files.notExists(file.directoryPath) || !file.checkSize()) {
+            throw FileNotFoundException(file.directory)
+        }
+        return file.toDto()
+    }
+
+    /**
+     * 파일 아이디에 해당하는 청크 파일이 업로드될 디렉터리 위치를 리턴
+     */
+    private fun getUploadDirectory(): Path {
+        val uuid = UUID.randomUUID().toString()
+        val uploadPath = fileUploadProperties.path.resolve(uuid)
+        FileUtils.deleteDirectory(uploadPath.toFile())
+        Files.createDirectories(uploadPath)
+        return uploadPath
+    }
+
+    data class ChunkInitRequest(
+        val name: String,
+        val type: String,
+        val size: Long,
+    )
+
+    data class ChunkUploadRequest(
+        val id: String,
+        val offset: Long,
+        val resource: Resource,
+    )
 }
