@@ -2,6 +2,7 @@ logging:
   level:
     org.h2: debug
     redis.embedded: debug
+    org.antop.board: debug
 
 spring:
   datasource:

@@ -17,8 +17,10 @@ create table if not exists files
     file_name varchar(255) not null comment '파일명',
     file_size int          not null comment '파일 크기',
     file_type varchar(100) not null comment '파일 타입',
-    file_path varchar(255) not null comment '파일 경로',
+    directory varchar(225) not null default '~/' comment '업로드 디렉터리',
+    completed boolean      not null default false comment '업로드 완료 여부',
     created   datetime     not null comment '등록 일시',
+    modified  datetime     null comment '수정 일시',
     primary key (file_id)
 );
 
@@ -29,13 +31,4 @@ create table if not exists post_files
     primary key (post_id, file_id),
     foreign key (post_id) references posts (post_id) on delete cascade,
     foreign key (file_id) references files (file_id) on delete cascade
-);
-
-create table if not exists tags
-(
-    tag_id   bigint       not null auto_increment comment '태그 ID',
-    tag_name varchar(100) not null comment '태그명',
-    post_id  bigint       not null comment '게시물 ID',
-    primary key (tag_id),
-    foreign key (post_id) references posts (post_id) on delete cascade
 );

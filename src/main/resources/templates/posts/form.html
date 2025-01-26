@@ -16,7 +16,6 @@
     <script type="text/javascript" th:src="@{/libs/bootstrap-5.3.3/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/filepond-4.28.2/filepond.js}"></script>
-    <script type="text/javascript" th:src="@{/libs/filepond-plugins/file-validate-size-2.2.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ckeditor5.umd.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ko.umd.js}"></script>
 </head>
@@ -101,14 +100,25 @@
     });
 </script>
 <script>
-    // filepond
-    FilePond.registerPlugin(FilePondPluginFileValidateSize);
-    FilePond.setOptions({
+    FilePond.create(document.getElementById("filepond"), {
         storeAsFile: true,
-        maxFileSize: "20MB",
-        server: "/filepond",
+        server: {
+            url: "/filepond",
+            process: {
+                headers: function (file) {
+                    // 청크 초기화할 정보를 서버로 보내준다.
+                    return {
+                        "Upload-Name": encodeURIComponent(file.name),
+                        "Upload-Type": file.type,
+                        "Upload-Length": file.size,
+                    };
+                }
+            }
+        },
+        chunkUploads: true,
+        chunkForce: true,
+        chunkSize: 5 * 1024 * 1024, // 5MB
     });
-    FilePond.create(document.getElementById("filepond"));
     // CKEditor
     const {
         ClassicEditor,
