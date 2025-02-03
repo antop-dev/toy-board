@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = "local.server.h2")
 data class LocalH2Properties(
-    val port: Int,
-    val database: String,
+    val port: Int = 49090,
+    val database: String = "~/toy-board",
     val init: Boolean = false,
 )
