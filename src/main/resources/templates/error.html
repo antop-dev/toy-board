@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${status + ' ' + error}"></title>
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+<div class="container pt-5 pb-5">
+    <div class="f-flex text-center align-items-center justify-content-center">
+        <h1 class="display-1 fw-bold" th:text="${status}"></h1>
+        <p class="fs-3"> <span class="text-danger">Opps!</span> <span th:text="${error}"></span></p>
+        <p class="lead" th:text="${message}"></p>
+        <a th:href="@{/}" class="btn btn-primary">홈으로</a>
+        <div th:if="${!#strings.isEmpty(#strings.trim(trace))}" class="p-4">
+            <pre class="text-start p-3 border" style="overflow: auto; font-size: 11px;"><code
+                    th:text="${#strings.trim(trace)}"></code></pre>
+        </div>
+    </div>
+</div>
+</body>
+</html>
