@@ -32,8 +32,7 @@
                     <button type="submit" class="input-group-text">
                         <i class="bi bi-search"></i>
                     </button>
-                    <a class="input-group-text" title="목록"
-                       th:href="@{/posts/list.html(page=${pagination.next},size=${pagination.size},keyword=${keyword})}">
+                    <a class="input-group-text" title="목록" th:href="@{/posts/list.html}">
                         <i class="bi bi-list-columns"></i>
                     </a>
                 </div>
@@ -46,35 +45,42 @@
              th:each="item : ${pagination.items}">
             <div class="row justify-content-between">
                 <!--/* 순번 */-->
-                <div class="text-end" style="width: 70px; max-width: 70px;" th:text="${item.seq}"></div>
+                <div class="text-center w-70px" th:text="${item.seq}"></div>
                 <!--/* 제목 */-->
                 <div class="col text-truncate ps-0">
-                    <a th:href="@{/posts/{id}.html(id=${item.data.id},page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
+                    <th:block th:if="${item.data.depth > 0}">
+                        <span th:each="i: ${#numbers.sequence(0, item.data.depth - 1)}" class="ms-3"></span>
+                        <i class="bi bi-reply"></i>
+                    </th:block>
+                    <a th:unless="${item.data.removed}" th:href="@{/posts/view.html(id=${item.data.id},page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
                        class="text-decoration-none text-black" th:text="${item.data.subject}"/>
+                    <span th:if="${item.data.removed}" class="text-decoration-line-through text-muted" th:text="${item.data.subject}"/>
                 </div>
                 <!--/* 작성자 */-->
-                <div class="col text-end text-truncate" style="max-width: 170px;">
+                <div class="col text-truncate block w-140px">
+                    <span><i class="bi bi-person"></i></span>
                     <span th:text="${item.data.author}"/>
                 </div>
             </div>
-            <div class="row justify-content-between pt-1">
+            <div th:unless="${item.data.removed}" class="row justify-content-between pt-1">
+                <!--/* 빈칸 */-->
+                <div class="col-auto w-70px"></div>
                 <!--/* 태그 */-->
-                <div class="col col-md-8">
-                    <div th:if="${item.data.tags != null}" style="margin-left: 60px;">
-                        <i class="bi bi-tag"></i>
+                <div class="col ps-0">
+                    <span th:if="${item.data.depth > 0}" th:each="i: ${#numbers.sequence(0, item.data.depth - 1)}" class="ms-3"></span>
+                    <span th:if="${item.data.tags != null}">
                         <a class="tag me-1" th:each="tag : ${item.data.tags}" th:href="@{/posts/list.html(keyword=${tag})}" th:text="'#' + ${tag}"/>
-                    </div>
+                    </span>
                 </div>
-                <!--/* 조회수, 변경일시 */-->
-                <div class="col col-md-4 text-end">
-                    <span class="ms-3" style="min-width: 70px; max-width: 70px; width: 70px;">
-                        <i class="bi bi-eye"></i>
-                        <th:block th:text="${item.data.hits}"/>
-                    </span>
-                    <span class="ms-3" style="min-width: 100px; max-width: 100px; width: 100px;">
-                        <i class="bi bi-calendar-week"></i>
-                        <span th:title="${#temporals.format(item.data.changed, 'yyyy.MM.dd HH:mm:ss')}" th:text="${item.data.changedPretty}"/>
-                    </span>
+                <!--/* 조회수 */-->
+                <div class="col-auto col-1 w-70px">
+                    <i class="bi bi-eye"></i>
+                    <th:block th:text="${item.data.hits}"/>
+                </div>
+                <!--/* 변경일시 */-->
+                <div class="col-auto w-140px">
+                    <i class="bi bi-calendar-week"></i>
+                    <span th:text="${item.data.changed}"/>
                 </div>
             </div>
         </div>
@@ -107,7 +113,7 @@
         </div>
         <!--/* 버튼 */-->
         <div class="ms-auto">
-            <a th:href="@{/posts/form.html(page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
+            <a th:href="@{/posts/save.html(page=${pagination.page},size=${pagination.size},keyword=${keyword})}"
                class="btn btn-outline-primary rounded-0">
                 <i class="bi bi-pencil"></i> 등록
             </a>

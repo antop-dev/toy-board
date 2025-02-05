@@ -12,4 +12,7 @@ object Posts : LongIdTable(name = "posts", columnName = "post_id") {
     val modified = datetime("modified").nullable()
     val tags = tags("tags").nullable()
     val hits = long("hits").default(0L)
+    val thread = long("thread")
+    val depth = integer("depth").default(0)
+    val removed = bool("removed").default(false)
 }

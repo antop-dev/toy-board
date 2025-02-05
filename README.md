@@ -2,6 +2,33 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
+## Sprint 6
+
+### `local-docker` 프로파일 추가 : 도커의 MariaDB, Redis를 사용.
+
+* `local` : H2(MySQL Mode)와 Embedded Redis를 사용. 서버 재시작하면 데이터 다 날라감 ㅜㅠ
+* `local-docker` : 도커(아니어도 됨)에 올린 MariaDB와 Redis를 사용
+
+### SQL 쿼리 로깅
+
+`Exposed`에서 제공하는 로그는 맘에 들지 않아 p6spy + sql-formatter 조합으로 로그 SQL 로그 출력
+
+### 공통 에러 페이지 구성
+
+### 댓글 구현
+
+1. 쓰레드로 댓글값 구현 (1000 단위 : 게시글, 1~999 : 댓글)
+   1. 게시글은 최대 `long / 1000`개 등록할 수 있다. 
+   2. 댓글은 게시글 하나당  최대 999개를 등록할 수 있다.
+2. 등록/수정/댓글 컨트롤러 분리 (+ Thymeleaf)
+3. 게시글 소프트 삭제 (삭제된 게시글은 "삭제된 게시글"로 노출)
+
+```mysql
+alter table posts add thread bigint not null comment '쓰레드';
+alter table posts add depth int not null default 0 comment '들여쓰기';
+alter table posts add removed boolean not null default false comment '삭제 여부';
+```
+
 ## Sprint 5
 
 ### 완전한 로컬 환경에서 실행 가능하도록 구성

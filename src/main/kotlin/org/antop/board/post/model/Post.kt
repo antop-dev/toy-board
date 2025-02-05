@@ -17,6 +17,8 @@ import org.jetbrains.exposed.dao.id.EntityID
  * @property tags 태그
  * @property hits 조회수
  * @property files 첨부파일 목록
+ * @property thread 쓰레드
+ * @property depth 들여쓰기
  */
 class Post(
     id: EntityID<Long>,
@@ -31,4 +33,28 @@ class Post(
     var tags: Set<String>? by Posts.tags
     var hits by Posts.hits
     var files by File via PostFiles
+    var thread: Long by Posts.thread
+    var depth: Int by Posts.depth
+    var removed by Posts.removed
+        private set
+
+    /**
+     * 삭제 처리 (소프트 삭제)
+     */
+    fun remove() {
+        this.removed = true
+    }
+
+    /**
+     * 해당 게시글이 가질 수 있는 최소 스레드 값
+     */
+    fun minThread(): Long {
+        val min =
+            if (thread % 1000 == 0L) { // 메인글 (1000, 2000, 3000)
+                thread - 1000
+            } else { // 쓰레드 (982, 1999, 2100)
+                thread / 1000 * 1000
+            }
+        return min + 1
+    }
 }

@@ -1,13 +1,16 @@
 create table if not exists posts
 (
-    post_id  bigint           not null auto_increment comment '게시글 ID',
-    subject  varchar(255)     not null comment '제목',
-    content  text             not null comment '내용',
-    author   varchar(100)     not null comment '작성자',
-    created  datetime         not null comment '등록 일시',
-    modified datetime         null comment '수정 일시',
-    hits     bigint default 0 not null comment '조회수',
-    tags     text             null comment '태그',
+    post_id  bigint       not null auto_increment comment '게시글 ID',
+    subject  varchar(255) not null comment '제목',
+    content  text         not null comment '내용',
+    author   varchar(100) not null comment '작성자',
+    created  datetime     not null comment '등록 일시',
+    modified datetime     null comment '수정 일시',
+    hits     bigint       not null default 0 not null comment '조회수',
+    tags     text         null comment '태그',
+    thread   bigint       not null comment '쓰레드',
+    depth    int          not null default 0 comment '들여쓰기',
+    removed  boolean      not null default false comment '삭제 여부',
     primary key (post_id)
 );
 

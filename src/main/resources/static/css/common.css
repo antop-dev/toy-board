@@ -1,0 +1,13 @@
+.container {
+    min-width: 576px;
+}
+
+.w-70px {
+    min-width: 70px;
+    max-width: 70px;
+}
+
+.w-140px {
+    min-width: 140px;
+    max-width: 140px;
+}

@@ -3,22 +3,25 @@ package org.antop.board.post.service
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.Base62
 import org.antop.board.common.Pagination
+import org.antop.board.common.exceptions.PostNotFoundException
 import org.antop.board.common.exposed.contains
 import org.antop.board.common.extensions.now
 import org.antop.board.common.extensions.toSizedIterable
 import org.antop.board.file.model.File
 import org.antop.board.file.model.Files
 import org.antop.board.post.dto.PostDto
-import org.antop.board.post.dto.PostEditDto
-import org.antop.board.post.dto.PostSaveDto
 import org.antop.board.post.mapper.toDto
 import org.antop.board.post.mapper.toDtoForList
 import org.antop.board.post.model.Post
 import org.antop.board.post.model.PostFiles
 import org.antop.board.post.model.Posts
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.between
+import org.jetbrains.exposed.sql.alias
+import org.jetbrains.exposed.sql.max
 import org.jetbrains.exposed.sql.or
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +32,7 @@ class PostService {
     /**
      * 게시물 조회
      */
-    fun list(
+    fun getPosts(
         keyword: String?,
         page: Long,
         pageSize: Int,
@@ -58,7 +61,7 @@ class PostService {
             .select(Posts.fields)
             .where { createOp(keyword) }
             .withDistinct()
-            .orderBy(Posts.id to SortOrder.DESC)
+            .orderBy(Posts.thread to SortOrder.DESC)
             .offset((page - 1) * pageSize)
             .limit(pageSize)
             .map { Post.wrapRow(it) }
@@ -68,7 +71,7 @@ class PostService {
             .leftJoin(PostFiles)
             .leftJoin(Files)
 
-    private fun createOp(keyword: String?) =
+    private fun createOp(keyword: String?): Op<Boolean> =
         keyword?.let {
             Op.FALSE
                 .or(Posts.subject contains it)
@@ -81,13 +84,19 @@ class PostService {
     /**
      * 게시물 한건 조회
      */
-    fun get(id: Long): PostDto? = Post.findById(id)?.toDto()
+    fun getPost(id: Long): PostDto {
+        val post = Post.findById(id) ?: throw PostNotFoundException()
+        if (post.removed) {
+            throw PostNotFoundException()
+        }
+        return post.toDto()
+    }
 
     /**
      * 게시물 저장
      */
     @Transactional
-    fun save(saveDto: PostSaveDto): PostDto {
+    fun save(saveDto: PostSaveServiceRequest): PostDto {
         val post =
             Post.new {
                 subject = saveDto.subject
@@ -96,36 +105,79 @@ class PostService {
                 created = LocalDateTime.now()
                 tags = saveDto.tags
                 files = getFiles(saveDto.files)
+                thread = nextThread()
             }
         return post.toDto()
+    }
+
+    private fun nextThread(): Long {
+        val alias = Posts.thread.max().alias("max_thread")
+        val maxThread = Posts.select(alias).singleOrNull()?.get(alias) ?: 0
+        return maxThread + 1000
+    }
+
+    /**
+     * 게시물 저장
+     */
+    @Transactional
+    fun reply(
+        parentPostId: Long,
+        request: PostSaveServiceRequest,
+    ): PostDto {
+        val parentPost = Post.findById(parentPostId) ?: throw PostNotFoundException()
+        // parentPost 의 thread 보다 낮았던 게시글들의 depth를 다 -1씩 낮춘다.
+        Post
+            .find(Posts.thread.between(parentPost.minThread(), parentPost.thread - 1))
+            .forEach { it.thread -= 1 }
+
+        val replyPost =
+            Post.new {
+                subject = request.subject
+                content = request.content
+                author = request.author
+                created = LocalDateTime.now()
+                tags = request.tags
+                files = getFiles(request.files)
+                thread = parentPost.thread - 1
+                depth = parentPost.depth + 1
+            }
+        return replyPost.toDto()
     }
 
     /**
      * 게시물 수정
      */
     @Transactional
-    fun edit(editDto: PostEditDto) {
-        Post.findByIdAndUpdate(editDto.id) {
-            it.subject = editDto.subject
-            it.content = editDto.content
-            it.author = editDto.author
-            it.modified = LocalDateTime.now()
-            it.tags = editDto.tags
-            it.files = getFiles(editDto.files)
-        }
+    fun edit(
+        postId: Long,
+        editDto: PostSaveServiceRequest,
+    ): PostDto {
+        val editedPost =
+            Post.findByIdAndUpdate(postId) {
+                it.subject = editDto.subject
+                it.content = editDto.content
+                it.author = editDto.author
+                it.modified = LocalDateTime.now()
+                it.tags = editDto.tags
+                it.files = getFiles(editDto.files)
+            } ?: throw PostNotFoundException()
+        return editedPost.toDto()
     }
 
     /**
      * 게시물 삭제
      */
     @Transactional
-    fun remove(id: Long) = Post.findById(id)?.delete()
+    fun remove(id: Long) {
+        Post.findById(id)?.remove()
+    }
 
     /**
      * 파일 아이디 목록으로 파일(엔티티) 목록 조회
      */
-    private fun getFiles(fileIds: List<String>): SizedIterable<File> =
+    private fun getFiles(fileIds: List<String>?): SizedIterable<File> =
         fileIds
-            .mapNotNull { fileId -> File.findById(Base62.decode(fileId)) }
-            .toSizedIterable()
+            ?.mapNotNull { fileId -> File.findById(Base62.decode(fileId)) }
+            ?.toSizedIterable()
+            ?: SizedCollection()
 }

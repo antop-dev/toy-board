@@ -1,4 +1,4 @@
-@import "common.css";
+@import "../common.css";
 
 .editor-container_classic-editor .editor-container__editor {
     margin-left: auto;
