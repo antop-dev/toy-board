@@ -1,5 +1,16 @@
+logging:
+  level:
+    org.h2: debug
+    redis.embedded: debug
+    org.antop.board: debug
+
 server:
   port: 8888
+  error:
+    include-exception: true
+    include-message: always
+    include-stacktrace: always
+    include-binding-errors: always
 
 spring:
   application:
@@ -11,6 +22,8 @@ spring:
   h2:
     console:
       enabled: false
+  exposed:
+    show-sql: false
 
 management:
   health:

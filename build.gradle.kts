@@ -48,6 +48,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:$exposedVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     // view
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     // https://github.com/wimdeblauwe/htmx-spring-boot
@@ -71,6 +72,11 @@ dependencies {
     implementation("com.h2database:h2")
     // https://github.com/codemonstur/embedded-redis
     implementation("com.github.codemonstur:embedded-redis:1.4.3")
+//    runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.5.1")
+
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0")
+    implementation("com.github.vertical-blank:sql-formatter:2.0.5")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
