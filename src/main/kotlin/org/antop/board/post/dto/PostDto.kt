@@ -13,4 +13,5 @@ data class PostDto(
     val files: List<FileDto> = emptyList(),
     val depth: Int = 0,
     val removed: Boolean = false,
+    val comments: Int,
 )

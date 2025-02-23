@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
-<head th:insert="~{/posts/form/fragments :: head ('게시글 등록')}">
-    <title>게시글 등록</title>
-</head>
+<head th:replace="~{/posts/form/fragments :: head ('게시글 등록')}"></head>
 <body>
 <div class="container pt-5 pb-5">
     <form hx:post="@{/posts/save}">

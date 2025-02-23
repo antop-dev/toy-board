@@ -15,4 +15,5 @@ object Posts : LongIdTable(name = "posts", columnName = "post_id") {
     val thread = long("thread")
     val depth = integer("depth").default(0)
     val removed = bool("removed").default(false)
+    val comments = integer("comments").default(0)
 }
