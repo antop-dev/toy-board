@@ -19,12 +19,12 @@ fun LocalDateTime.Companion.now(): LocalDateTime = Clock.System.now().toLocalDat
  * 당일일 때와 아닐 때 다른 포멧
  */
 @OptIn(FormatStringsInDatetimeFormats::class)
-fun LocalDateTime.pretty(): String {
+fun LocalDateTime.pretty(pattern: String = "yyyy.MM.dd"): String {
     val now = LocalDateTime.now()
     return if (date == now.date) {
         PrettyTime().format(this.toJavaLocalDateTime())
     } else {
-        val format = LocalDateTime.Format { byUnicodePattern("yyyy.MM.dd") }
+        val format = LocalDateTime.Format { byUnicodePattern(pattern) }
         return this.format(format)
     }
 }

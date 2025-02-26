@@ -37,6 +37,7 @@ class Post(
     var depth: Int by Posts.depth
     var removed by Posts.removed
         private set
+    var comments by Posts.comments
 
     /**
      * 삭제 처리 (소프트 삭제)

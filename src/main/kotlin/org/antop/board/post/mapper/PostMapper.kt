@@ -18,6 +18,7 @@ fun Post.toDto(): PostDto {
         hits = hits,
         files = files.map { it.toDto() },
         depth = depth,
+        comments = comments,
     )
 }
 
@@ -41,5 +42,6 @@ fun Post.toDtoForList(): PostDto {
         hits = hits,
         depth = depth,
         removed = removed,
+        comments = comments,
     )
 }

@@ -9,3 +9,7 @@
     white-space: nowrap;
     text-decoration: none;
 }
+
+.badge-comment {
+    font-size: 0.7em;
+}

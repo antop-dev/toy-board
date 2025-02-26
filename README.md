@@ -2,6 +2,28 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
+## Sprint 7
+
+### 코멘트 구현
+
+코멘트 수정은 아직 구현 못함 ㅠㅠ
+
+```mysql
+create table comments
+(
+   comment_id bigint   not null auto_increment comment '코멘트ID',
+   post_id    bigint   not null comment '게시물ID',
+   content    text     not null comment '내용',
+   created    datetime not null comment '등록일시',
+   modified   datetime null comment '수정일시',
+   removed    boolean  not null default false comment '삭제여부',
+   primary key (comment_id),
+   foreign key (post_id) references posts (post_id)
+);
+
+alter table posts add comments int default 0 not null comment '코멘트 수';
+```
+
 ## Sprint 6
 
 ### `local-docker` 프로파일 추가 : 도커의 MariaDB, Redis를 사용.

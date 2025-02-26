@@ -2,6 +2,7 @@ package org.antop.board.post.controller
 
 import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.common.Pagination
+import org.antop.board.post.service.CommentService
 import org.antop.board.post.service.PostHitsService
 import org.antop.board.post.service.PostService
 import org.springframework.stereotype.Controller
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class PostViewContoller(
     private val postService: PostService,
     private val postHitsService: PostHitsService,
+    private val commentService: CommentService,
 ) {
     @GetMapping("/list.html")
     fun list(
@@ -50,11 +52,14 @@ class PostViewContoller(
         // 조회수 증가
         val visitorId = request.remoteAddr
         val hits = postHitsService.incrementHits(post, visitorId)
+        // 코멘트 목록
+        val comments = commentService.getComments(post.id)
 
         model.addAttribute("post", post.copy(hits = hits))
         model.addAttribute("page", paging.page)
         model.addAttribute("size", paging.size)
         model.addAttribute("keyword", keyword)
-        return "posts/view"
+        model.addAttribute("comments", comments)
+        return "posts/view/view"
     }
 }

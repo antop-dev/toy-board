@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<body>
+<!--/* 코멘트 목록 */-->
+<th:block th:fragment="comments (postId)">
+    <!--/*@thymesVar id="comments" type="java.util.List"*/-->
+    <div th:each="c : ${comments}" th:id="|comments-${c.id}|" class="mt-3 border-top border-1 border-dark">
+        <!--/*@thymesVar id="c" type="org.antop.board.post.dto.CommentView"*/-->
+        <div class="mt-2 d-flex">
+            <div th:text="${c.changed}"></div>
+            <div class="ms-auto">
+                <!--/* 삭제 버튼 */-->
+                <span class="text-danger cursor-pointer" hx:target="|#comments-${c.id}|" hx-swap="delete"
+                      hx:delete="@{/comments/{commentId}(commentId=${c.id})}">
+                <i class="bi bi-trash3"></i>
+            </span>
+            </div>
+        </div>
+        <div class="mt-2 ck-content" th:utext="${c.content}"></div>
+    </div>
+    <div th:if="${comments.size() > 0}"
+         hx:get="@{/posts/{postId}/comments(postId=${postId},before=${comments.get(comments.size() - 1).id})}"
+         hx-trigger="revealed" hx-swap="afterend">
+    </div>
+</th:block>
+<!--/* 코멘트 */-->
+<div th:fragment="comment" th:id="|comments-${c.id}|" class="mt-3 border-top border-1 border-dark">
+    <!--/*@thymesVar id="c" type="org.antop.board.post.dto.CommentView"*/-->
+    <div class="mt-2 d-flex">
+        <div th:text="${c.changed}"></div>
+        <div class="ms-auto">
+            <!--/* 삭제 버튼 */-->
+            <span class="text-danger cursor-pointer" hx:target="|#comments-${c.id}|" hx-swap="delete"
+                  hx:delete="@{/comments/{commentId}(commentId=${c.id})}">
+                <i class="bi bi-trash3"></i>
+            </span>
+        </div>
+    </div>
+    <div class="mt-2 ck-content" th:utext="${c.content}"></div>
+</div>
+</body>
+</html>

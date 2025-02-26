@@ -11,6 +11,7 @@ create table if not exists posts
     thread   bigint       not null comment '쓰레드',
     depth    int          not null default 0 comment '들여쓰기',
     removed  boolean      not null default false comment '삭제 여부',
+    comments int          not null default 0 comment '코멘트 수',
     primary key (post_id)
 );
 
@@ -34,4 +35,16 @@ create table if not exists post_files
     primary key (post_id, file_id),
     foreign key (post_id) references posts (post_id) on delete cascade,
     foreign key (file_id) references files (file_id) on delete cascade
+);
+
+create table comments
+(
+    comment_id bigint   not null auto_increment comment '코멘트ID',
+    post_id    bigint   not null comment '게시물ID',
+    content    text     not null comment '내용',
+    created    datetime not null comment '등록일시',
+    modified   datetime null comment '수정일시',
+    removed    boolean  not null default false comment '삭제여부',
+    primary key (comment_id),
+    foreign key (post_id) references posts (post_id)
 );
