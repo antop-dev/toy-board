@@ -53,6 +53,7 @@ class CaptchaController {
                 .headers {
                     it.contentDisposition = ContentDisposition.inline().filename("captcha.png").build()
                     it.contentType = MediaType.IMAGE_PNG
+                    it.contentLength = output.size().toLong()
                 }.body(ByteArrayResource(output.toByteArray()))
         }
     }
