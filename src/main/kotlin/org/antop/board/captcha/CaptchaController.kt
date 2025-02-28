@@ -21,6 +21,7 @@ class CaptchaController {
     companion object {
         private const val CAPTCHA_LENGTH = 6
         private const val CAPTCHA_NOISE = 5
+        private const val CAPTCHA_SYMBOLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789"
     }
 
     @GetMapping("/captcha.png")
@@ -38,14 +39,21 @@ class CaptchaController {
         width: Int,
         height: Int,
     ): GeneratedCaptcha {
-        val config = Config(width, height, CAPTCHA_LENGTH, CAPTCHA_NOISE, false)
+        val config =
+            Config().apply {
+                this.width = width
+                this.height = height
+                noise = CAPTCHA_NOISE
+                isDark = false
+            }
 
-        val symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789"
-        val randomStringGenerator = RandomStringGenerator(6, SecureRandom(), symbols)
+        val captcha =
+            Captcha().apply {
+                this.config = config
 
-        val captcha = Captcha()
-        captcha.config = config
-        captcha.setRandomStringGenerator(randomStringGenerator)
+                val randomStringGenerator = RandomStringGenerator(CAPTCHA_LENGTH, SecureRandom(), CAPTCHA_SYMBOLS)
+                setRandomStringGenerator(randomStringGenerator)
+            }
 
         return captcha.generate()
     }
