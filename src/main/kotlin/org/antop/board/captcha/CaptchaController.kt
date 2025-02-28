@@ -18,6 +18,11 @@ import javax.imageio.ImageIO
 
 @Controller
 class CaptchaController {
+    companion object {
+        private const val CAPTCHA_LENGTH = 6
+        private const val CAPTCHA_NOISE = 5
+    }
+
     @GetMapping("/captcha.png")
     fun captcha(
         session: HttpSession,
@@ -33,7 +38,7 @@ class CaptchaController {
         width: Int,
         height: Int,
     ): GeneratedCaptcha {
-        val config = Config(width, height, 6, 5, false)
+        val config = Config(width, height, CAPTCHA_LENGTH, CAPTCHA_NOISE, false)
 
         val symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789"
         val randomStringGenerator = RandomStringGenerator(6, SecureRandom(), symbols)
