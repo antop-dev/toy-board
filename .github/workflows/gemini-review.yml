@@ -33,9 +33,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: truongnh1992/gemini-ai-code-reviewer@main
+#      - uses: truongnh1992/gemini-ai-code-reviewer@main
+      - uses: antop-dev/gemini-ai-code-reviewer@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: gemini-1.5-flash-002 # Optional, default is `gemini-1.5-flash-002`
           EXCLUDE: "*.md,*.txt,*.yml,*.yaml"
+          LANG: "Korean"
