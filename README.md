@@ -1,5 +1,17 @@
 # 토이 프로젝트 - 게시판
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=bugs)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=coverage)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=antop-dev_toy-board&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=antop-dev_toy-board)
+
 점진적으로 발전해나가는 게시판 프로젝트
 
 ## Sprint 7
