@@ -40,3 +40,4 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: gemini-1.5-flash-002 # Optional, default is `gemini-1.5-flash-002`
           EXCLUDE: "*.md,*.txt,*.yml,*.yaml"
+          LANG: "Korean"
