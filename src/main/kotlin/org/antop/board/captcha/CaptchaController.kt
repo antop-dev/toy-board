@@ -46,14 +46,14 @@ class CaptchaController {
     }
 
     fun ok(captcha: GeneratedCaptcha): ResponseEntity<ByteArrayResource> {
-        val output = ByteArrayOutputStream()
-        ImageIO.write(captcha.image, "png", output)
-
-        return ResponseEntity
-            .ok()
-            .headers {
-                it.contentDisposition = ContentDisposition.inline().filename("captcha.png").build()
-                it.contentType = MediaType.IMAGE_PNG
-            }.body(ByteArrayResource(output.toByteArray()))
+        ByteArrayOutputStream().use { output ->
+            ImageIO.write(captcha.image, "png", output)
+            return ResponseEntity
+                .ok()
+                .headers {
+                    it.contentDisposition = ContentDisposition.inline().filename("captcha.png").build()
+                    it.contentType = MediaType.IMAGE_PNG
+                }.body(ByteArrayResource(output.toByteArray()))
+        }
     }
 }
