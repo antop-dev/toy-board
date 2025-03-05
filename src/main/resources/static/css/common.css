@@ -15,3 +15,11 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.link {
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

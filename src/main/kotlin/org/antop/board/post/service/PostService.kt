@@ -180,4 +180,14 @@ class PostService {
             ?.mapNotNull { fileId -> File.findById(Base62.decode(fileId)) }
             ?.toSizedIterable()
             ?: SizedCollection()
+
+    /**
+     * 게시글 좋아요 카운트 올림
+     */
+    fun like(postId: Long): PostDto? = Post.findByIdAndUpdate(postId) { it.likes++ }?.toDto()
+
+    /**
+     * 게시글 싫어요 카운트 올림
+     */
+    fun dislike(postId: Long): PostDto? = Post.findByIdAndUpdate(postId) { it.dislikes++ }?.toDto()
 }
