@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 @RequestMapping("/posts")
-class PostViewContoller(
+class PostViewController(
     private val postService: PostService,
     private val postHitsService: PostHitsService,
     private val commentService: CommentService,
@@ -77,7 +77,7 @@ class PostViewContoller(
         @PathVariable postId: Long,
     ): String {
         val post = postService.like(postId)
-        return (post?.likes ?: 0).comma()
+        return post.likes.comma()
     }
 
     @HxRequest
@@ -88,6 +88,6 @@ class PostViewContoller(
         @PathVariable postId: Long,
     ): String {
         val post = postService.dislike(postId)
-        return (post?.dislikes ?: 0).comma()
+        return post.dislikes.comma()
     }
 }

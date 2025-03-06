@@ -16,5 +16,7 @@ class NumberTest {
         assertThat(BigDecimal("1234567890").comma(), `is`("1,234,567,890"))
         assertThat(56789F.comma(), `is`("56,789"))
         assertThat(3000.toShort().comma(), `is`("3,000"))
+        assertThat((-3000).comma(), `is`("-3,000"))
+        assertThat(1234.56.comma(), `is`("1,234.56"))
     }
 }

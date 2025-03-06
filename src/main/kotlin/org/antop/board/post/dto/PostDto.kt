@@ -14,6 +14,6 @@ data class PostDto(
     val depth: Int = 0,
     val removed: Boolean = false,
     val comments: Int,
-    val likes: Int,
-    val dislikes: Int,
+    val likes: Int = 0,
+    val dislikes: Int = 0,
 )
