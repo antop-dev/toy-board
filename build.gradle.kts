@@ -35,6 +35,7 @@ val commonsTextVersion: String by project
 val kotlinxSerializationVersion: String by project
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -77,6 +78,8 @@ dependencies {
 
     implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0")
     implementation("com.github.vertical-blank:sql-formatter:2.0.5")
+
+    implementation("com.mewebstudio:captcha:0.1.3")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

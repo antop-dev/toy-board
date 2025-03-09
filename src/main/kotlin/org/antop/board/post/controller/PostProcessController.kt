@@ -2,6 +2,7 @@ package org.antop.board.post.controller
 
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
+import org.antop.board.captcha.ValidCaptcha
 import org.antop.board.post.dto.PostDto
 import org.antop.board.post.service.PostSaveServiceRequest
 import org.antop.board.post.service.PostService
@@ -30,6 +31,7 @@ class PostProcessController(
     }
 
     @HxRequest
+    @ValidCaptcha
     @PostMapping("/save")
     fun save(
         @RequestParam subject: String,
@@ -45,6 +47,7 @@ class PostProcessController(
     }
 
     @HxRequest
+    @ValidCaptcha
     @PostMapping("/reply")
     fun reply(
         @RequestParam("parent") parentPostId: Long,
@@ -60,6 +63,7 @@ class PostProcessController(
     }
 
     @HxRequest
+    @ValidCaptcha
     @PostMapping("/edit")
     fun edit(
         @RequestParam id: Long,
