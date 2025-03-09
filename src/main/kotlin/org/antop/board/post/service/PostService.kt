@@ -151,17 +151,13 @@ class PostService {
     fun edit(
         postId: Long,
         editDto: PostSaveServiceRequest,
-    ): PostDto {
-        val editedPost =
-            Post.findByIdAndUpdate(postId) {
-                it.subject = editDto.subject
-                it.content = editDto.content
-                it.author = editDto.author
-                it.modified = LocalDateTime.now()
-                it.tags = editDto.tags
-                it.files = getFiles(editDto.files)
-            } ?: throw PostNotFoundException()
-        return editedPost.toDto()
+    ) = findForUpdate(postId) {
+        it.subject = editDto.subject
+        it.content = editDto.content
+        it.author = editDto.author
+        it.modified = LocalDateTime.now()
+        it.tags = editDto.tags
+        it.files = getFiles(editDto.files)
     }
 
     /**
@@ -180,4 +176,26 @@ class PostService {
             ?.mapNotNull { fileId -> File.findById(Base62.decode(fileId)) }
             ?.toSizedIterable()
             ?: SizedCollection()
+
+    /**
+     * 게시글 좋아요 카운트++
+     */
+    @Transactional
+    fun like(postId: Long) = findForUpdate(postId) { it.likes++ }
+
+    /**
+     * 게시글 싫어요 카운트++
+     */
+    @Transactional
+    fun dislike(postId: Long) = findForUpdate(postId) { it.dislikes++ }
+
+    /**
+     * 수정하기 위한 조회. 내부적으로 해당 데이터에 락이 걸린다.
+     */
+    @Transactional
+    fun findForUpdate(
+        postId: Long,
+        action: (Post) -> Unit = {
+        },
+    ) = Post.findByIdAndUpdate(postId) { action(it) }?.toDto() ?: throw PostNotFoundException()
 }

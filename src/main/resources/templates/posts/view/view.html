@@ -23,7 +23,7 @@
     <section>
         <!--/* 제목 */-->
         <h2 th:text="${post.subject}"/>
-        <div class="mt-4">
+        <div class="mt-4 d-flex">
             <div>
                 <!--/* 작성자 */-->
                 <em class="fs-5" th:text="${post.author}"/>
@@ -36,6 +36,18 @@
                 <span class="ms-3">
                     <i class="bi bi-eye"></i>
                     <th:block th:text="${post.hits}"/>
+                </span>
+            </div>
+            <div class="ms-auto">
+                <span class="cursor-pointer" hx:post="@{/posts/{postId}/like(postId=${post.id})}" hx-trigger="click"
+                      hx-target="#likes">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                    <span id="likes" th:text="${#numbers.formatInteger(post.likes, 1, 'COMMA')}">0</span>
+                </span>
+                <span class="ms-2 cursor-pointer" hx:post="@{/posts/{postId}/dislike(postId=${post.id})}"
+                      hx-trigger="click" hx-target="#dislikes">
+                    <i id="dislike" class="bi bi-hand-thumbs-down"></i>
+                    <span id="dislikes" th:text="${#numbers.formatInteger(post.dislikes, 1, 'COMMA')}">0</span>
                 </span>
             </div>
         </div>

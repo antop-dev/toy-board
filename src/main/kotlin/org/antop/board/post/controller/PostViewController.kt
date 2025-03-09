@@ -1,19 +1,25 @@
 package org.antop.board.post.controller
 
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxReswap
 import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.common.Pagination
+import org.antop.board.common.extensions.comma
 import org.antop.board.post.service.CommentService
 import org.antop.board.post.service.PostHitsService
 import org.antop.board.post.service.PostService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 @RequestMapping("/posts")
-class PostViewContoller(
+class PostViewController(
     private val postService: PostService,
     private val postHitsService: PostHitsService,
     private val commentService: CommentService,
@@ -61,5 +67,27 @@ class PostViewContoller(
         model.addAttribute("keyword", keyword)
         model.addAttribute("comments", comments)
         return "posts/view/view"
+    }
+
+    @HxRequest
+    @PostMapping("{postId}/like")
+    @ResponseBody
+    @HxReswap
+    fun like(
+        @PathVariable postId: Long,
+    ): String {
+        val post = postService.like(postId)
+        return post.likes.comma()
+    }
+
+    @HxRequest
+    @PostMapping("{postId}/dislike")
+    @ResponseBody
+    @HxReswap
+    fun dislike(
+        @PathVariable postId: Long,
+    ): String {
+        val post = postService.dislike(postId)
+        return post.dislikes.comma()
     }
 }
