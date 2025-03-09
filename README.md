@@ -14,6 +14,28 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
+## Spring 8
+
+### AI Code Review 추가
+
+https://github.com/marketplace/actions/chatgpt-codereviewer
+
+`gpt-4o-mini` 모델을 사용하여 PR 단계에서 AI 코드 리뷰
+
+### 캡챠 구현
+
+https://github.com/mewebstudio/java-captcha-generator
+
+게시글 등록/수정, 답글 등록 폼에 캡챠 적용.
+
+![sprint8-captcha](./assets/sprint8-captcha.png)
+
+### 좋아요/싫어요 구현
+
+게시글 보기 상단 오른쪽에 좋아요/싫어요 버튼 배치
+
+![sprint8-like](./assets/sprint8-like.png)
+
 ## Sprint 7
 
 ### 코멘트 구현
