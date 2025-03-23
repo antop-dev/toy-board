@@ -50,8 +50,12 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:$exposedVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.session:spring-session-data-redis")
+
     // view
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.3.RELEASE")
     // https://github.com/wimdeblauwe/htmx-spring-boot
     implementation("io.github.wimdeblauwe:htmx-spring-boot:$htmxSpringBootVersion")
     implementation("io.github.wimdeblauwe:htmx-spring-boot-thymeleaf:$htmxSpringBootVersion")
@@ -73,7 +77,7 @@ dependencies {
     implementation("com.h2database:h2")
     // https://github.com/codemonstur/embedded-redis
     implementation("com.github.codemonstur:embedded-redis:1.4.3")
-//    runtimeOnly("com.mysql:mysql-connector-j")
+    // runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.5.1")
 
     implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0")

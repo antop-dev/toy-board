@@ -14,7 +14,33 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
-## Spring 8
+## Sprint 9
+
+### 회원 테이블 설계
+
+```mysql
+create table users
+(
+    user_id  bigint auto_increment comment '유저ID',
+    email    varchar(100) not null comment '이메일',
+    password varchar(255) not null comment '비밀번호',
+    nickname varchar(100) not null comment '닉네임',
+    created  datetime     not null comment '등록일시',
+    modified datetime comment '수정일시',
+    primary key (user_id),
+    unique (email)
+);
+
+```
+
+### 로그인 구현
+
+* 이메일/비빌번호로 로그인
+* 로그아웃
+* 로그인 상태 유지(Remember Me)
+* HTMX + CSRF<sup>`Cross Site Request Forgery`</sup>
+
+## Sprint 8
 
 ### AI Code Review 추가
 

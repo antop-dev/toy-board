@@ -7,18 +7,6 @@ import org.jetbrains.exposed.dao.id.EntityID
 
 /**
  * 게시글
- *
- * @property id 게시글 ID
- * @property subject 제목
- * @property content 내용
- * @property author 작성자
- * @property created 등록일시
- * @property modified 마지막 수정일시
- * @property tags 태그
- * @property hits 조회수
- * @property files 첨부파일 목록
- * @property thread 쓰레드
- * @property depth 들여쓰기
  */
 class Post(
     id: EntityID<Long>,

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
-<head th:replace="~{/posts/form/fragments :: head ('게시글 수정')}">
-    <title>게시글 수정</title>
+<head>
+    <th:block th:replace="~{/posts/form/fragments :: head ('게시글 수정')}" />
+    <th:block th:replace="~{common :: head-csrf}" />
 </head>
 <body>
-
+<nav th:replace="~{common :: header}"></nav>
 <div class="container pt-5 pb-5">
     <form hx:post="@{/posts/edit}">
         <input type="hidden" name="id" th:value="${post.id}">

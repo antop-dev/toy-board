@@ -24,7 +24,7 @@ class PostViewController(
     private val postHitsService: PostHitsService,
     private val commentService: CommentService,
 ) {
-    @GetMapping("/list.html")
+    @GetMapping(path = ["/", "/list.html"])
     fun list(
         model: Model,
         paging: Pagination.Request,

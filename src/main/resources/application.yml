@@ -11,6 +11,10 @@ server:
     include-message: always
     include-stacktrace: always
     include-binding-errors: always
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
 
 spring:
   application:
