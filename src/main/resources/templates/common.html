@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head-csrf">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script>
+        document.addEventListener('htmx:config-request', (event) => {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+            event.detail.headers[csrfHeader] = csrfToken;
+        });
+    </script>
+</head>
+
+<nav class="py-2 bg-light border-bottom sticky-top" th:fragment="header">
+    <div class="container d-flex flex-wrap">
+        <div class="nav me-auto"></div>
+        <ul class="nav">
+            <li class="nav-item">
+                <span sec:authentication="name" class="nav-link link-dark px-2">authentication.name</span>
+            </li>
+            <li class="nav-item">
+                <a href="#" hx-post="/logout" hx-trigger="click" class="nav-link link-dark px-2 cursor-pointer">Sign out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</html>

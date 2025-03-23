@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
+    <th:block th:replace="~{common :: head-csrf}"/>
+</head>
+<body>
+<!--/* https://jsfiddle.net/StartBootstrap/amxr8n19/ */-->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                    <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
+                    <form hx:post="@{{url}(url=${loginProcessingUrl})}">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" th:name="${usernameParameter}" autofocus
+                                   required>
+                            <label for="email">Email address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" th:name="${passwordParameter}"
+                                   required>
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="remember-me"
+                                   th:name="${rememberMeParameter}">
+                            <label class="form-check-label" for="remember-me">Remember me</label>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
+                                in
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
