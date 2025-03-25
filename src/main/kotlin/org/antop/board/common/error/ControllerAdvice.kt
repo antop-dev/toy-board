@@ -19,7 +19,8 @@ class ControllerAdvice {
         e: ValidationException,
         response: HttpServletResponse,
     ) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.message)
+        val message = e.message ?: "잘못된 요청입니다."
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, message)
     }
 
     @ExceptionHandler(NotFoundException::class)
