@@ -1,6 +1,5 @@
 package org.antop.board.member.service
 
-import jakarta.validation.ValidationException
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.extensions.now
 import org.antop.board.member.dto.MemberDto
@@ -28,17 +27,13 @@ class MemberService(
     @Transactional
     fun register(
         email: String,
-        password1: String,
-        password2: String,
+        password: String,
         nickname: String,
     ): MemberDto {
-        if (password1 != password2) {
-            throw ValidationException("비밀번호가 일치하지 않습니다.")
-        }
         val entity =
             Member.new {
                 this.email = email
-                this.password = passwordEncoder.encode(password1)
+                this.password = passwordEncoder.encode(password)
                 this.nickname = nickname
                 created = LocalDateTime.now()
             }

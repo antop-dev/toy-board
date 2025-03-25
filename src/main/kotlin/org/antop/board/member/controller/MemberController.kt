@@ -28,12 +28,11 @@ class MemberController(
     @PostMapping(MemberConsts.Url.REGISTER_PROCESSING)
     fun registerProcess(
         @RequestParam("email") email: String,
-        @RequestParam("password1") password1: String,
-        @RequestParam("password2") password2: String,
+        @RequestParam("password") password: String,
         @RequestParam("nickname") nickname: String,
         request: HttpServletRequest,
     ): HtmxResponse {
-        memberService.register(email, password1, password2, nickname)
+        memberService.register(email, password, nickname)
         return HtmxResponse
             .builder()
             .redirect(request.contextPath())

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
 <head>
-    <th:block th:replace="~{/members/fragments :: head ('회원 등록')}" />
-    <th:block th:replace="~{/common :: head-csrf}" />
+    <th:block th:replace="~{/members/fragments :: head ('회원 등록')}"/>
+    <script th:src="@{/libs/pswmeter-1.1/pswmeter.min.js}"></script>
+    <th:block th:replace="~{/common :: head-csrf}"/>
 </head>
 <body>
 <div class="container pt-5 pb-5">
@@ -16,11 +17,13 @@
             </div>
             <div class="mt-3">
                 <label for="password1" class="form-label">비밀번호</label>
-                <input type="password" class="form-control" id="password1" name="password1" placeholder="비밀번호를 입력하세요.">
+                <input type="password" class="form-control" id="password1" name="password" placeholder="비밀번호를 입력하세요.">
+                <div id="pswmeter" class="mt-2"></div>
+                <div id="pswmeter-message"></div>
             </div>
             <div class="mt-3">
                 <label for="password2" class="form-label">비밀번호 확인</label>
-                <input type="password" class="form-control" id="password2" name="password2" placeholder="비밀번호를 입력하세요.">
+                <input type="password" class="form-control" id="password2" placeholder="비밀번호를 입력하세요.">
             </div>
             <div class="mt-3">
                 <label for="nickname" class="form-label">닉네임</label>
@@ -59,6 +62,31 @@
         const src = img.getAttribute("src"); // 기존 src 값을 가져옴
         img.setAttribute("src", src); // 캐시 방지
     }
+
+    // 비밀번호와 비밀번호확인 값 일치 확인
+    function matchPassword(password1, password2) {
+        if (password1.value === password2.value) {
+            password2.classList.remove("border-danger");
+        } else {
+            password2.classList.add("border-danger");
+        }
+    }
+
+    // 비밀번호 강도 체크
+    passwordStrengthMeter({
+        containerElement: '#pswmeter',
+        passwordInput: '#password1',
+        showMessage: false,
+        height: 6,
+        borderRadius: 0,
+        pswMinLength: 8,
+    });
+
+    const password1 = document.getElementById("password1");
+    const password2 = document.getElementById("password2");
+
+    password1.addEventListener("input", () => matchPassword(password1, password2))
+    password2.addEventListener("input", () => matchPassword(password1, password2));
 </script>
 </body>
 </html>
