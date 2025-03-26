@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="~{/members/fragments :: head ('회원 등록')}"/>
+    <script th:src="@{/libs/pswmeter-1.1/pswmeter.min.js}"></script>
+    <th:block th:replace="~{/common :: head-csrf}"/>
+</head>
+<body>
+<div class="container pt-5 pb-5">
+    <h2>회원 가입</h2>
+    <form hx:post="@{{url}(url=${registerProcessingUrl})}">
+        <!--/* 폼 */-->
+        <section class="mt-2 pt-4 border-top border-3 border-dark" th:fragment="form">
+            <div class="">
+                <label for="email" class="form-label">이메일</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요.">
+            </div>
+            <div class="mt-3">
+                <label for="password1" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="password1" name="password" placeholder="비밀번호를 입력하세요.">
+                <div id="pswmeter" class="mt-2"></div>
+                <div id="pswmeter-message"></div>
+            </div>
+            <div class="mt-3">
+                <label for="password2" class="form-label">비밀번호 확인</label>
+                <input type="password" class="form-control" id="password2" placeholder="비밀번호를 입력하세요.">
+            </div>
+            <div class="mt-3">
+                <label for="nickname" class="form-label">닉네임</label>
+                <input type="text" class="form-control" id="nickname" name="nickname" placeholder="닉네임을 입력하세요.">
+            </div>
+            <div class="mt-3">
+                <label for="captcha" class="form-label">자동 등록 방지</label>
+                <div class="input-group">
+                    <button type="button" class="input-group-text" onclick="refreshCaptcha()">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <img id="captcha-image" width="200" height="38"
+                         class="form-control" style="flex: none; width: 200px; padding: 0;"
+                         th:src="@{/captcha.png(w=200,h=38)}">
+                    <input type="text" id="captcha" name="captcha" class="form-control" placeholder="표시된 코드를 입력하세요">
+                </div>
+            </div>
+        </section>
+        <!--/* 버튼 */-->
+        <section class="pt-3 mt-4 border-top border-1 border-dark d-flex">
+            <div class="ms-auto">
+                <button type="submit" class="btn btn-outline-primary rounded-0">
+                    <i class="bi bi-pencil"></i> 등록
+                </button>
+                <a th:href="@{/}"
+                   class="btn btn-outline-dark rounded-0">
+                    <i class="bi bi-x"></i> 취소
+                </a>
+            </div>
+        </section>
+    </form>
+</div>
+<script>
+    function refreshCaptcha() {
+        const img = document.getElementById("captcha-image");
+        const src = img.getAttribute("src"); // 기존 src 값을 가져옴
+        img.setAttribute("src", src); // 캐시 방지
+    }
+
+    // 비밀번호와 비밀번호확인 값 일치 확인
+    function matchPassword(password1, password2) {
+        if (password1.value === password2.value) {
+            password2.classList.remove("border-danger");
+        } else {
+            password2.classList.add("border-danger");
+        }
+    }
+
+    // 비밀번호 강도 체크
+    passwordStrengthMeter({
+        containerElement: '#pswmeter',
+        passwordInput: '#password1',
+        showMessage: false,
+        height: 6,
+        borderRadius: 0,
+        pswMinLength: 8,
+    });
+
+    const password1 = document.getElementById("password1");
+    const password2 = document.getElementById("password2");
+
+    password1.addEventListener("input", () => matchPassword(password1, password2))
+    password2.addEventListener("input", () => matchPassword(password1, password2));
+</script>
+</body>
+</html>

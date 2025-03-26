@@ -1,6 +1,5 @@
 package org.antop.board.member.model
 
-import org.antop.board.post.model.Posts
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -23,8 +22,8 @@ class Member(
     var nickname by Members.nickname
 
     /** 작성일시 */
-    var created by Posts.created
+    var created by Members.created
 
     /** 수정일시 */
-    var modified by Posts.modified
+    var modified by Members.modified
 }
