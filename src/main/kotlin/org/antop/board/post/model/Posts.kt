@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 object Posts : LongIdTable(name = "posts", columnName = "post_id") {
     val subject = varchar("subject", 255)
     val content = largeText("content")
-    val author = varchar("author", 100)
+    val authorId = long("author_id")
     val created = datetime("created")
     val modified = datetime("modified").nullable()
     val tags = tags("tags").nullable()

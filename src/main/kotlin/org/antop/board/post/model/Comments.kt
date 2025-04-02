@@ -4,6 +4,7 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
 object Comments : LongIdTable(name = "comments", columnName = "comment_id") {
+    val authorId = long("author_id")
     val content = text("content")
     val created = datetime("created")
     val modified = datetime("modified").nullable()

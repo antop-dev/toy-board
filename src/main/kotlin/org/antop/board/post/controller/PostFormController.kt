@@ -1,19 +1,18 @@
 package org.antop.board.post.controller
 
 import org.antop.board.common.Pagination
+import org.antop.board.common.constants.PostConsts
 import org.antop.board.post.service.PostService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/posts")
 class PostFormController(
     private val postService: PostService,
 ) {
-    @GetMapping("/save.html")
+    @GetMapping(PostConsts.Url.SAVE_FORM)
     fun save(
         keyword: String?,
         paging: Pagination.Request,
@@ -25,7 +24,7 @@ class PostFormController(
         return "posts/form/save"
     }
 
-    @GetMapping("/edit.html")
+    @GetMapping(PostConsts.Url.EDIT_FORM)
     fun edit(
         id: Long,
         keyword: String?,
@@ -40,7 +39,7 @@ class PostFormController(
         return "posts/form/edit"
     }
 
-    @GetMapping("/reply.html")
+    @GetMapping(PostConsts.Url.REPLY_FORM)
     fun reply(
         @RequestParam("parent") parentPostId: Long,
         keyword: String?,
@@ -52,7 +51,6 @@ class PostFormController(
             parentPost.copy(
                 subject = "RE: ${parentPost.subject}",
                 content = "",
-                author = "",
                 tags = setOf(),
                 files = listOf(),
             )

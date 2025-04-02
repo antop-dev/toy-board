@@ -24,6 +24,13 @@ class MemberService(
         return member.toDto()
     }
 
+    @Throws(UsernameNotFoundException::class)
+    @Transactional(readOnly = true)
+    fun getMember(memberId: Long): MemberDto {
+        val member = memberRepository.findById(memberId) ?: throw MemberNotFoundException("$memberId")
+        return member.toDto()
+    }
+
     @Transactional
     fun register(
         email: String,

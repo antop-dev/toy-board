@@ -64,7 +64,7 @@
                 <!--/* 작성자 */-->
                 <div class="col text-truncate block w-140px">
                     <span><i class="bi bi-person"></i></span>
-                    <span th:text="${item.data.author}"/>
+                    <span th:text="${item.data.author.nickname}"/>
                 </div>
             </div>
             <div th:unless="${item.data.removed}" class="row justify-content-between pt-1">
@@ -90,6 +90,9 @@
                     <span th:text="${item.data.changed}"/>
                 </div>
             </div>
+        </div>
+        <div th:if="${pagination.total == 0}" class="p-3 text-center border-black border-bottom">
+            등록된 글이 없습니다.
         </div>
     </section>
     <section class="mt-3 d-flex">

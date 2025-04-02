@@ -1,4 +1,4 @@
-package org.antop.board.common.exceptions
+package org.antop.board.common.extensions
 
 import org.springframework.security.core.Authentication
 

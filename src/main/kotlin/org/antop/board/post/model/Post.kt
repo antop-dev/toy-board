@@ -20,7 +20,7 @@ class Post(
     var content by Posts.content
 
     /** 작성자 */
-    var author by Posts.author
+    var authorId by Posts.authorId
 
     /** 작성일시 */
     var created by Posts.created
