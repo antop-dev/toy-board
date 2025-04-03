@@ -7,7 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails
 class UserPrincipal(
     private val _member: MemberDto,
 ) : UserDetails {
-    override fun getAuthorities() = mutableListOf(SimpleGrantedAuthority("ROLE_USER"))
+    companion object {
+        private const val DEFAULT_ROLE_NAME = "ROLE_USER"
+        val DEFAULT_ROLE = SimpleGrantedAuthority(DEFAULT_ROLE_NAME)
+    }
+
+    override fun getAuthorities() = mutableListOf(DEFAULT_ROLE)
 
     override fun getPassword() = _member.password
 

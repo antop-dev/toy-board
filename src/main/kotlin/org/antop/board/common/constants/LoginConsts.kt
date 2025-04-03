@@ -11,4 +11,6 @@ object LoginConsts {
         const val PASSWORD = "password"
         const val REMEMBER_ME = "remember-me"
     }
+
+    const val SAVED_REQUEST = "SPRING_SECURITY_SAVED_REQUEST"
 }

@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.antop.board.common.extensions.contextPath
-import org.antop.board.common.extensions.isAnonymous
+import org.antop.board.common.extensions.isRealAuthenticated
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.AntPathMatcher
@@ -30,7 +30,7 @@ class AlreadyAuthenticatedFilter(
         }
 
         val authentication: Authentication? = SecurityContextHolder.getContext().authentication
-        if (authentication != null && authentication.isAuthenticated && !authentication.isAnonymous) {
+        if (authentication?.isRealAuthenticated == true) {
             response.sendRedirect(request.contextPath())
             return
         }
