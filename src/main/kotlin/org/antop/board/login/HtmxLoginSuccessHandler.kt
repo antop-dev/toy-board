@@ -3,6 +3,7 @@ package org.antop.board.login
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponseHeader
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.antop.board.common.constants.LoginConsts
 import org.antop.board.common.extensions.contextPath
 import org.antop.board.common.extensions.setHeader
 import org.springframework.security.core.Authentication
@@ -25,7 +26,7 @@ class HtmxLoginSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
      */
     private fun redirectUrl(request: HttpServletRequest): String {
         // 원래 사용자가 접근하려던 URL 가져오기
-        val savedRequest = request.session.getAttribute("SPRING_SECURITY_SAVED_REQUEST") as SavedRequest?
+        val savedRequest = request.session.getAttribute(LoginConsts.SAVED_REQUEST) as SavedRequest?
         return savedRequest?.redirectUrl ?: request.contextPath()
     }
 }
