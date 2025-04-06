@@ -1,11 +1,13 @@
 package org.antop.board.login
 
-import org.antop.board.member.dto.MemberDto
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserPrincipal(
-    private val _member: MemberDto,
+    val id: Long,
+    val email: String,
+    private val _password: String,
+    val nickname: String,
 ) : UserDetails {
     companion object {
         private const val DEFAULT_ROLE_NAME = "ROLE_USER"
@@ -14,10 +16,7 @@ class UserPrincipal(
 
     override fun getAuthorities() = mutableListOf(DEFAULT_ROLE)
 
-    override fun getPassword() = _member.password
+    override fun getPassword() = _password
 
-    override fun getUsername() = _member.email
-
-    val member: MemberDto
-        get() = _member.copy()
+    override fun getUsername() = email
 }

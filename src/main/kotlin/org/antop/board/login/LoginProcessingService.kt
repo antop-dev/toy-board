@@ -12,7 +12,12 @@ class LoginProcessingService(
     override fun loadUserByUsername(username: String): UserDetails {
         try {
             val member = memberService.getMember(username)
-            return UserPrincipal(member)
+            return UserPrincipal(
+                id = member.id,
+                email = member.email,
+                _password = member.password,
+                nickname = member.nickname,
+            )
         } catch (e: MemberNotFoundException) {
             throw UsernameNotFoundException(username)
         }

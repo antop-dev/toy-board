@@ -5,7 +5,6 @@ import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import org.antop.board.captcha.ValidCaptcha
 import org.antop.board.common.constants.PostConsts
 import org.antop.board.login.UserPrincipal
-import org.antop.board.member.dto.MemberDto
 import org.antop.board.post.dto.PostDto
 import org.antop.board.post.service.PostSaveServiceRequest
 import org.antop.board.post.service.PostService
@@ -44,7 +43,7 @@ class PostProcessController(
         @RequestParam("file") files: List<String> = listOf(),
         @AuthenticationPrincipal principal: UserPrincipal,
     ): HtmxResponse {
-        val postSaveServiceRequest = buildPostSaveServiceRequest(subject, content, principal.member, tags, files)
+        val postSaveServiceRequest = buildPostSaveServiceRequest(subject, content, principal.id, tags, files)
         val post = postService.save(postSaveServiceRequest)
         return buildViewHtmxResponse(post)
     }
@@ -60,7 +59,7 @@ class PostProcessController(
         @RequestParam("file") files: List<String> = listOf(),
         @AuthenticationPrincipal principal: UserPrincipal,
     ): HtmxResponse {
-        val postSaveDto = buildPostSaveServiceRequest(subject, content, principal.member, tags, files)
+        val postSaveDto = buildPostSaveServiceRequest(subject, content, principal.id, tags, files)
         val post = postService.reply(parentPostId, postSaveDto)
         return buildViewHtmxResponse(post)
     }
@@ -76,7 +75,7 @@ class PostProcessController(
         @RequestParam("file") files: List<String> = listOf(),
         @AuthenticationPrincipal principal: UserPrincipal,
     ): HtmxResponse {
-        val saveRequest = buildPostSaveServiceRequest(subject, content, principal.member, tags, files)
+        val saveRequest = buildPostSaveServiceRequest(subject, content, principal.id, tags, files)
         val post = postService.edit(id, saveRequest)
         return buildViewHtmxResponse(post)
     }
@@ -90,13 +89,13 @@ class PostProcessController(
     private fun buildPostSaveServiceRequest(
         subject: String,
         content: String,
-        author: MemberDto,
+        authorId: Long,
         tags: Set<String>?,
         files: List<String>,
     ) = PostSaveServiceRequest(
         subject = subject,
         content = content,
-        authorId = author.id,
+        authorId = authorId,
         tags = tags,
         files = files.filter { it.isNotBlank() },
     )

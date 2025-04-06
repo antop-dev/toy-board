@@ -79,13 +79,13 @@
         </div>
         <div class="ms-auto">
             <a sec:authorize="isAuthenticated()"
-               th:if="${#authentication.principal.member.id == author.id}"
+               th:if="${#authentication.principal.id == author.id}"
                th:href="@{/posts/edit.html(id=${post.id},page=${page},size=${size},keyword=${keyword})}"
                class="btn btn-outline-secondary rounded-0">
                 <i class="bi bi-pencil"></i> 수정
             </a>
             <button sec:authorize="isAuthenticated()"
-                    th:if="${#authentication.principal.member.id == author.id}"
+                    th:if="${#authentication.principal.id == author.id}"
                     hx:delete="@{/posts/{id}(id=${post.id})}"
                     hx-confirm="게시글을 삭제하시겠습니까?"
                     class="btn btn-outline-danger rounded-0">
