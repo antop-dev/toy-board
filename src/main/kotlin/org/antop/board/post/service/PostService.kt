@@ -51,7 +51,9 @@ class PostService(
      */
     fun getPost(id: Long): PostDto {
         val post = postRepository.findPost(id) ?: throw PostNotFoundException()
-        if (post.removed) throw PostNotFoundException()
+        if (post.removed) {
+            throw PostNotFoundException()
+        }
         return post.toDto()
     }
 
