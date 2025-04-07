@@ -10,7 +10,7 @@ fun Post.toDto(): PostDto {
     return PostDto(
         id = id.value,
         subject = subject,
-        author = author,
+        authorId = authorId,
         content = content,
         changed = changed.pretty(),
         tags = tags,
@@ -22,16 +22,3 @@ fun Post.toDto(): PostDto {
         dislikes = dislikes,
     )
 }
-
-/**
- * 목록 조회를 위해 내용과 첨부파일 목록은 제외하고 DTO 변환
- */
-fun Post.toDtoForList() =
-    this.toDto().copy(
-        subject =
-            when (removed) {
-                true -> "삭제된 게시글"
-                else -> subject
-            },
-        content = "",
-    )

@@ -4,7 +4,9 @@ import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxReswap
 import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.common.Pagination
+import org.antop.board.common.constants.LoginConsts
 import org.antop.board.common.extensions.comma
+import org.antop.board.member.service.MemberService
 import org.antop.board.post.service.CommentService
 import org.antop.board.post.service.PostHitsService
 import org.antop.board.post.service.PostService
@@ -23,6 +25,7 @@ class PostViewController(
     private val postService: PostService,
     private val postHitsService: PostHitsService,
     private val commentService: CommentService,
+    private val memberService: MemberService,
 ) {
     @GetMapping(path = ["/", "/list.html"])
     fun list(
@@ -60,12 +63,16 @@ class PostViewController(
         val hits = postHitsService.incrementHits(post, visitorId)
         // 코멘트 목록
         val comments = commentService.getComments(post.id)
+        // 작성자 조회
+        val author = memberService.getMember(post.authorId)
 
+        model.addAttribute("loginUrl", LoginConsts.Url.LOGIN_FORM)
         model.addAttribute("post", post.copy(hits = hits))
         model.addAttribute("page", paging.page)
         model.addAttribute("size", paging.size)
         model.addAttribute("keyword", keyword)
         model.addAttribute("comments", comments)
+        model.addAttribute("author", author)
         return "posts/view/view"
     }
 

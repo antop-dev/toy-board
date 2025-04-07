@@ -4,31 +4,28 @@ import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.Base62
 import org.antop.board.common.Pagination
 import org.antop.board.common.exceptions.PostNotFoundException
-import org.antop.board.common.exposed.contains
 import org.antop.board.common.extensions.now
 import org.antop.board.common.extensions.toSizedIterable
 import org.antop.board.file.model.File
-import org.antop.board.file.model.Files
 import org.antop.board.post.dto.PostDto
+import org.antop.board.post.dto.PostQuery
 import org.antop.board.post.mapper.toDto
-import org.antop.board.post.mapper.toDtoForList
 import org.antop.board.post.model.Post
-import org.antop.board.post.model.PostFiles
 import org.antop.board.post.model.Posts
-import org.jetbrains.exposed.sql.Op
+import org.antop.board.post.repository.PostRepository
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.SizedIterable
-import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.between
 import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.max
-import org.jetbrains.exposed.sql.or
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
-class PostService {
+class PostService(
+    private val postRepository: PostRepository,
+) {
     /**
      * 게시물 조회
      */
@@ -36,56 +33,24 @@ class PostService {
         keyword: String?,
         page: Long,
         pageSize: Int,
-    ): Pagination.Response<PostDto> {
-        val total = countQuery(keyword)
-        val posts = if (total > 0) selectQuery(keyword, page, pageSize) else listOf()
+    ): Pagination.Response<PostQuery> {
+        val total = postRepository.count(keyword)
+        val posts =
+            when {
+                total > 0 -> postRepository.queryPosts(keyword, page, pageSize)
+                else -> listOf()
+            }
         return Pagination.Response(
-            items = posts.map { it.toDtoForList() },
+            items = posts,
             total = total,
         )
     }
-
-    private fun countQuery(keyword: String?): Long =
-        joinClause()
-            .select(Posts.id)
-            .where { createOp(keyword) }
-            .withDistinct()
-            .count()
-
-    private fun selectQuery(
-        keyword: String?,
-        page: Long,
-        pageSize: Int,
-    ): List<Post> =
-        joinClause()
-            .select(Posts.fields)
-            .where { createOp(keyword) }
-            .withDistinct()
-            .orderBy(Posts.thread to SortOrder.DESC)
-            .offset((page - 1) * pageSize)
-            .limit(pageSize)
-            .map { Post.wrapRow(it) }
-
-    private fun joinClause() =
-        Posts
-            .leftJoin(PostFiles)
-            .leftJoin(Files)
-
-    private fun createOp(keyword: String?): Op<Boolean> =
-        keyword?.let {
-            Op.FALSE
-                .or(Posts.subject contains it)
-                .or(Posts.author contains it)
-                .or(Posts.content contains it)
-                .or(Posts.tags contains it)
-                .or(Files.name contains it)
-        } ?: Op.TRUE
 
     /**
      * 게시물 한건 조회
      */
     fun getPost(id: Long): PostDto {
-        val post = Post.findById(id) ?: throw PostNotFoundException()
+        val post = postRepository.findPost(id) ?: throw PostNotFoundException()
         if (post.removed) {
             throw PostNotFoundException()
         }
@@ -101,7 +66,7 @@ class PostService {
             Post.new {
                 subject = saveDto.subject
                 content = saveDto.content
-                author = saveDto.author
+                authorId = saveDto.authorId
                 created = LocalDateTime.now()
                 tags = saveDto.tags
                 files = getFiles(saveDto.files)
@@ -134,7 +99,7 @@ class PostService {
             Post.new {
                 subject = request.subject
                 content = request.content
-                author = request.author
+                authorId = request.authorId
                 created = LocalDateTime.now()
                 tags = request.tags
                 files = getFiles(request.files)
@@ -154,7 +119,7 @@ class PostService {
     ) = findForUpdate(postId) {
         it.subject = editDto.subject
         it.content = editDto.content
-        it.author = editDto.author
+        it.authorId = editDto.authorId
         it.modified = LocalDateTime.now()
         it.tags = editDto.tags
         it.files = getFiles(editDto.files)

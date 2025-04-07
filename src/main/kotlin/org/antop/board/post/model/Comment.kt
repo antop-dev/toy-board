@@ -19,6 +19,7 @@ class Comment(
     companion object : LongEntityClass<Comment>(Comments)
 
     var post by Post referencedOn Comments.post
+    var authorId by Comments.authorId
     var content by Comments.content
     var created by Comments.created
     var modified by Comments.modified

@@ -7,7 +7,6 @@ import org.antop.board.member.exception.MemberNotFoundException
 import org.antop.board.member.mapper.toDto
 import org.antop.board.member.model.Member
 import org.antop.board.member.repository.MemberRepository
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,10 +16,17 @@ class MemberService(
     private val memberRepository: MemberRepository,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    @Throws(UsernameNotFoundException::class)
+    @Throws(MemberNotFoundException::class)
     @Transactional(readOnly = true)
     fun getMember(email: String): MemberDto {
         val member = memberRepository.findByEmail(email) ?: throw MemberNotFoundException(email)
+        return member.toDto()
+    }
+
+    @Throws(MemberNotFoundException::class)
+    @Transactional(readOnly = true)
+    fun getMember(memberId: Long): MemberDto {
+        val member = memberRepository.findById(memberId) ?: throw MemberNotFoundException("$memberId")
         return member.toDto()
     }
 

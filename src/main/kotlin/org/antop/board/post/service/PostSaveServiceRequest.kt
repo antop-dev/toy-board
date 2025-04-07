@@ -6,7 +6,7 @@ package org.antop.board.post.service
 data class PostSaveServiceRequest(
     val subject: String,
     val content: String,
-    val author: String,
+    val authorId: Long,
     val tags: Set<String>?,
     val files: List<String>?,
 )

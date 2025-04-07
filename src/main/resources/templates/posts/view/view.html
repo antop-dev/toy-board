@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +17,7 @@
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ckeditor5.umd.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ko.umd.js}"></script>
     <script type="text/javascript" th:src="@{/libs/prism-1.29.0/prism.js}"></script>
-    <th:block th:replace="~{common :: head-csrf}" />
+    <th:block th:replace="~{common :: head-csrf}"/>
 </head>
 <body>
 <nav th:replace="~{common :: header}"></nav>
@@ -27,7 +28,7 @@
         <div class="mt-4 d-flex">
             <div>
                 <!--/* 작성자 */-->
-                <em class="fs-5" th:text="${post.author}"/>
+                <em class="fs-5" th:text="${author.nickname}"/>
                 <!--/* 변경일시 */-->
                 <span class="ms-3">
                     <i class="bi bi-calendar-week"></i>
@@ -77,11 +78,17 @@
             </a>
         </div>
         <div class="ms-auto">
-            <a th:href="@{/posts/edit.html(id=${post.id},page=${page},size=${size},keyword=${keyword})}"
+            <a sec:authorize="isAuthenticated()"
+               th:if="${#authentication.principal.id == author.id}"
+               th:href="@{/posts/edit.html(id=${post.id},page=${page},size=${size},keyword=${keyword})}"
                class="btn btn-outline-secondary rounded-0">
                 <i class="bi bi-pencil"></i> 수정
             </a>
-            <button class="btn btn-outline-danger rounded-0" hx:delete="@{/posts/{id}(id=${post.id})}" hx-confirm="Are you sure?">
+            <button sec:authorize="isAuthenticated()"
+                    th:if="${#authentication.principal.id == author.id}"
+                    hx:delete="@{/posts/{id}(id=${post.id})}"
+                    hx-confirm="게시글을 삭제하시겠습니까?"
+                    class="btn btn-outline-danger rounded-0">
                 <i class="bi bi-trash"></i> 삭제
             </button>
             <a th:href="@{/posts/list.html(page=${page},size=${size},keyword=${keyword})}"
@@ -93,7 +100,10 @@
     <!--/* 코멘트 */-->
     <section class="mt-4">
         <!--/* 코멘트 등록 폼 */-->
-        <div class="form-floating">
+        <div sec:authorize="isAnonymous()" class="text-center">
+            코멘트를 등록하려면 <a th:href="@{{url}(url=${loginUrl})}">로그인</a>이 필요합니다.
+        </div>
+        <div class="form-floating" sec:authorize="isAuthenticated()">
             <form hx:post="@{/posts/{postId}/comments(postId=${post.id})}" hx-target="#comments-container"
                   hx-swap="afterbegin" hx-on:submit="window.editor.setData('');">
                 <div class="editor-container editor-container_classic-editor"

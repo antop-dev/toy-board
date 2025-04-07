@@ -1,19 +1,21 @@
 package org.antop.board.post.dto
 
-import org.antop.board.file.dto.FileDto
-
-data class PostDto(
+data class PostQuery(
     val id: Long,
     val subject: String,
-    val content: String,
-    val authorId: Long,
+    val author: Author,
     val changed: String,
     val tags: Set<String>? = null,
     val hits: Long = 0,
-    val files: List<FileDto> = emptyList(),
     val depth: Int = 0,
     val removed: Boolean = false,
-    val comments: Int = 0,
+    val comments: Int,
     val likes: Int = 0,
     val dislikes: Int = 0,
-)
+) {
+    data class Author(
+        val id: Long,
+        val nickname: String,
+        val email: String,
+    )
+}
