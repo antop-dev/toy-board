@@ -7,7 +7,6 @@ import org.antop.board.common.Pagination
 import org.antop.board.common.constants.LoginConsts
 import org.antop.board.common.extensions.comma
 import org.antop.board.member.service.MemberService
-import org.antop.board.post.service.CommentService
 import org.antop.board.post.service.PostHitsService
 import org.antop.board.post.service.PostService
 import org.springframework.stereotype.Controller
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody
 class PostViewController(
     private val postService: PostService,
     private val postHitsService: PostHitsService,
-    private val commentService: CommentService,
     private val memberService: MemberService,
 ) {
     @GetMapping(path = ["/", "/list.html"])
@@ -52,7 +50,7 @@ class PostViewController(
     fun view(
         model: Model,
         @RequestParam id: Long,
-        keyword: String?,
+        @RequestParam keyword: String?,
         paging: Pagination.Request,
         request: HttpServletRequest,
     ): String {
@@ -61,8 +59,6 @@ class PostViewController(
         // 조회수 증가
         val visitorId = request.remoteAddr
         val hits = postHitsService.incrementHits(post, visitorId)
-        // 코멘트 목록
-        val comments = commentService.getComments(post.id)
         // 작성자 조회
         val author = memberService.getMember(post.authorId)
 
@@ -71,7 +67,6 @@ class PostViewController(
         model.addAttribute("page", paging.page)
         model.addAttribute("size", paging.size)
         model.addAttribute("keyword", keyword)
-        model.addAttribute("comments", comments)
         model.addAttribute("author", author)
         return "posts/view/view"
     }

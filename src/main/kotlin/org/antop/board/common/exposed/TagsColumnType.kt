@@ -40,4 +40,4 @@ fun Table.tags(
     delimiter: String = " ",
 ): Column<Set<String>> = registerColumn(name, TagsColumnType(delimiter))
 
-infix fun ExpressionWithColumnType<Set<String>?>.contains(v: String) = LikeEscapeOp(this, stringParam(v), true, null)
+infix fun ExpressionWithColumnType<Set<String>?>.contains(v: String) = LikeEscapeOp(this, stringParam("%$v%"), true, null)

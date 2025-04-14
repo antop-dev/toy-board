@@ -124,7 +124,9 @@
         <!--/* 코멘트 목록 */-->
         <section>
             <div hx-indicator=".htmx-indicator" id="comments-container">
-                <div th:replace="~{/posts/view/fragments :: comments (${post.id})}"></div>
+                <div hx:get="@{/posts/{postId}/comments(postId=${post.id})}"
+                     hx-trigger="revealed" hx-swap="afterend">
+                </div>
             </div>
             <div class="text-center">
                 <img class="htmx-indicator" width="60" th:src="@{/img/bars.svg}" alt="Loading...">
