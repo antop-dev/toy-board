@@ -3,6 +3,7 @@ package org.antop.board.post.controller
 import org.antop.board.common.Pagination
 import org.antop.board.common.constants.PostConsts
 import org.antop.board.post.service.PostService
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,6 +25,7 @@ class PostFormController(
         return "posts/form/save"
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(PostConsts.Url.EDIT_FORM)
     fun edit(
         id: Long,
@@ -39,6 +41,7 @@ class PostFormController(
         return "posts/form/edit"
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(PostConsts.Url.REPLY_FORM)
     fun reply(
         @RequestParam("parent") parentPostId: Long,

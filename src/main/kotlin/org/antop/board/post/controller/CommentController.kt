@@ -4,6 +4,7 @@ import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import org.antop.board.login.UserPrincipal
 import org.antop.board.post.dto.CommentDto
 import org.antop.board.post.service.CommentService
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -38,6 +39,7 @@ class CommentController(
 
     @HxRequest
     @PostMapping("/posts/{postId:[0-9]+}/comments")
+    @PreAuthorize("isAuthenticated()")
     fun save(
         @PathVariable postId: Long,
         @RequestParam content: String,
@@ -54,6 +56,7 @@ class CommentController(
 
     @HxRequest
     @PutMapping("/comments/{commentId:[0-9]+}")
+    @PreAuthorize("isAuthenticated()")
     fun edit(
         @PathVariable commentId: Long,
         @RequestParam content: String,
@@ -62,6 +65,7 @@ class CommentController(
 
     @HxRequest
     @DeleteMapping("/comments/{commentId:[0-9]+}")
+    @PreAuthorize("isAuthenticated()")
     fun delete(
         @PathVariable commentId: Long,
     ) {
