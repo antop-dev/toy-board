@@ -76,6 +76,7 @@ class PostRepository {
                             nickname = row[Members.nickname.alias(AuthorQueryColumn.AUTHOR_NICKNAME)],
                             email = row[Members.email.alias(AuthorQueryColumn.AUTHOR_EMAIL)],
                         ),
+                    created = row[Posts.created],
                     changed = changed.pretty(),
                     tags = row[Posts.tags.alias(PostQueryColumn.POST_TAGS)],
                     hits = row[Posts.hits.alias(PostQueryColumn.POST_HITS)],

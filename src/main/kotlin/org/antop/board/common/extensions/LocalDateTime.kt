@@ -9,6 +9,8 @@ import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import org.ocpsoft.prettytime.PrettyTime
+import java.time.ZoneId
+import java.util.Date
 
 /**
  * 현재 일시
@@ -27,4 +29,15 @@ fun LocalDateTime.pretty(pattern: String = "yyyy.MM.dd"): String {
         val format = LocalDateTime.Format { byUnicodePattern(pattern) }
         return this.format(format)
     }
+}
+
+/**
+ * java.util.Date 변환
+ */
+fun LocalDateTime.toJavaDate(): Date {
+    val instant =
+        toJavaLocalDateTime()
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+    return Date.from(instant)
 }
