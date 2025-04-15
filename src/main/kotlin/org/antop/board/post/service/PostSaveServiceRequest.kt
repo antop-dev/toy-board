@@ -9,4 +9,5 @@ data class PostSaveServiceRequest(
     val authorId: Long,
     val tags: Set<String>?,
     val files: List<String>?,
+    val secret: Boolean,
 )

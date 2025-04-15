@@ -24,7 +24,10 @@
 <div class="container pt-5 pb-5">
     <section>
         <!--/* 제목 */-->
-        <h2 th:text="${post.subject}"/>
+        <div class="d-inline-flex align-items-end gap-2">
+            <h2 class="mb-0" th:text="${post.subject}"/>
+            <i th:if="${post.secret}" class="bi bi-lock-fill"></i>
+        </div>
         <div class="mt-4 d-flex">
             <div>
                 <!--/* 작성자 */-->

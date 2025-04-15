@@ -5,10 +5,13 @@ import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxReswap
 import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.common.Pagination
 import org.antop.board.common.constants.LoginConsts
+import org.antop.board.common.exceptions.SecretPostException
 import org.antop.board.common.extensions.comma
+import org.antop.board.login.UserPrincipal
 import org.antop.board.member.service.MemberService
 import org.antop.board.post.service.PostHitsService
 import org.antop.board.post.service.PostService
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -53,9 +56,14 @@ class PostViewController(
         @RequestParam keyword: String?,
         paging: Pagination.Request,
         request: HttpServletRequest,
+        @AuthenticationPrincipal principal: UserPrincipal?,
     ): String {
         // 게시글 조회
         val post = postService.getPost(id)
+        // 비밀글일 경우 해당 게시글의 작성자이거나 상위 게시글의 작성자만 볼 수 있다.
+        if (post.secret && post.authorId != principal?.id && post.parent?.authorId != principal?.id) {
+            throw SecretPostException()
+        }
         // 조회수 증가
         val visitorId = request.remoteAddr
         val hits = postHitsService.incrementHits(post, visitorId)

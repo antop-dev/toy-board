@@ -54,7 +54,12 @@ class PostService(
         if (post.removed) {
             throw PostNotFoundException()
         }
-        return post.toDto()
+        // 상위 게시글 조회
+        val parent = post.parentId?.let { getPost(it) }
+        return when {
+            (parent != null) -> post.toDto(parent)
+            else -> post.toDto()
+        }
     }
 
     /**
@@ -71,6 +76,7 @@ class PostService(
                 tags = saveDto.tags
                 files = getFiles(saveDto.files)
                 thread = nextThread()
+                secret = saveDto.secret
             }
         return post.toDto()
     }
@@ -105,6 +111,7 @@ class PostService(
                 files = getFiles(request.files)
                 thread = parentPost.thread - 1
                 depth = parentPost.depth + 1
+                secret = request.secret
             }
         return replyPost.toDto()
     }
@@ -123,6 +130,7 @@ class PostService(
         it.modified = LocalDateTime.now()
         it.tags = editDto.tags
         it.files = getFiles(editDto.files)
+        it.secret = editDto.secret
     }
 
     /**
