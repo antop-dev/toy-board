@@ -12,7 +12,4 @@ object PostQueryColumn {
     const val POST_COMMENTS: String = "post_comments"
     const val POST_LIKES: String = "post_likes"
     const val POST_DISLIKES: String = "post_dislikes"
-    const val AUTHOR_ID: String = "author_id"
-    const val AUTHOR_EMAIL: String = "author_email"
-    const val AUTHOR_NICKNAME: String = "author_nickname"
 }

@@ -1,45 +1,52 @@
 package org.antop.board.post.service
 
 import kotlinx.datetime.LocalDateTime
-import org.antop.board.common.Pagination
 import org.antop.board.common.exceptions.CommentNotFoundException
 import org.antop.board.common.exceptions.PostNotFoundException
 import org.antop.board.common.extensions.now
-import org.antop.board.post.dto.CommentView
+import org.antop.board.member.service.MemberService
+import org.antop.board.post.dto.CommentDto
+import org.antop.board.post.dto.CommentQuery
 import org.antop.board.post.mapper.toDto
 import org.antop.board.post.model.Comment
-import org.antop.board.post.model.Comments
 import org.antop.board.post.model.Post
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
+import org.antop.board.post.repository.CommentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CommentService {
+class CommentService(
+    private val memberService: MemberService,
+    private val commentRepository: CommentRepository,
+) {
     @Transactional
     fun save(
         postId: Long,
         content: String,
-    ): CommentView {
+        authorId: Long,
+    ): CommentDto {
         val post = Post.findByIdAndUpdate(postId) { it.comments++ } ?: throw PostNotFoundException()
         val comment =
             Comment.new {
                 this.post = post
                 this.content = content
+                this.authorId = authorId
                 created = LocalDateTime.now()
             }
-        return comment.toDto()
+        val author = memberService.getMember(comment.authorId)
+        return comment.toDto(author)
     }
 
     @Transactional
     fun edit(
         commentId: Long,
         content: String,
-    ): CommentView {
+    ): CommentDto {
         val comment = Comment.findById(commentId) ?: throw CommentNotFoundException()
         comment.content = content
-        return comment.toDto()
+
+        val author = memberService.getMember(comment.authorId)
+        return comment.toDto(author)
     }
 
     @Transactional
@@ -54,10 +61,5 @@ class CommentService {
     fun getComments(
         postId: Long,
         before: Long = Long.MAX_VALUE,
-    ): List<CommentView> =
-        Comment
-            .find { (Comments.post eq postId) and (Comments.removed eq false) and (Comments.id less before) }
-            .orderBy(Comments.id to SortOrder.DESC)
-            .limit(Pagination.DEFAULT_PAGE_SIZE)
-            .map { it.toDto() }
+    ): List<CommentQuery> = commentRepository.queryCommentsByPost(postId, before)
 }
