@@ -12,4 +12,5 @@ data class PostQuery(
     val comments: Int,
     val likes: Int = 0,
     val dislikes: Int = 0,
+    val secret: Boolean = false,
 )

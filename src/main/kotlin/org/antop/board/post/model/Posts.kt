@@ -19,4 +19,6 @@ object Posts : LongIdTable(name = "posts", columnName = "post_id") {
     val comments = integer("comments").default(0)
     val likes = integer("likes").default(0)
     val dislikes = integer("dislikes").default(0)
+    val secret = bool("secret").default(false)
+    val parentId = long("parent_id").nullable()
 }

@@ -56,6 +56,12 @@ class Post(
     /** 싫어요 수 */
     var dislikes by Posts.dislikes
 
+    /** 비밀글 여부 */
+    var secret by Posts.secret
+
+    /** 상위 게시글ID */
+    var parentId by Posts.parentId
+
     /**
      * 삭제 처리 (소프트 삭제)
      */

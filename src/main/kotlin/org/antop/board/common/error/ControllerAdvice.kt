@@ -3,6 +3,7 @@ package org.antop.board.common.error
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.ValidationException
 import org.antop.board.common.exceptions.NotFoundException
+import org.antop.board.common.exceptions.SecretPostException
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -26,4 +27,8 @@ class ControllerAdvice {
     @ExceptionHandler(NotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun notFoundException() = "/error/404"
+
+    @ExceptionHandler(SecretPostException::class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun secretPostException() = "/error/403"
 }
