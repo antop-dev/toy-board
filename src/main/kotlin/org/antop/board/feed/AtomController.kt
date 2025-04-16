@@ -11,6 +11,7 @@ import org.antop.board.common.extensions.toJavaDate
 import org.antop.board.post.dto.AuthorQuery
 import org.antop.board.post.dto.PostQuery
 import org.antop.board.post.service.PostService
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 class AtomController(
     private val postService: PostService,
 ) : FeedHelper() {
-    @GetMapping("/feed/atom")
+    @GetMapping("/feed/atom", produces = [MediaType.APPLICATION_ATOM_XML_VALUE])
     fun atom(request: HttpServletRequest): Feed {
         val posts = postService.getPosts()
         return Feed("atom_1.0").apply {
