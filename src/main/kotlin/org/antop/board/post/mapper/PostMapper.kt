@@ -5,7 +5,7 @@ import org.antop.board.file.mapper.toDto
 import org.antop.board.post.dto.PostDto
 import org.antop.board.post.model.Post
 
-fun Post.toDto(): PostDto {
+fun Post.toDto(parent: PostDto? = null): PostDto {
     val changed = (modified ?: created)
     return PostDto(
         id = id.value,
@@ -20,5 +20,7 @@ fun Post.toDto(): PostDto {
         comments = comments,
         likes = likes,
         dislikes = dislikes,
+        secret = secret,
+        parent = parent,
     )
 }

@@ -55,6 +55,7 @@ class PostRepository {
                 Posts.comments.alias(PostQueryColumn.POST_COMMENTS),
                 Posts.likes.alias(PostQueryColumn.POST_LIKES),
                 Posts.dislikes.alias(PostQueryColumn.POST_DISLIKES),
+                Posts.secret.alias(PostQueryColumn.POST_SECRET),
                 Members.id.alias(AuthorQueryColumn.AUTHOR_ID),
                 Members.nickname.alias(AuthorQueryColumn.AUTHOR_NICKNAME),
                 Members.email.alias(AuthorQueryColumn.AUTHOR_EMAIL),
@@ -68,23 +69,24 @@ class PostRepository {
                     row.getOrNull(Posts.created.alias(PostQueryColumn.POST_MODIFIED))
                         ?: row[Posts.created.alias(PostQueryColumn.POST_CREATED)]
                 PostQuery(
-                    id = row[Posts.id.alias(PostQueryColumn.POST_ID)].value,
-                    subject = row[Posts.subject.alias(PostQueryColumn.POST_SUBJECT)],
+                    id = row[Posts.id].value,
+                    subject = row[Posts.subject],
                     author =
                         AuthorQuery(
-                            id = row[Members.id.alias(AuthorQueryColumn.AUTHOR_ID)].value,
-                            nickname = row[Members.nickname.alias(AuthorQueryColumn.AUTHOR_NICKNAME)],
-                            email = row[Members.email.alias(AuthorQueryColumn.AUTHOR_EMAIL)],
+                            id = row[Members.id].value,
+                            nickname = row[Members.nickname],
+                            email = row[Members.email],
                         ),
                     created = row[Posts.created],
                     changed = changed.pretty(),
-                    tags = row[Posts.tags.alias(PostQueryColumn.POST_TAGS)],
-                    hits = row[Posts.hits.alias(PostQueryColumn.POST_HITS)],
-                    depth = row[Posts.depth.alias(PostQueryColumn.POST_DEPTH)],
-                    removed = row[Posts.removed.alias(PostQueryColumn.POST_REMOVED)],
-                    comments = row[Posts.comments.alias(PostQueryColumn.POST_COMMENTS)],
-                    likes = row[Posts.likes.alias(PostQueryColumn.POST_LIKES)],
-                    dislikes = row[Posts.dislikes.alias(PostQueryColumn.POST_DISLIKES)],
+                    tags = row[Posts.tags],
+                    hits = row[Posts.hits],
+                    depth = row[Posts.depth],
+                    removed = row[Posts.removed],
+                    comments = row[Posts.comments],
+                    likes = row[Posts.likes],
+                    dislikes = row[Posts.dislikes],
+                    secret = row[Posts.secret],
                 )
             }
 
