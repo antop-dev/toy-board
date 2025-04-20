@@ -1,6 +1,6 @@
 package org.antop.board.common.constants
 
-object LoginConsts {
+object LoginConstant {
     object Url {
         const val LOGIN_FORM = "/login.html"
         const val LOGIN_PROCESSING = "/login"

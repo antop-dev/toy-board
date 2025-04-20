@@ -1,7 +1,7 @@
 package org.antop.board.config
 
-import org.antop.board.common.constants.LoginConsts
-import org.antop.board.common.constants.PostConsts
+import org.antop.board.common.constants.LoginConstant
+import org.antop.board.common.constants.PostConstant
 import org.antop.board.login.AlreadyAuthenticatedFilter
 import org.antop.board.login.HtmxLoginFailureHandler
 import org.antop.board.login.HtmxLoginSuccessHandler
@@ -30,19 +30,19 @@ class SecurityConfig(
                 csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse()
             }
             authorizeHttpRequests {
-                authorize(PostConsts.Url.SAVE_FORM, authenticated)
-                authorize(PostConsts.Url.SAVE_PROCESS, authenticated)
-                authorize(PostConsts.Url.EDIT_FORM, authenticated)
-                authorize(PostConsts.Url.EDIT_PROCESS, authenticated)
-                authorize(PostConsts.Url.REPLY_FORM, authenticated)
-                authorize(PostConsts.Url.REPLY_PROCESS, authenticated)
+                authorize(PostConstant.Url.SAVE_FORM, authenticated)
+                authorize(PostConstant.Url.SAVE_PROCESS, authenticated)
+                authorize(PostConstant.Url.EDIT_FORM, authenticated)
+                authorize(PostConstant.Url.EDIT_PROCESS, authenticated)
+                authorize(PostConstant.Url.REPLY_FORM, authenticated)
+                authorize(PostConstant.Url.REPLY_PROCESS, authenticated)
                 authorize(anyRequest, permitAll)
             }
             formLogin {
-                loginPage = LoginConsts.Url.LOGIN_FORM
-                loginProcessingUrl = LoginConsts.Url.LOGIN_PROCESSING
-                usernameParameter = LoginConsts.Parameter.USERNAME
-                passwordParameter = LoginConsts.Parameter.PASSWORD
+                loginPage = LoginConstant.Url.LOGIN_FORM
+                loginProcessingUrl = LoginConstant.Url.LOGIN_PROCESSING
+                usernameParameter = LoginConstant.Parameter.USERNAME
+                passwordParameter = LoginConstant.Parameter.PASSWORD
                 authenticationSuccessHandler = loginSuccessHandler()
                 authenticationFailureHandler = loginFailureHandler()
                 permitAll()
@@ -53,13 +53,13 @@ class SecurityConfig(
                 permitAll()
             }
             rememberMe {
-                rememberMeParameter = LoginConsts.Parameter.REMEMBER_ME
+                rememberMeParameter = LoginConstant.Parameter.REMEMBER_ME
                 userDetailsService = userDetailsService(memberService)
             }
         }
 
         http.addFilterBefore(
-            AlreadyAuthenticatedFilter(LoginConsts.Url.LOGIN_FORM),
+            AlreadyAuthenticatedFilter(LoginConstant.Url.LOGIN_FORM),
             UsernamePasswordAuthenticationFilter::class.java,
         )
 

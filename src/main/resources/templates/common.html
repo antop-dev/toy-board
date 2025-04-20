@@ -24,10 +24,10 @@
                 <a href="#" hx-post="/logout" hx-trigger="click" class="nav-link link-dark px-2 cursor-pointer">Sign out</a>
             </li>
             <li class="nav-item" sec:authorize="isAnonymous()">
-                <a th:href="@{{url}(url=${T(org.antop.board.common.constants.LoginConsts.Url).LOGIN_FORM})}" class="nav-link link-dark px-2">Sign in</a>
+                <a th:href="@{{url}(url=${T(org.antop.board.common.constants.LoginConstant.Url).LOGIN_FORM})}" class="nav-link link-dark px-2">Sign in</a>
             </li>
             <li class="nav-item" sec:authorize="isAnonymous()">
-                <a th:href="@{{url}(url=${T(org.antop.board.common.constants.MemberConsts.Url).REGISTER_FORM})}" class="nav-link link-dark px-2">Sign up</a>
+                <a th:href="@{{url}(url=${T(org.antop.board.common.constants.MemberConstant.Url).REGISTER_FORM})}" class="nav-link link-dark px-2">Sign up</a>
             </li>
         </ul>
     </div>

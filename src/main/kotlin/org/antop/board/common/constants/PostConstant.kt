@@ -1,8 +1,11 @@
 package org.antop.board.common.constants
 
-object PostConsts {
+object PostConstant {
     object Url {
         const val PREFIX = "/posts"
+
+        const val LIST = "$PREFIX/list.html"
+        const val VIEW = "$PREFIX/view.html"
 
         const val SAVE_FORM = "$PREFIX/save.html"
         const val SAVE_PROCESS = "$PREFIX/save"

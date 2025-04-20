@@ -3,7 +3,7 @@ package org.antop.board.post.controller
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import org.antop.board.captcha.ValidCaptcha
-import org.antop.board.common.constants.PostConsts
+import org.antop.board.common.constants.PostConstant
 import org.antop.board.login.UserPrincipal
 import org.antop.board.post.dto.PostDto
 import org.antop.board.post.service.PostSaveServiceRequest
@@ -21,7 +21,7 @@ class PostProcessController(
     private val postService: PostService,
 ) {
     @HxRequest
-    @DeleteMapping(PostConsts.Url.PREFIX + "/{id}")
+    @DeleteMapping(PostConstant.Url.PREFIX + "/{id}")
     fun remove(
         @PathVariable id: Long,
     ): HtmxResponse {
@@ -34,7 +34,7 @@ class PostProcessController(
 
     @HxRequest
     @ValidCaptcha
-    @PostMapping(PostConsts.Url.SAVE_PROCESS)
+    @PostMapping(PostConstant.Url.SAVE_PROCESS)
     @PreAuthorize("isAuthenticated()")
     fun save(
         @RequestParam subject: String,
@@ -50,7 +50,7 @@ class PostProcessController(
 
     @HxRequest
     @ValidCaptcha
-    @PostMapping(PostConsts.Url.REPLY_PROCESS)
+    @PostMapping(PostConstant.Url.REPLY_PROCESS)
     fun reply(
         @RequestParam("parent") parentPostId: Long,
         @RequestParam subject: String,
@@ -66,7 +66,7 @@ class PostProcessController(
 
     @HxRequest
     @ValidCaptcha
-    @PostMapping(PostConsts.Url.EDIT_PROCESS)
+    @PostMapping(PostConstant.Url.EDIT_PROCESS)
     fun edit(
         @RequestParam id: Long,
         @RequestParam subject: String,

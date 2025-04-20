@@ -4,7 +4,7 @@ import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import jakarta.servlet.http.HttpServletRequest
 import org.antop.board.captcha.ValidCaptcha
-import org.antop.board.common.constants.MemberConsts
+import org.antop.board.common.constants.MemberConstant
 import org.antop.board.common.extensions.contextPath
 import org.antop.board.member.service.MemberService
 import org.springframework.stereotype.Controller
@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam
 class MemberController(
     private val memberService: MemberService,
 ) {
-    @GetMapping(MemberConsts.Url.REGISTER_FORM)
+    @GetMapping(MemberConstant.Url.REGISTER_FORM)
     fun registerForm(model: Model): String {
-        model.addAttribute("registerProcessingUrl", MemberConsts.Url.REGISTER_PROCESSING)
+        model.addAttribute("registerProcessingUrl", MemberConstant.Url.REGISTER_PROCESSING)
         return "members/register"
     }
 
     @HxRequest
     @ValidCaptcha
-    @PostMapping(MemberConsts.Url.REGISTER_PROCESSING)
+    @PostMapping(MemberConstant.Url.REGISTER_PROCESSING)
     fun registerProcess(
         @RequestParam("email") email: String,
         @RequestParam("password") password: String,
