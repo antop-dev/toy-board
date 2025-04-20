@@ -41,9 +41,10 @@ class PostProcessController(
         @RequestParam content: String,
         @RequestParam(required = false) tags: Set<String>?,
         @RequestParam("file") files: List<String> = listOf(),
+        @RequestParam(required = false, defaultValue = "false") secret: Boolean = false,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): HtmxResponse {
-        val postSaveServiceRequest = buildPostSaveServiceRequest(subject, content, principal.id, tags, files)
+        val postSaveServiceRequest = buildPostSaveServiceRequest(subject, content, principal.id, tags, files, secret)
         val post = postService.save(postSaveServiceRequest)
         return buildViewHtmxResponse(post)
     }
@@ -57,9 +58,10 @@ class PostProcessController(
         @RequestParam content: String,
         @RequestParam(required = false) tags: Set<String>?,
         @RequestParam("file") files: List<String> = listOf(),
+        @RequestParam(required = false, defaultValue = "false") secret: Boolean = false,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): HtmxResponse {
-        val postSaveDto = buildPostSaveServiceRequest(subject, content, principal.id, tags, files)
+        val postSaveDto = buildPostSaveServiceRequest(subject, content, principal.id, tags, files, secret)
         val post = postService.reply(parentPostId, postSaveDto)
         return buildViewHtmxResponse(post)
     }
@@ -73,9 +75,10 @@ class PostProcessController(
         @RequestParam content: String,
         @RequestParam(required = false) tags: Set<String>?,
         @RequestParam("file") files: List<String> = listOf(),
+        @RequestParam(required = false, defaultValue = "false") secret: Boolean = false,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): HtmxResponse {
-        val saveRequest = buildPostSaveServiceRequest(subject, content, principal.id, tags, files)
+        val saveRequest = buildPostSaveServiceRequest(subject, content, principal.id, tags, files, secret)
         val post = postService.edit(id, saveRequest)
         return buildViewHtmxResponse(post)
     }
@@ -92,11 +95,13 @@ class PostProcessController(
         authorId: Long,
         tags: Set<String>?,
         files: List<String>,
+        secret: Boolean = false,
     ) = PostSaveServiceRequest(
         subject = subject,
         content = content,
         authorId = authorId,
         tags = tags,
         files = files.filter { it.isNotBlank() },
+        secret = secret,
     )
 }

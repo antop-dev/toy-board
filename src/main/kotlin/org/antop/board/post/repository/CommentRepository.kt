@@ -46,16 +46,16 @@ class CommentRepository {
             .limit(Pagination.DEFAULT_PAGE_SIZE)
             .map { row ->
                 val changed =
-                    row.getOrNull(Comments.created.alias(CommentQueryColumn.COMMENT_MODIFIED))
-                        ?: row[Comments.created.alias(CommentQueryColumn.COMMENT_CREATED)]
+                    row.getOrNull(Comments.created)
+                        ?: row[Comments.created]
                 CommentQuery(
-                    id = row[Comments.id.alias(CommentQueryColumn.COMMENT_ID)].value,
-                    content = row[Comments.content.alias(CommentQueryColumn.COMMENT_CONTENT)],
+                    id = row[Comments.id].value,
+                    content = row[Comments.content],
                     author =
                         AuthorQuery(
-                            id = row[Members.id.alias(AuthorQueryColumn.AUTHOR_ID)].value,
-                            nickname = row[Members.nickname.alias(AuthorQueryColumn.AUTHOR_NICKNAME)],
-                            email = row[Members.email.alias(AuthorQueryColumn.AUTHOR_EMAIL)],
+                            id = row[Members.id].value,
+                            nickname = row[Members.nickname],
+                            email = row[Members.email],
                         ),
                     changed = changed.pretty(),
                 )

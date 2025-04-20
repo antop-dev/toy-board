@@ -57,6 +57,7 @@
                         <th:block th:text="${item.data.subject}"/>
                         <span th:if="${item.data.comments > 0}" class="badge-comment text-danger"
                               th:text="|[${item.data.comments}]|"></span>
+                        <i th:if="${item.data.secret == true}" class="bi bi-lock-fill"></i>
                     </a>
                     <span th:if="${item.data.removed}" class="text-decoration-line-through text-muted"
                           th:text="${item.data.subject}"/>

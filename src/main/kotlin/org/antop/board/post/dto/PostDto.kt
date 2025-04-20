@@ -16,4 +16,6 @@ data class PostDto(
     val comments: Int = 0,
     val likes: Int = 0,
     val dislikes: Int = 0,
+    val secret: Boolean = false,
+    val parent: PostDto? = null,
 )
