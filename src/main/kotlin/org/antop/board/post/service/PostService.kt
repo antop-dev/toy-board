@@ -30,9 +30,9 @@ class PostService(
      * 게시물 조회
      */
     fun getPosts(
-        keyword: String?,
-        page: Long,
-        pageSize: Int,
+        keyword: String? = null,
+        page: Long = 1,
+        pageSize: Int = 10,
     ): Pagination.Response<PostQuery> {
         val total = postRepository.count(keyword)
         val posts =

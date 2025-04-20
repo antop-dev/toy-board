@@ -1,7 +1,7 @@
 package org.antop.board.post.controller
 
 import org.antop.board.common.Pagination
-import org.antop.board.common.constants.PostConsts
+import org.antop.board.common.constants.PostConstant
 import org.antop.board.post.service.PostService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class PostFormController(
     private val postService: PostService,
 ) {
-    @GetMapping(PostConsts.Url.SAVE_FORM)
+    @GetMapping(PostConstant.Url.SAVE_FORM)
     fun save(
         keyword: String?,
         paging: Pagination.Request,
@@ -26,7 +26,7 @@ class PostFormController(
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(PostConsts.Url.EDIT_FORM)
+    @GetMapping(PostConstant.Url.EDIT_FORM)
     fun edit(
         id: Long,
         keyword: String?,
@@ -42,7 +42,7 @@ class PostFormController(
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(PostConsts.Url.REPLY_FORM)
+    @GetMapping(PostConstant.Url.REPLY_FORM)
     fun reply(
         @RequestParam("parent") parentPostId: Long,
         keyword: String?,

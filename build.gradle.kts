@@ -69,6 +69,8 @@ dependencies {
     implementation("commons-io:commons-io:2.18.0")
     // https://tika.apache.org/
     implementation("org.apache.tika:tika-core:3.0.0")
+    // https://rometools.github.io/rome/
+    implementation("com.rometools:rome:2.1.0")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

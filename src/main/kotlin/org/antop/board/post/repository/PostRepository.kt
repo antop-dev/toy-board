@@ -77,6 +77,7 @@ class PostRepository {
                             nickname = row[Members.nickname],
                             email = row[Members.email],
                         ),
+                    created = row[Posts.created],
                     changed = changed.pretty(),
                     tags = row[Posts.tags],
                     hits = row[Posts.hits],
