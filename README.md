@@ -14,6 +14,29 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
+## Sprint 11
+
+### 비밀글
+
+게시글 등록/수정/답변에 비밀글 추가. 답변을 비밀글로 등록하면 상위 게시글 작성자도 답글을 불 수 있다.
+
+```mysql
+alter table posts add secret boolean default false not null comment '비밀글 여부';
+alter table posts add parent_id bigint null comment '상위 게시글ID';
+alter table posts add foreign key (parent_id) references posts (post_id);
+/* 마이그레이션 */
+update posts p
+set parent_id = (select post_id from posts where depth = p.depth - 1 and thread > p.thread order by p.thread limit 1)
+where p.depth >= 1;
+```
+
+### 피드 제공
+
+RSS<sup>`Really Simple Syndication`</sup>, ATOM<sup>`Atom Syndication Format`</sup> 포멧으로 피드를 제공한다.
+
+* `/feed/rss`
+* `/feed/rss`
+
 ## Sprint 10
 
 ### 회원과 게시판 연동
@@ -67,6 +90,11 @@ https://github.com/mewebstudio/java-captcha-generator
 ### 좋아요/싫어요 구현
 
 게시글 보기 상단 오른쪽에 좋아요/싫어요 버튼 배치
+
+```mysql
+alter table posts add likes bigint default 0 not null comment '좋아요 수';
+alter table posts add dislikes bigint default 0 not null comment '싫어요 수';
+```
 
 ![sprint8-like](./assets/sprint8-like.png)
 
