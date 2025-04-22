@@ -1,5 +1,6 @@
 package org.antop.board.post.dto
 
+import kotlinx.datetime.LocalDateTime
 import org.antop.board.file.dto.FileDto
 
 data class PostDto(
@@ -7,7 +8,8 @@ data class PostDto(
     val subject: String,
     val content: String,
     val authorId: Long,
-    val changed: String,
+    val created: LocalDateTime,
+    val modified: LocalDateTime?,
     val tags: Set<String>? = null,
     val hits: Long = 0,
     val files: List<FileDto> = emptyList(),

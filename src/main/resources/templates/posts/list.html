@@ -88,7 +88,8 @@
                 <!--/* 변경일시 */-->
                 <div class="col-auto w-140px">
                     <i class="bi bi-calendar-week"></i>
-                    <span th:text="${item.data.changed}"/>
+                    <!--/*@thymesVar id="#datetimex" type="org.antop.board.common.thymeleaf.KotlinxDateTimeExpression"*/-->
+                    <span th:text="${#datetimex.pretty(item.data.modified, item.data.created)}"/>
                 </div>
             </div>
         </div>

@@ -1,7 +1,6 @@
 package org.antop.board.post.repository
 
 import org.antop.board.common.Pagination
-import org.antop.board.common.extensions.pretty
 import org.antop.board.member.model.Members
 import org.antop.board.post.dto.AuthorQuery
 import org.antop.board.post.dto.AuthorQueryColumn
@@ -45,9 +44,6 @@ class CommentRepository {
             }.orderBy(Comments.id to SortOrder.DESC)
             .limit(Pagination.DEFAULT_PAGE_SIZE)
             .map { row ->
-                val changed =
-                    row.getOrNull(Comments.created)
-                        ?: row[Comments.created]
                 CommentQuery(
                     id = row[Comments.id].value,
                     content = row[Comments.content],
@@ -57,7 +53,8 @@ class CommentRepository {
                             nickname = row[Members.nickname],
                             email = row[Members.email],
                         ),
-                    changed = changed.pretty(),
+                    created = row[Comments.created],
+                    modified = row[Comments.modified],
                 )
             }
 }
