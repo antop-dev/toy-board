@@ -35,7 +35,8 @@
                 <!--/* 변경일시 */-->
                 <span class="ms-3">
                     <i class="bi bi-calendar-week"></i>
-                    <span th:text="${post.changed}"/>
+                    <!--/*@thymesVar id="#datetimex" type="org.antop.board.common.thymeleaf.KotlinxDateTimeExpression"*/-->
+                    <span th:text="${#datetimex.pretty(post.modified, post.created)}"/>
                 </span>
                 <!--/* 조회수 */-->
                 <span class="ms-3">

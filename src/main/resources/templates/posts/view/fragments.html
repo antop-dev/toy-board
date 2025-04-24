@@ -2,14 +2,15 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
+<!--/*@thymesVar id="author" type="org.antop.board.post.dto.AuthorQuery"*/-->
 <!--/* 코멘트 목록 */-->
 <th:block th:fragment="comments (postId)">
     <!--/*@thymesVar id="comments" type="java.util.List"*/-->
     <div th:each="c : ${comments}" th:id="|comments-${c.id}|" class="mt-3 border-top border-1 border-dark">
         <!--/*@thymesVar id="c" type="org.antop.board.post.dto.CommentQuery"*/-->
         <div class="mt-2 d-flex">
-            <!--/*@thymesVar id="author" type="org.antop.board.post.dto.AuthorQuery"*/-->
-            <div th:text="|${c.author.nickname} (${c.changed})|"></div>
+            <!--/*@thymesVar id="#datetimex" type="org.antop.board.common.thymeleaf.KotlinxDateTimeExpression"*/-->
+            <div th:text="|${c.author.nickname} (${#datetimex.format(c.created, 'yyyy.MM.dd HH:mm:ss')})|"></div>
             <div class="ms-auto">
                 <!--/* 삭제 버튼 */-->
                 <span sec:authorize="isAuthenticated()"
@@ -32,7 +33,7 @@
 <div th:fragment="comment" th:id="|comments-${c.id}|" class="mt-3 border-top border-1 border-dark">
     <!--/*@thymesVar id="c" type="org.antop.board.post.dto.CommentQuery"*/-->
     <div class="mt-2 d-flex">
-        <div th:text="|${c.author.nickname} (${c.changed})|"></div>
+        <div th:text="|${c.author.nickname} (${#datetimex.format(c.created, 'yyyy.MM.dd HH:mm:ss')})|"></div>
         <div class="ms-auto">
             <!--/* 삭제 버튼 */-->
             <span sec:authorize="isAuthenticated()"

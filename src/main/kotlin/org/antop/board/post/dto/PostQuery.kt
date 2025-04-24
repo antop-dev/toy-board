@@ -7,7 +7,7 @@ data class PostQuery(
     val subject: String,
     val author: AuthorQuery,
     val created: LocalDateTime,
-    val changed: String,
+    val modified: LocalDateTime?,
     val tags: Set<String>? = null,
     val hits: Long = 0,
     val depth: Int = 0,

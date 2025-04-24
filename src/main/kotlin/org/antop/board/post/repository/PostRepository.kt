@@ -1,7 +1,6 @@
 package org.antop.board.post.repository
 
 import org.antop.board.common.exposed.contains
-import org.antop.board.common.extensions.pretty
 import org.antop.board.file.model.Files
 import org.antop.board.member.model.Members
 import org.antop.board.post.dto.AuthorQuery
@@ -65,9 +64,6 @@ class PostRepository {
             .offset((page - 1) * pageSize)
             .limit(pageSize)
             .map { row ->
-                val changed =
-                    row.getOrNull(Posts.created.alias(PostQueryColumn.POST_MODIFIED))
-                        ?: row[Posts.created.alias(PostQueryColumn.POST_CREATED)]
                 PostQuery(
                     id = row[Posts.id].value,
                     subject = row[Posts.subject],
@@ -78,7 +74,7 @@ class PostRepository {
                             email = row[Members.email],
                         ),
                     created = row[Posts.created],
-                    changed = changed.pretty(),
+                    modified = row[Posts.modified],
                     tags = row[Posts.tags],
                     hits = row[Posts.hits],
                     depth = row[Posts.depth],
