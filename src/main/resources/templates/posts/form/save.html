@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:hx="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/posts/form/layout}"
+      th:with="showHeader=true">
 <head>
-    <th:block th:replace="~{/posts/form/fragments :: head ('게시글 등록')}" />
-    <th:block th:replace="~{common :: head-csrf}" />
+    <title>게시글 등록</title>
 </head>
 <body>
-<nav th:replace="~{common :: header}"></nav>
-<div class="container pt-5 pb-5">
+<div layout:fragment="content" class="container pt-5 pb-5">
     <form hx:post="@{/posts/save}">
         <!--/* 폼 */-->
         <section th:replace="~{/posts/form/fragments :: form}"></section>
@@ -24,6 +27,5 @@
         </section>
     </form>
 </div>
-<th:block th:replace="~{/posts/form/fragments :: javascript}"/>
 </body>
 </html>

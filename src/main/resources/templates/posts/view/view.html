@@ -1,27 +1,23 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:hx="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="showHeader=true">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${post.subject}"></title>
-    <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
-    <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
     <link rel="stylesheet" th:href="@{/libs/ckeditor-5.44.10/ckeditor5.css}">
     <link rel="stylesheet" th:href="@{/libs/ckeditor-5.44.10/ckeditor5-content.css}">
     <link rel="stylesheet" th:href="@{/libs/prism-1.29.0/prism.css}">
     <link rel="stylesheet" th:href="@{/css/posts/view.css}">
-    <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ckeditor5.umd.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ko.umd.js}"></script>
     <script type="text/javascript" th:src="@{/libs/prism-1.29.0/prism.js}"></script>
-    <th:block th:replace="~{common :: head-csrf}"/>
 </head>
 <body>
-<nav th:replace="~{common :: header}"></nav>
-<div class="container pt-5 pb-5">
+<div layout:fragment="content" class="container pt-5 pb-5">
     <section>
         <!--/* 제목 */-->
         <div class="d-inline-flex align-items-end gap-2">
@@ -138,7 +134,7 @@
         </section>
     </section>
 </div>
-<script>
+<script layout:fragment="js">
     // CKEditor
     const {
         ClassicEditor,
@@ -276,21 +272,24 @@
         },
     };
 
-    ClassicEditor
-        .create(document.querySelector("#editor"), editorConfig)
-        .then(editor => {
-            window.editor = editor;
-            // 엔터키 입력시 <p>가 아닌 <br>로 처리.
-            editor.editing.view.document.on("enter", (e, data) => {
-                editor.execute("shiftEnter");
-                data.preventDefault();
-                e.stop();
-                editor.editing.view.scrollToTheSelection();
-            }, {
-                priority: "high"
-            });
-        })
-        .catch(error => console.error(error));
+    const editor = document.querySelector("#editor");
+    if (editor != null) {
+        ClassicEditor
+            .create(editor, editorConfig)
+            .then(editor => {
+                window.editor = editor;
+                // 엔터키 입력시 <p>가 아닌 <br>로 처리.
+                editor.editing.view.document.on("enter", (e, data) => {
+                    editor.execute("shiftEnter");
+                    data.preventDefault();
+                    e.stop();
+                    editor.editing.view.scrollToTheSelection();
+                }, {
+                    priority: "high"
+                });
+            })
+            .catch(error => console.error(error));
+    }
 </script>
 </body>
 </html>

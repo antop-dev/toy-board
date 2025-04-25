@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="ko">
+<head>
+    <title>Layout page</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
+</head>
+<body>
+<th:block th:if="${showHeader}">
+    <nav th:replace="~{fragments :: header}"></nav>
+</th:block>
+<div class="container" layout:fragment="content"></div>
+<script layout:fragment="js"></script>
+<script>
+    // HTMX + CSRF
+    document.addEventListener('htmx:config-request', (event) => {
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        event.detail.headers[csrfHeader] = csrfToken;
+    });
+</script>
+</body>
+</html>
