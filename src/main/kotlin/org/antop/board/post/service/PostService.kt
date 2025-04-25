@@ -112,6 +112,7 @@ class PostService(
                 thread = parentPost.thread - 1
                 depth = parentPost.depth + 1
                 secret = request.secret
+                parentId = parentPost.id.value
             }
         return replyPost.toDto()
     }
