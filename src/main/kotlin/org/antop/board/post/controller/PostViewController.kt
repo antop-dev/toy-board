@@ -10,6 +10,7 @@ import org.antop.board.common.exceptions.SecretPostException
 import org.antop.board.common.extensions.comma
 import org.antop.board.login.UserPrincipal
 import org.antop.board.member.service.MemberService
+import org.antop.board.post.dto.PostDto
 import org.antop.board.post.service.PostHitsService
 import org.antop.board.post.service.PostService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -60,7 +61,7 @@ class PostViewController(
         // 게시글 조회
         val post = postService.getPost(id)
         // 비밀글일 경우 해당 게시글의 작성자이거나 상위 게시글의 작성자만 볼 수 있다.
-        if (post.secret && post.authorId != principal?.id && post.parent?.authorId != principal?.id) {
+        if (!checkAccessible(post, principal)) {
             throw SecretPostException()
         }
         // 조회수 증가
@@ -76,6 +77,27 @@ class PostViewController(
         model.addAttribute("keyword", keyword)
         model.addAttribute("author", author)
         return "posts/view/view"
+    }
+
+    /**
+     * 이 게시글을 볼 수 있는 권한이 있는지 체크한다.
+     */
+    private fun checkAccessible(
+        post: PostDto,
+        principal: UserPrincipal?,
+    ): Boolean {
+        if (post.secret) { // 비밀글인 경우
+            if (principal == null) { // 회원이 로그인 안했음
+                return false
+            }
+            if (post.authorId == principal.id) { // 회원이 이 게시글의 작성자일 경우
+                return true
+            }
+            if (post.parent != null && post.parent.authorId == principal.id) { // 회원이 상위 게시글의 작성자일 경우
+                return true
+            }
+        }
+        return false
     }
 
     @HxRequest
