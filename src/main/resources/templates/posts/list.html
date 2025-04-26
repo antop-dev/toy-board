@@ -1,20 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="showHeader=true">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
-    <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
-    <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <title>게시글 목록</title>
     <link rel="stylesheet" th:href="@{/css/posts/list.css}">
-    <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
-    <th:block th:replace="~{common :: head-csrf}"/>
 </head>
 <body>
-<nav th:replace="~{common :: header}"></nav>
-<div class="container pt-5 pb-5">
+<div layout:fragment="content" class="container pt-5 pb-5">
     <section class="d-flex align-items-end">
         <!--/* 총 건수 */-->
         <div>

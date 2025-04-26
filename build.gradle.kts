@@ -55,6 +55,7 @@ dependencies {
 
     // view
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.3.RELEASE")
     // https://github.com/wimdeblauwe/htmx-spring-boot
     implementation("io.github.wimdeblauwe:htmx-spring-boot:$htmxSpringBootVersion")

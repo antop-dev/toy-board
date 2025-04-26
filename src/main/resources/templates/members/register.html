@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:hx="http://www.w3.org/1999/xhtml">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:hx="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:with="showHeader=false">
 <head>
-    <th:block th:replace="~{/members/fragments :: head ('회원 등록')}"/>
+    <script>회원 가입</script>
     <script th:src="@{/libs/pswmeter-1.1/pswmeter.min.js}"></script>
-    <th:block th:replace="~{/common :: head-csrf}"/>
 </head>
 <body>
-<div class="container pt-5 pb-5">
+<div layout:fragment="content" class="container pt-5 pb-5">
     <h2>회원 가입</h2>
     <form hx:post="@{{url}(url=${registerProcessingUrl})}">
         <!--/* 폼 */-->
@@ -56,7 +60,7 @@
         </section>
     </form>
 </div>
-<script>
+<script layout:fragment="js">
     function refreshCaptcha() {
         const img = document.getElementById("captcha-image");
         const src = img.getAttribute("src"); // 기존 src 값을 가져옴
