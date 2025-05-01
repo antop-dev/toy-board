@@ -86,18 +86,18 @@ class PostViewController(
         post: PostDto,
         principal: UserPrincipal?,
     ): Boolean {
-        if (post.secret) { // 비밀글인 경우
-            if (principal == null) { // 회원이 로그인 안했음
-                return false
-            }
-            if (post.authorId == principal.id) { // 회원이 이 게시글의 작성자일 경우
-                return true
-            }
-            if (post.parent != null && post.parent.authorId == principal.id) { // 회원이 상위 게시글의 작성자일 경우
-                return true
-            }
+        if (!post.secret) {
+            return true
         }
-        return false
+        return when {
+            // 회원이 로그인 안했음
+            principal == null -> false
+            // 회원이 이 게시글의 작성자일 경우
+            post.authorId == principal.id -> true
+            // 회원이 상위 게시글의 작성자일 경우
+            post.parent != null && post.parent.authorId == principal.id -> true
+            else -> false
+        }
     }
 
     @HxRequest
