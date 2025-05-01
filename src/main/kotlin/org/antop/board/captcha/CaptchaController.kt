@@ -21,7 +21,7 @@ class CaptchaController {
     companion object {
         private const val CAPTCHA_LENGTH = 6
         private const val CAPTCHA_NOISE = 5
-        private const val CAPTCHA_SYMBOLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789"
+        private const val CAPTCHA_SYMBOLS = "0123456789"
     }
 
     @GetMapping("/captcha.png")
