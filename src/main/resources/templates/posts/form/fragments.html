@@ -48,11 +48,8 @@
     <div>
         <label for="captcha" class="form-label">자동 등록 방지</label>
         <div class="input-group">
-            <button type="button" class="input-group-text" onclick="refreshCaptcha()">
-                <i class="bi bi-arrow-clockwise"></i>
-            </button>
             <img id="captcha-image" width="200" height="38"
-                 class="form-control" style="flex: none; width: 200px; padding: 0;"
+                 class="form-control" style="flex: none; width: 200px; padding: 0; cursor: pointer;"
                  th:src="@{/captcha.png(w=200,h=38)}" alt="캡챠 이미지"/>
             <input type="text" id="captcha" name="captcha" class="form-control" placeholder="표시된 코드를 입력하세요">
         </div>
