@@ -1,6 +1,7 @@
 package org.antop.board.member.service
 
 import kotlinx.datetime.LocalDateTime
+import org.antop.board.common.exceptions.EmailAlreadyExistsException
 import org.antop.board.common.extensions.now
 import org.antop.board.member.dto.MemberDto
 import org.antop.board.member.exception.MemberNotFoundException
@@ -36,13 +37,16 @@ class MemberService(
         password: String,
         nickname: String,
     ): MemberDto {
-        val entity =
+        memberRepository.findByEmail(email)?.let {
+            throw EmailAlreadyExistsException(email)
+        }
+        val member =
             Member.new {
                 this.email = email
                 this.password = passwordEncoder.encode(password)
                 this.nickname = nickname
                 created = LocalDateTime.now()
             }
-        return entity.toDto()
+        return member.toDto()
     }
 }
