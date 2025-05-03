@@ -10,7 +10,6 @@
     <link rel="stylesheet" th:href="@{/libs/filepond-4.28.2/filepond.min.css}">
     <link rel="stylesheet" th:href="@{/libs/ckeditor-5.44.10/ckeditor5.css}">
     <link rel="stylesheet" th:href="@{/css/posts/form.css}">
-    <script type="text/javascript" th:src="@{/libs/jquery-3.7.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/filepond-4.28.2/filepond.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ckeditor5.umd.js}"></script>
     <script type="text/javascript" th:src="@{/libs/ckeditor-5.44.10/ko.umd.js}"></script>
@@ -27,12 +26,6 @@
         showDropIcon: false,
         showAllSuggestions: false,
     });
-
-    function refreshCaptcha() {
-        const img = document.getElementById("captcha-image");
-        const src = img.getAttribute("src"); // 기존 src 값을 가져옴
-        img.setAttribute("src", src); // 캐시 방지
-    }
 
     FilePond.create(document.getElementById("filepond"), {
         storeAsFile: true,

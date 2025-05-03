@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>Layout page</title>
     <meta charset="utf-8">
@@ -10,15 +11,18 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <link rel="stylesheet" th:href="@{/libs/bootstrap-5.3.3/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/sweetalert2-11.19.1/sweetalert2.min.css}">
     <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <script type="text/javascript" th:src="@{/libs/bootstrap-5.3.3/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/libs/jquery-3.7.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
+    <script type="text/javascript" th:src="@{/libs/sweetalert2-11.19.1/sweetalert2.min.js}"></script>
 </head>
 <body>
 <th:block th:if="${showHeader}">
     <nav th:replace="~{fragments :: header}"></nav>
 </th:block>
 <div class="container" layout:fragment="content"></div>
-<script layout:fragment="js"></script>
 <script>
     // HTMX + CSRF
     document.addEventListener('htmx:config-request', (event) => {
@@ -26,6 +30,32 @@
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
         event.detail.headers[csrfHeader] = csrfToken;
     });
+
+    // 캡챠 이미지 클릭 시 이미지 변경
+    const captchaImage = document.getElementById("captcha-image");
+    if (captchaImage != null) {
+        captchaImage.addEventListener("click", function (e) {
+            // 무작위 문자열 생성
+            const randomValue = Math.random().toString(36).substring(2, 8);
+            // r 파라미터 세팅
+            const urlObj = new URL(this.getAttribute("src"), window.location.origin);
+            urlObj.searchParams.set('r', randomValue);
+            // 이미지 주소 바꿈
+            const newUrl = urlObj.pathname + '?' + urlObj.searchParams.toString();
+            this.setAttribute("src", newUrl);
+        });
+    }
+
+    // HTMX AJAX 공통 에러 처리
+    document.body.addEventListener("htmx:response-error", function (e) {
+        const responseText = e.detail.xhr.responseText;
+        const json = JSON.parse(responseText);
+        Swal.fire({
+            icon: "error",
+            text: json.message,
+        });
+    });
 </script>
+<script layout:fragment="js"></script>
 </body>
 </html>

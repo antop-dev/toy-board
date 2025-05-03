@@ -87,8 +87,8 @@
             <button sec:authorize="isAuthenticated()"
                     th:if="${#authentication.principal.id == author.id}"
                     hx:delete="@{/posts/{id}(id=${post.id})}"
-                    hx-confirm="게시글을 삭제하시겠습니까?"
-                    class="btn btn-outline-danger rounded-0">
+                    class="btn btn-outline-danger rounded-0"
+                    id="btn-delete">
                 <i class="bi bi-trash"></i> 삭제
             </button>
             <a th:href="@{/posts/list.html(page=${page},size=${size},keyword=${keyword})}"
@@ -290,6 +290,25 @@
             })
             .catch(error => console.error(error));
     }
+
+    document.body.addEventListener("htmx:confirm", function(e) {
+        // 코멘트 삭제 버튼은 동적으로 생성되기 때문에 confirm 이벤트 시점에 코멘트 삭제 버튼인지 확인한다.
+        if (e.detail.verb === "delete" && e.detail.target.id.startsWith("comments")) {
+            e.preventDefault();
+            Swal.fire({
+                text: "코멘트를 삭제 하시겠습니까?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc3545",
+                confirmButtonText: "삭제",
+                cancelButtonText: "취소",
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    e.detail.issueRequest(true);
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>
