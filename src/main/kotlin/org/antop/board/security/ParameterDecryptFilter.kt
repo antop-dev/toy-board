@@ -21,11 +21,7 @@ class ParameterDecryptFilter(
                 false
             }
         // 암호화한 요청인 경우에만 처리한다.
-        if (encrypted) {
-            val wrapper = ParameterDecryptRequestWrapper(request, rsaDecrypter, aesDecrypter)
-            filterChain.doFilter(wrapper, response)
-        } else {
-            filterChain.doFilter(request, response)
-        }
+        val wrapper = if (encrypted) ParameterDecryptRequestWrapper(request, rsaDecrypter, aesDecrypter) else request
+        filterChain.doFilter(wrapper, response)
     }
 }
