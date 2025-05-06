@@ -11,7 +11,7 @@ import org.antop.board.member.service.MemberService
 import org.antop.board.security.AesDecrypter
 import org.antop.board.security.ParameterDecryptFilter
 import org.antop.board.security.RsaDecrypter
-import org.antop.board.security.RsaProvider
+import org.antop.board.security.RsaResourceProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -85,7 +85,7 @@ class SecurityConfig(
     fun userDetailsService(memberService: MemberService): UserDetailsService = LoginProcessingService(memberService)
 
     @Bean
-    fun rsaDecrypter(rsaProvider: RsaProvider): RsaDecrypter = RsaDecrypter(rsaProvider)
+    fun rsaDecrypter(rsaResourceProperties: RsaResourceProperties): RsaDecrypter = RsaDecrypter(rsaResourceProperties)
 
     @Bean
     fun aesDecrypter() = AesDecrypter()
