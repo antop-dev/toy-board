@@ -6,3 +6,8 @@ spring:
     password: local
   thymeleaf:
     cache: false
+
+app:
+  rsa:
+    private-key: classpath:rsa/private_key.pem
+    public-key: classpath:rsa/public_key.pem
