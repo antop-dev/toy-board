@@ -8,8 +8,14 @@ import org.antop.board.login.HtmxLoginSuccessHandler
 import org.antop.board.login.HtmxLogoutSuccessHandler
 import org.antop.board.login.LoginProcessingService
 import org.antop.board.member.service.MemberService
+import org.antop.board.security.AesDecrypter
+import org.antop.board.security.ParameterDecryptFilter
+import org.antop.board.security.RsaDecrypter
+import org.antop.board.security.RsaResourceProperties
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.Ordered
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
@@ -77,4 +83,19 @@ class SecurityConfig(
 
     @Bean
     fun userDetailsService(memberService: MemberService): UserDetailsService = LoginProcessingService(memberService)
+
+    @Bean
+    fun rsaDecrypter(rsaResourceProperties: RsaResourceProperties): RsaDecrypter = RsaDecrypter(rsaResourceProperties)
+
+    @Bean
+    fun aesDecrypter() = AesDecrypter()
+
+    @Bean
+    fun parameterDecryptFilter(
+        rsaDecrypter: RsaDecrypter,
+        aesDecrypter: AesDecrypter,
+    ) = FilterRegistrationBean<ParameterDecryptFilter>().apply {
+        filter = ParameterDecryptFilter(rsaDecrypter, aesDecrypter)
+        order = Ordered.HIGHEST_PRECEDENCE
+    }
 }
