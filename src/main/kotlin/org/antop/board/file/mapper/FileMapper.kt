@@ -1,6 +1,6 @@
 package org.antop.board.file.mapper
 
-import org.antop.board.common.Base62
+import org.antop.board.common.encode.Base62
 import org.antop.board.file.dto.FileDto
 import org.antop.board.file.model.File
 

@@ -1,8 +1,8 @@
 package org.antop.board.file.model
 
+import extensions.now
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.datetime.LocalDateTime
-import org.antop.board.common.extensions.now
 import org.antop.board.post.model.Post
 import org.antop.board.post.model.PostFiles
 import org.apache.tika.Tika

@@ -1,9 +1,9 @@
 package org.antop.board.post.service
 
+import extensions.now
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.exceptions.CommentNotFoundException
 import org.antop.board.common.exceptions.PostNotFoundException
-import org.antop.board.common.extensions.now
 import org.antop.board.member.service.MemberService
 import org.antop.board.post.dto.CommentDto
 import org.antop.board.post.dto.CommentQuery

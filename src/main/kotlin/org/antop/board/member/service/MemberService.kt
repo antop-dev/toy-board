@@ -1,8 +1,8 @@
 package org.antop.board.member.service
 
+import extensions.now
 import kotlinx.datetime.LocalDateTime
 import org.antop.board.common.exceptions.EmailAlreadyExistsException
-import org.antop.board.common.extensions.now
 import org.antop.board.member.dto.MemberDto
 import org.antop.board.member.exception.MemberNotFoundException
 import org.antop.board.member.mapper.toDto
@@ -48,5 +48,15 @@ class MemberService(
                 created = LocalDateTime.now()
             }
         return member.toDto()
+    }
+
+    @Transactional
+    fun changePassword(
+        email: String,
+        password: String,
+    ) {
+        memberRepository.findByEmail(email)?.let { member ->
+            member.password = passwordEncoder.encode(password)
+        }
     }
 }

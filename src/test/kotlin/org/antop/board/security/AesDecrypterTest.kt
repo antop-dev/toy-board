@@ -1,9 +1,10 @@
 package org.antop.board.security
 
-import org.antop.board.common.extensions.decodeHex
+import org.antop.board.common.security.AesDecrypter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Test
+import kotlin.extensions.decodeHex
 
 class AesDecrypterTest {
     val decrypter = AesDecrypter()
