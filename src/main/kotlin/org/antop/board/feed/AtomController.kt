@@ -4,10 +4,10 @@ import com.rometools.rome.feed.atom.Content
 import com.rometools.rome.feed.atom.Entry
 import com.rometools.rome.feed.atom.Feed
 import com.rometools.rome.feed.atom.Person
+import extensions.now
+import extensions.toJavaDate
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.datetime.LocalDateTime
-import org.antop.board.common.extensions.now
-import org.antop.board.common.extensions.toJavaDate
 import org.antop.board.post.dto.AuthorQuery
 import org.antop.board.post.dto.PostQuery
 import org.antop.board.post.service.PostService

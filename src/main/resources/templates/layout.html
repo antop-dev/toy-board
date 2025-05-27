@@ -17,6 +17,7 @@
     <script type="text/javascript" th:src="@{/libs/jquery-3.7.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/sweetalert2-11.19.1/sweetalert2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/libs/forge-1.0.0/forge.min.js}"></script>
 </head>
 <body>
 <th:block th:if="${showHeader}">
@@ -55,6 +56,72 @@
             text: json.message,
         });
     });
+
+    /**
+     * HTMX 이벤트의 모든 파라미터를 암호화
+     *
+     * @param detail HTMX Event Detail
+     * @param rsaPublicKey RSA 공개키
+     */
+    function encryptFormData(detail, rsaPublicKey) {
+        detail.headers["X-Encrypted"] = true;
+        const formData = detail.parameters;
+        const entries = formData.entries();
+        for (const [name, value] of entries) {
+            const [key, iv, encrypted, tag, aad] = encrypt(value, rsaPublicKey);
+            let encoded = key + iv + encrypted + tag;
+            if (aad != null) {
+                encoded += aad;
+            }
+            formData.set(name, encoded);
+        }
+    }
+
+    /**
+     * 암호화
+     *
+     * @param plain 원문
+     * @param rsaPublicKey RSA 공개키
+     * @returns 암호화된 값
+     */
+    function encrypt(plain, rsaPublicKey) {
+        const publicKey = forge.pki.publicKeyFromPem(rsaPublicKey);
+        const [key, iv, encrypted, tag, aad] = encAesGcm(plain);
+        // AES 키를 RSA(RSA/ECB/OAEPWithSHA-256AndMGF1Padding)로 암호화
+        const encKey = publicKey.encrypt(key, "RSA-OAEP", {
+            md: forge.md.sha256.create(),
+            mgf1: {
+                md: forge.md.sha256.create()
+            }
+        });
+        return [
+            forge.util.bytesToHex(encKey),
+            forge.util.bytesToHex(iv),
+            forge.util.bytesToHex(encrypted),
+            forge.util.bytesToHex(tag),
+            forge.util.bytesToHex(aad)
+        ];
+    }
+
+    /**
+     * AES/GCM 암호화
+     */
+    function encAesGcm(plain) {
+        const key = forge.random.getBytesSync(16);
+        const iv = forge.random.getBytesSync(16);
+        const aad = forge.random.getBytesSync(32);
+
+        const cipher = forge.cipher.createCipher('AES-GCM', key);
+        cipher.start({
+            iv: iv, // should be a 12-byte binary-encoded string or byte buffer
+            additionalData: aad, // optional
+            tagLength: 128 // optional, defaults to 128 bits
+        });
+        cipher.update(forge.util.createBuffer(plain));
+        cipher.finish();
+
+        return [key, iv, cipher.output, cipher.mode.tag, aad];
+    }
 </script>
 <script layout:fragment="js"></script>
 </body>

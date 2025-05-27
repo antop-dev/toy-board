@@ -1,10 +1,10 @@
 package org.antop.board.login
 
+import extensions.contextPath
+import extensions.isRealAuthenticated
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.antop.board.common.extensions.contextPath
-import org.antop.board.common.extensions.isRealAuthenticated
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.AntPathMatcher

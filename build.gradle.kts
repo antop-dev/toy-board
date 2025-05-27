@@ -73,13 +73,16 @@ dependencies {
     // https://rometools.github.io/rome/
     implementation("com.rometools:rome:2.1.0")
 
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     // https://h2database.com
     implementation("com.h2database:h2")
-    // https://github.com/codemonstur/embedded-redis
-    implementation("com.github.codemonstur:embedded-redis:1.4.3")
     // runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.5.1")
 

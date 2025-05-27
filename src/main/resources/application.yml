@@ -37,3 +37,9 @@ management:
 app:
   file-upload:
     path: /Users/antop/test
+  site:
+    url: https://bbs.antop.org
+  jwt:
+    secret-key: 8366f5f7-7d72-4c25-a83d-57ca9e317ba0
+  password-reset:
+    token-timeout: 1h

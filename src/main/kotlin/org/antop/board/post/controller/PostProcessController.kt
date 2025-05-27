@@ -2,7 +2,7 @@ package org.antop.board.post.controller
 
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
-import org.antop.board.captcha.ValidCaptcha
+import org.antop.board.common.captcha.ValidCaptcha
 import org.antop.board.common.constants.PostConstant
 import org.antop.board.login.UserPrincipal
 import org.antop.board.post.dto.PostDto

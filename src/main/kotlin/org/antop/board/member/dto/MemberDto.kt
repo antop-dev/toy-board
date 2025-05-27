@@ -8,7 +8,7 @@ data class MemberDto(
     /** 이메일 */
     val email: String,
     /** 비밀번호 */
-    val password: String,
+    var password: String,
     /** 별명 */
     val nickname: String,
 ) : Serializable

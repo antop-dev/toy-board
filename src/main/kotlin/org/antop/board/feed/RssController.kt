@@ -3,10 +3,10 @@ package org.antop.board.feed
 import com.rometools.rome.feed.rss.Category
 import com.rometools.rome.feed.rss.Channel
 import com.rometools.rome.feed.rss.Item
+import extensions.now
+import extensions.toJavaDate
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.datetime.LocalDateTime
-import org.antop.board.common.extensions.now
-import org.antop.board.common.extensions.toJavaDate
 import org.antop.board.post.dto.PostQuery
 import org.antop.board.post.service.PostService
 import org.springframework.http.MediaType

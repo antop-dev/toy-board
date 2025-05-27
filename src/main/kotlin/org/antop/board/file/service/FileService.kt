@@ -1,10 +1,10 @@
 package org.antop.board.file.service
 
+import extensions.now
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import kotlinx.datetime.LocalDateTime
-import org.antop.board.common.Base62
-import org.antop.board.common.extensions.now
+import org.antop.board.common.encode.Base62
 import org.antop.board.file.config.FileUploadProperties
 import org.antop.board.file.dto.FileDto
 import org.antop.board.file.mapper.toDto

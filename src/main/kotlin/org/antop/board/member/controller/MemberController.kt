@@ -1,11 +1,11 @@
 package org.antop.board.member.controller
 
+import extensions.contextPath
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import jakarta.servlet.http.HttpServletRequest
-import org.antop.board.captcha.ValidCaptcha
+import org.antop.board.common.captcha.ValidCaptcha
 import org.antop.board.common.constants.MemberConstant
-import org.antop.board.common.extensions.contextPath
 import org.antop.board.member.service.MemberService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

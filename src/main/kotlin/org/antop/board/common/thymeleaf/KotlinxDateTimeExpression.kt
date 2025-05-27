@@ -1,10 +1,10 @@
 package org.antop.board.common.thymeleaf
 
+import extensions.pretty
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
-import org.antop.board.common.extensions.pretty
 
 class KotlinxDateTimeExpression {
     fun pretty(vararg dateTimes: LocalDateTime?): String? =

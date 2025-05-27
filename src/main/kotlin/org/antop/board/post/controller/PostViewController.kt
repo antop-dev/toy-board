@@ -1,5 +1,6 @@
 package org.antop.board.post.controller
 
+import extensions.comma
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxReswap
 import jakarta.servlet.http.HttpServletRequest
@@ -7,7 +8,6 @@ import org.antop.board.common.Pagination
 import org.antop.board.common.constants.LoginConstant
 import org.antop.board.common.constants.PostConstant
 import org.antop.board.common.exceptions.SecretPostException
-import org.antop.board.common.extensions.comma
 import org.antop.board.login.UserPrincipal
 import org.antop.board.member.service.MemberService
 import org.antop.board.post.dto.PostDto

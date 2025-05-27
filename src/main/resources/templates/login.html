@@ -8,7 +8,6 @@
 <head>
     <title>Sign In</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
-    <script type="text/javascript" th:src="@{/libs/forge-1.0.0/forge.min.js}"></script>
 </head>
 <body>
 <!--/* https://jsfiddle.net/StartBootstrap/amxr8n19/ */-->
@@ -35,13 +34,17 @@
                             <label class="form-check-label" for="remember-me">Remember me</label>
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
-                                in
-                            </button>
+                            <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign in</button>
                         </div>
-                        <div class="mt-3 text-end">
-                            <a th:href="@{{url}(url=${memberRegisterUrl})}" class="link-info">Sign up</a>
+                        <div class="mt-3 d-flex justify-content-between">
+                            <div>
+                                <a th:href="@{/members/forgot-password.html}" class="link-info">Forgot Password</a>
+                            </div>
+                            <div class="text-end">
+                                <a th:href="@{{url}(url=${memberRegisterUrl})}" class="link-info">Sign up</a>
+                            </div>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -50,59 +53,11 @@
 </div>
 <script layout:fragment="js" th:inline="javascript">
     const rsaPublicKey = /*[[${rsaPublicKey}]]*/ "";
-    const publicKey = forge.pki.publicKeyFromPem(rsaPublicKey);
 
     // 서버로 요청되는 파라미터를 암호화 한다.
-    document.addEventListener('htmx:config-request', (event) => {
-        event.detail.headers["X-Encrypted"] = true;
-
-        const formData = event.detail.parameters;
-        const entries = formData.entries();
-        for (const [name, value] of entries) {
-            const [key, iv, encrypted, tag, aad] = encrypt(value);
-            let encoded = key + iv + encrypted + tag;
-            if (aad != null) {
-                encoded += aad;
-            }
-            formData.set(name, encoded);
-        }
+    document.addEventListener('htmx:config-request', (e) => {
+        encryptFormData(e.detail, rsaPublicKey)
     });
-
-    function encrypt(plain) {
-        const [key, iv, encrypted, tag, aad] = encAesGcm(plain);
-        // AES 키를 RSA(RSA/ECB/OAEPWithSHA-256AndMGF1Padding)로 암호화
-        const encKey = publicKey.encrypt(key, "RSA-OAEP", {
-            md: forge.md.sha256.create(),
-            mgf1: {
-                md: forge.md.sha256.create()
-            }
-        });
-        return [
-            forge.util.bytesToHex(encKey),
-            forge.util.bytesToHex(iv),
-            forge.util.bytesToHex(encrypted),
-            forge.util.bytesToHex(tag),
-            forge.util.bytesToHex(aad)
-        ];
-    }
-
-    // AES/GCM 암호화
-    function encAesGcm(plain) {
-        const key = forge.random.getBytesSync(16);
-        const iv = forge.random.getBytesSync(16);
-        const aad = forge.random.getBytesSync(32);
-
-        const cipher = forge.cipher.createCipher('AES-GCM', key);
-        cipher.start({
-            iv: iv, // should be a 12-byte binary-encoded string or byte buffer
-            additionalData: aad, // optional
-            tagLength: 128 // optional, defaults to 128 bits
-        });
-        cipher.update(forge.util.createBuffer(plain));
-        cipher.finish();
-
-        return [key, iv, cipher.output, cipher.mode.tag, aad];
-    }
 </script>
 </body>
 </html>

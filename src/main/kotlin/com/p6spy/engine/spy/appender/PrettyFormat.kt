@@ -17,6 +17,7 @@ class PrettyFormat : MessageFormattingStrategy {
             append(elapsed)
             append("ms | ")
             append(category)
+            append(" | ")
             append(url)
             if (sql.isNotBlank()) {
                 append("\n")
