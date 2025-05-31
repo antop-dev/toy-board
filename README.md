@@ -14,6 +14,12 @@
 
 점진적으로 발전해나가는 게시판 프로젝트
 
+## Sprint 15
+
+```sql
+alter table users add avatar blob null comment '프로필 이미지' after nickname;
+```
+
 ## Sprint 11
 
 ### 비밀글

@@ -30,9 +30,10 @@ class MemberController(
         @RequestParam("email") email: String,
         @RequestParam("password") password: String,
         @RequestParam("nickname") nickname: String,
+        @RequestParam("avatar") avatar: String?,
         request: HttpServletRequest,
     ): HtmxResponse {
-        memberService.register(email, password, nickname)
+        memberService.register(email, password, nickname, avatar)
         return HtmxResponse
             .builder()
             .redirect(request.contextPath())

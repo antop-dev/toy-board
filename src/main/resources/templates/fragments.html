@@ -1,11 +1,16 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <nav class="py-2 bg-light border-bottom sticky-top" th:fragment="header">
+    <!--/*@thymesVar id="principal" type="org.antop.board.login.UserPrincipal"*/-->
+    <!--/*@thymesVar id="authentication.principal" type="org.antop.board.login.UserPrincipal"*/-->
     <div class="container d-flex flex-wrap">
         <div class="nav me-auto"></div>
         <ul class="nav">
+            <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
+                <img th:if="${#authentication.principal.avatar != null}" th:src="${#authentication.principal.avatar}"
+                     th:alt="${principal?.nickname}" width="30" height="30"/>
+            </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <!--/*@thymesVar id="principal" type="org.antop.board.login.UserPrincipal"*/-->
                 <span sec:authentication="principal.nickname" class="nav-link link-dark px-2">nickname</span>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">

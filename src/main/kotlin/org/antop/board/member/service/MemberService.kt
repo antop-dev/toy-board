@@ -8,6 +8,7 @@ import org.antop.board.member.exception.MemberNotFoundException
 import org.antop.board.member.mapper.toDto
 import org.antop.board.member.model.Member
 import org.antop.board.member.repository.MemberRepository
+import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -36,6 +37,7 @@ class MemberService(
         email: String,
         password: String,
         nickname: String,
+        avatar: String?,
     ): MemberDto {
         memberRepository.findByEmail(email)?.let {
             throw EmailAlreadyExistsException(email)
@@ -45,6 +47,7 @@ class MemberService(
                 this.email = email
                 this.password = passwordEncoder.encode(password)
                 this.nickname = nickname
+                this.avatar = avatar?.let { ExposedBlob(it.toByteArray()) }
                 created = LocalDateTime.now()
             }
         return member.toDto()

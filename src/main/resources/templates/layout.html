@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/libs/bootstrap-icons-1.11.3/bootstrap-icons.min.css}">
     <link rel="stylesheet" th:href="@{/libs/sweetalert2-11.19.1/sweetalert2.min.css}">
     <link rel="stylesheet" th:href="@{/libs/nanum-gothic/NanumGothic.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
     <script type="text/javascript" th:src="@{/libs/bootstrap-5.3.3/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/jquery-3.7.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/libs/htmx-2.0.4/htmx.min.js}"></script>
@@ -35,7 +36,7 @@
     // 캡챠 이미지 클릭 시 이미지 변경
     const captchaImage = document.getElementById("captcha-image");
     if (captchaImage != null) {
-        captchaImage.addEventListener("click", function (e) {
+        captchaImage.addEventListener("click", function () {
             // 무작위 문자열 생성
             const randomValue = Math.random().toString(36).substring(2, 8);
             // r 파라미터 세팅

@@ -21,6 +21,9 @@ class Member(
     /** 닉네임 */
     var nickname by Members.nickname
 
+    /** 프로핑 이미지 */
+    var avatar by Members.avatar
+
     /** 작성일시 */
     var created by Members.created
 

@@ -10,6 +10,11 @@ spring:
     host: localhost
     port: 2525
 
+management:
+  health:
+    mail:
+      enabled: false # 얍 사적 사 SMTP 서버 체크 안함
+
 app:
   site:
     url: http://localhost:8888

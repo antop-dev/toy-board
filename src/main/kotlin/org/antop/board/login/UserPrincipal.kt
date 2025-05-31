@@ -6,8 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails
 class UserPrincipal(
     val id: Long,
     val email: String,
-    private val _password: String,
+    private val password: String,
     val nickname: String,
+    val avatar: String?,
 ) : UserDetails {
     companion object {
         private const val DEFAULT_ROLE_NAME = "ROLE_USER"
@@ -16,7 +17,7 @@ class UserPrincipal(
 
     override fun getAuthorities() = mutableListOf(DEFAULT_ROLE)
 
-    override fun getPassword() = _password
+    override fun getPassword() = password
 
     override fun getUsername() = email
 }
