@@ -6,8 +6,11 @@
       layout:decorate="~{layout}"
       th:with="showHeader=false">
 <head>
-    <script>회원 가입</script>
+    <title>회원 가입</title>
+    <link rel="stylesheet" th:href="@{/libs/cropper-1.5.12/cropper.min.css}">
     <script th:src="@{/libs/pswmeter-1.1/pswmeter.min.js}"></script>
+    <script th:src="@{/libs/cropper-1.5.12/cropper.min.js}"></script>
+    <script th:src="@{/libs/jquery-cropper-1.0.2/jquery-cropper.min.js}"></script>
 </head>
 <body>
 <div layout:fragment="content" class="container pt-5 pb-5">
@@ -15,7 +18,7 @@
     <form hx:post="@{{url}(url=${registerProcessingUrl})}">
         <!--/* 폼 */-->
         <section class="mt-2 pt-4 border-top border-3 border-dark" th:fragment="form">
-            <div class="">
+            <div>
                 <label for="email" class="form-label">이메일</label>
                 <input type="email" class="form-control" id="email" name="email" required placeholder="이메일을 입력하세요.">
             </div>
@@ -33,12 +36,27 @@
                 <label for="nickname" class="form-label">닉네임</label>
                 <input type="text" class="form-control" id="nickname" name="nickname" required placeholder="닉네임을 입력하세요.">
             </div>
+            <!-- 프로필 사진 -->
+            <div class="mt-3">
+                <label class="form-label">프로필 사진</label>
+                <input type="hidden" id="avatar" name="avatar">
+                <div>
+                    <label for="inputImage" class="btn btn-sm btn-primary">
+                        <input type="file" class="d-none" id="inputImage" name="file" accept="image/*">
+                        <i class="bi bi-filetype-png"></i>
+                        사진 업로드
+                    </label>
+                </div>
+                <div class="mt-1">
+                    <img id="cropper" alt="프로필 이미지" src="" class="d-none">
+                </div>
+            </div>
             <div class="mt-3">
                 <label for="captcha" class="form-label">자동 등록 방지</label>
                 <div class="input-group">
                     <img id="captcha-image" width="200" height="38"
                          class="form-control" style="flex: none; width: 200px; padding: 0; cursor: pointer;"
-                         th:src="@{/captcha.png(w=200,h=38)}">
+                         th:src="@{/captcha.png(w=200,h=38)}" alt="캡챠 이미지">
                     <input type="text" id="captcha" name="captcha" class="form-control" required placeholder="표시된 코드를 입력하세요">
                 </div>
             </div>
@@ -58,8 +76,6 @@
     </form>
 </div>
 <script layout:fragment="js">
-
-
     // 비밀번호와 비밀번호확인 값 일치 확인
     function matchPassword(password1, password2) {
         if (password1.value === password2.value) {
@@ -84,6 +100,81 @@
 
     password1.addEventListener("input", () => matchPassword(password1, password2))
     password2.addEventListener("input", () => matchPassword(password1, password2));
+
+    // Cropper.js
+    const $cropper = $('#cropper');
+    // createObjectURL 을 사용하면 브라우저의 메모리를 사용한다.
+    // 메모리 관리해야 한다.
+    let previousBlob;
+
+    $("#inputImage").change(function (e) {
+        const files = e.target.files;
+        if (!files || files.length === 0) {
+            return;
+        }
+        const file = files[0];
+        // 이전 Blob URL이 있다면 해제
+        if (previousBlob) {
+            URL.revokeObjectURL(previousBlob);
+        }
+        // 새로운 Blob URL 생성
+        previousBlob = URL.createObjectURL(file);
+
+        $cropper.cropper("destroy");
+        $cropper.attr("src", previousBlob);
+
+        $cropper.cropper({
+            viewMode: 1,
+            aspectRatio: 1, // 1:1 비율 강제
+            dragMode: 'move', // 이미지 드래그 모드 설정
+            autoCropArea: 1, // 초기 크롭 영역을 100%로 설정
+            restore: false,
+            guides: true,
+            center: true,
+            highlight: false,
+            cropBoxMovable: false,
+            cropBoxResizable: false, // 크롭 박스 크기 조절 비활성화
+            toggleDragModeOnDblclick: false,
+            minContainerHeight: 400, // 원하는 고정 높이 값 설정
+            height: 400, // 원하는 고정 높이 값 설정
+            minCropBoxWidth: 200, // 최소 크롭 박스 너비
+            minCropBoxHeight: 200, // 최소 크롭 박스 높이
+            maxCropBoxWidth: 200, // 최대 크롭 박스 너비
+            maxCropBoxHeight: 200, // 최대 크롭 박스 높이
+            data: { // 초기 크롭 박스 크기 설정
+                width: 200,
+                height: 200
+            },
+            ready: function() { // cropper가 준비되면 크롭 박스를 중앙에 위치시킴
+                const cropper = this.cropper;
+                const containerData = cropper.getContainerData();
+                const cropBoxData = cropper.getCropBoxData();
+
+                const left = (containerData.width - cropBoxData.width) / 2;
+                const top = (containerData.height - cropBoxData.height) / 2;
+
+                cropper.setCropBoxData({
+                    left: left,
+                    top: top
+                });
+            },
+            crop: function() {
+                const dataUrl = $cropper.cropper("getCroppedCanvas", {
+                    width: 200,
+                    height: 200,
+                }).toDataURL("image/png");
+                // base64 이미지 문자열을 세팅
+                $("#avatar").val(dataUrl)
+            }
+        });
+    });
+
+    // 페이지를 떠날 때 Blob URL 해제
+    $(window).on('beforeunload', function() {
+        if (previousBlob) {
+            URL.revokeObjectURL(previousBlob);
+        }
+    });
 </script>
 </body>
 </html>
