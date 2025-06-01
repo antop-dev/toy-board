@@ -13,7 +13,7 @@ spring:
 management:
   health:
     mail:
-      enabled: false # 얍 사적 사 SMTP 서버 체크 안함
+      enabled: false # 앱 시작시 SMTP 서버 체크 안함
 
 app:
   site:
@@ -23,4 +23,3 @@ app:
   rsa:
     private-key: classpath:rsa/private_key.pem
     public-key: classpath:rsa/public_key.pem
-

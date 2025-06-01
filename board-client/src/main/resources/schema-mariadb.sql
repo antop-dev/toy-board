@@ -4,6 +4,7 @@ create table if not exists users
     email    varchar(100) not null comment '이메일',
     password varchar(255) not null comment '비밀번호',
     nickname varchar(100) not null comment '닉네임',
+    avatar   mediumtext   null comment '프로필사진',
     created  datetime     not null comment '등록일시',
     modified datetime comment '수정일시',
     primary key (user_id),
