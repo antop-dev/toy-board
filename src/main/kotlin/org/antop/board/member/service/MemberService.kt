@@ -36,6 +36,7 @@ class MemberService(
         email: String,
         password: String,
         nickname: String,
+        avatar: String?,
     ): MemberDto {
         memberRepository.findByEmail(email)?.let {
             throw EmailAlreadyExistsException(email)
@@ -45,6 +46,7 @@ class MemberService(
                 this.email = email
                 this.password = passwordEncoder.encode(password)
                 this.nickname = nickname
+                this.avatar = avatar
                 created = LocalDateTime.now()
             }
         return member.toDto()

@@ -11,4 +11,6 @@ data class MemberDto(
     var password: String,
     /** 별명 */
     val nickname: String,
+    /** 프로필 이미지 */
+    val avatar: String?,
 ) : Serializable

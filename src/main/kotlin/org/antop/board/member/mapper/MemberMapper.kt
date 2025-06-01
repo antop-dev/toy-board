@@ -9,4 +9,5 @@ fun Member.toDto(): MemberDto =
         email = this.email,
         password = this.password,
         nickname = this.nickname,
+        avatar = this.avatar,
     )

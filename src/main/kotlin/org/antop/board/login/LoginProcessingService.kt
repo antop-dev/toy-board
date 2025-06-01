@@ -15,10 +15,11 @@ class LoginProcessingService(
             return UserPrincipal(
                 id = member.id,
                 email = member.email,
-                _password = member.password,
+                password = member.password,
                 nickname = member.nickname,
+                avatar = member.avatar,
             )
-        } catch (e: MemberNotFoundException) {
+        } catch (_: MemberNotFoundException) {
             throw UsernameNotFoundException(username)
         }
     }
