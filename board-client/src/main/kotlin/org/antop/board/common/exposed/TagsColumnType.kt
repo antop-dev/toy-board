@@ -27,7 +27,6 @@ class TagsColumnType(
         when (value) {
             is Collection<*> -> value.joinToString(delimiter) { it }
             null -> null
-            else -> throw IllegalArgumentException("Unexpected value: $value")
         }
 
     override fun notNullValueToDB(value: Set<String>): Any = nonNullValueToString(value)
