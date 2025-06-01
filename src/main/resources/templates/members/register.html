@@ -159,12 +159,15 @@
                 });
             },
             crop: function() {
+                // crop 이벤트를 사용하면 항상(초기화, 픽셀단위 이동, 등) 이벤트가 발생한다.
+                // 근데 이걸 효율적을 바꾸기 위해서는 read, crop, zoom, move 각각 이벤트를 다 걸어야한다.
+                // 그래서 그냥 crop 쓴다.
                 const dataUrl = $cropper.cropper("getCroppedCanvas", {
                     width: 200,
                     height: 200,
                 }).toDataURL("image/png");
                 // base64 이미지 문자열을 세팅
-                $("#avatar").val(dataUrl)
+                $("#avatar").val(dataUrl);
             }
         });
     });
