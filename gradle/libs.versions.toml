@@ -1,0 +1,68 @@
+[versions]
+kotlin = "1.9.25"
+spring-boot = "3.4.5"
+htmx-spring-boot = "3.5.0"
+exposed = "0.61.0"
+jjwt = "0.12.6"
+p6spy = "1.10.0"
+jte = "3.2.1"
+
+[libraries]
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+# https://github.com/Kotlin/kotlinx-datetime
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.1" }
+# https://kotlinlang.org/docs/serialization.html
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
+# https://github.com/oshai/kotlin-logging
+kotlin-logging-jvm = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.6" }
+# https://github.com/wimdeblauwe/htmx-spring-boot
+htmx-spring-boot = { module = "io.github.wimdeblauwe:htmx-spring-boot", version.ref = "htmx-spring-boot" }
+htmx-spring-boot-thymeleaf = { module = "io.github.wimdeblauwe:htmx-spring-boot-thymeleaf", version.ref = "htmx-spring-boot" }
+# https://www.jetbrains.com/help/exposed
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-crypt = { module = "org.jetbrains.exposed:exposed-crypt", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+# https://github.com/JetBrains/Exposed/tree/main/exposed-spring-boot-starter
+exposed-spring-boot-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
+# https://github.com/ultraq/thymeleaf-layout-dialect
+thymeleaf-layout-dialect = { module = "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect", version = "3.4.0" }
+# https://github.com/thymeleaf/thymeleaf-extras-springsecurity
+thymeleaf-extras-springsecurity = { module = "org.thymeleaf.extras:thymeleaf-extras-springsecurity6", version = "3.1.3.RELEASE" }
+# https://www.ocpsoft.org/prettytime/
+prettytime = { module = "org.ocpsoft.prettytime:prettytime", version = "5.0.9.Final" }
+# https://github.com/apache/commons-codec
+commons-codec = { module = "commons-codec:commons-codec", version = "1.18.0" }
+# https://github.com/apache/commons-text
+commons-text = { module = "org.apache.commons:commons-text", version = "1.12.0" }
+# https://mvnrepository.com/artifact/commons-io/commons-io
+commons-io = { module = "commons-io:commons-io", version = "2.18.0" }
+# https://github.com/jwtk/jjwt
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+# https://mariadb.com/kb/en/about-mariadb-connector-j/
+mariadb-java-client = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.5.1" }
+# https://tika.apache.org/
+tika-core = { module = "org.apache.tika:tika-core", version = "3.0.0" }
+# https://github.com/rometools/rome
+rome = { module = "com.rometools:rome", version = "2.1.0" }
+# https://github.com/gavlyukovskiy/spring-boot-data-source-decorator
+p6spy-spring-boot-starter = { module = "com.github.gavlyukovskiy:p6spy-spring-boot-starter", version.ref = "p6spy" }
+# https://github.com/vertical-blank/sql-formatter
+sql-formatter = { module = "com.github.vertical-blank:sql-formatter", version = "2.0.5" }
+# https://github.com/mewebstudio/java-captcha-generator
+captcha = { module = "com.mewebstudio:captcha", version = "0.1.3" }
+# https://jte.gg/
+jte-kotlin = { module = "gg.jte:jte-kotlin", version.ref = "jte" }
+jte-spring-boot-starter = { module = "gg.jte:jte-spring-boot-starter-3", version.ref = "jte" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
+sonarqube = { id = "org.sonarqube", version = "6.0.1.5171" }
+jte-gradle = { id = "gg.jte.gradle", version.ref = "jte" }

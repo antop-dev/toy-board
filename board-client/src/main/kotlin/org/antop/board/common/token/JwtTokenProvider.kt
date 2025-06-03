@@ -1,6 +1,5 @@
 package org.antop.board.common.token
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -16,8 +15,6 @@ import java.util.Date
 class JwtTokenProvider(
     private val jwtProperties: JwtProperties,
 ) : TokenProvider {
-    private val log = KotlinLogging.logger { }
-
     override fun create(
         what: String,
         expiration: Duration,

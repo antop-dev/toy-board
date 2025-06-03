@@ -5,7 +5,7 @@ logging:
     org.antop.board: debug
 
 server:
-  port: 8888
+  port: 8001
   error:
     include-exception: true
     include-message: always

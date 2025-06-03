@@ -1,0 +1,62 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.kotlin.plugin.spring)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.sonarqube)
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.session:spring-session-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.crypt)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.kotlin.datetime)
+    implementation(libs.exposed.spring.boot.starter)
+    implementation(libs.commons.codec)
+    implementation(libs.commons.text)
+    implementation(libs.commons.io)
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation(libs.thymeleaf.layout.dialect)
+    implementation(libs.thymeleaf.extras.springsecurity)
+    implementation(libs.htmx.spring.boot)
+    implementation(libs.htmx.spring.boot.thymeleaf)
+    implementation(libs.prettytime)
+    implementation(libs.kotlin.logging.jvm)
+    implementation(libs.tika.core)
+    implementation(libs.rome)
+    implementation(libs.jjwt.api)
+    implementation(libs.jjwt.impl)
+    implementation(libs.jjwt.jackson)
+    implementation(libs.mariadb.java.client)
+    implementation(libs.p6spy.spring.boot.starter)
+    implementation(libs.sql.formatter)
+    implementation(libs.captcha)
+
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "antop-dev_toy-board")
+        property("sonar.organization", "antop-dev")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
