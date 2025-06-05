@@ -46,7 +46,7 @@
                         <i class="bi bi-filetype-png"></i>
                         사진 업로드
                     </label>
-                    <button id="removeImage" type="button" class="btn btn-sm btn-outline-danger">
+                    <button id="removeImage" type="button" class="btn btn-sm btn-outline-danger" aria-label="프로필 이미지 삭제">
                         <i class="bi bi-trash"></i>
                     </button>
                     <div class="btn-group">
@@ -191,9 +191,14 @@
     });
     // 프로필 이미지 삭제
     $("#removeImage").click(function() {
+        // Revoke the Blob URL if it exists
+        if (previousBlob) {
+            URL.revokeObjectURL(previousBlob);
+            previousBlob = null;
+        }
         $cropper.cropper("destroy");
         $cropper.attr("src", "");
-        $("#avatar").val("");
+        $("#avatar").val("").addClass("d-none");
     });
     // 좌우 뒤집기
     $("#scaleX").click(function() {
