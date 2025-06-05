@@ -46,6 +46,24 @@
                         <i class="bi bi-filetype-png"></i>
                         사진 업로드
                     </label>
+                    <button id="removeImage" type="button" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <div class="btn-group">
+
+                        <button id="scaleX" type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-arrows"></i>
+                        </button>
+                        <button id="scaleY" type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-arrows-vertical"></i>
+                        </button>
+                        <button id="rotateLeft" type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </button>
+                        <button id="rotateRight" type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="mt-1">
                     <img id="cropper" alt="프로필 이미지" src="" class="d-none">
@@ -106,7 +124,7 @@
     // createObjectURL 을 사용하면 브라우저의 메모리를 사용한다.
     // 메모리 관리해야 한다.
     let previousBlob;
-
+    // 이미지 등록
     $("#inputImage").change(function (e) {
         const files = e.target.files;
         if (!files || files.length === 0) {
@@ -171,7 +189,34 @@
             }
         });
     });
-
+    // 프로필 이미지 삭제
+    $("#removeImage").click(function() {
+        $cropper.cropper("destroy");
+        $cropper.attr("src", "");
+        $("#avatar").val("");
+    });
+    // 좌우 뒤집기
+    $("#scaleX").click(function() {
+        if (!$cropper.data('cropper')) return;
+        const scaleX = $cropper.cropper("getData").scaleX;
+        $cropper.cropper("scaleX", scaleX * -1);
+    });
+    // 상하 뒤집기
+    $("#scaleY").click(function() {
+        if (!$cropper.data('cropper')) return;
+        const scaleY = $cropper.cropper("getData").scaleY;
+        $cropper.cropper("scaleY", scaleY * -1);
+    });
+    // 왼쪽으로 45도 회전
+    $("#rotateLeft").click(function() {
+        if (!$cropper.data('cropper')) return;
+        $cropper.cropper("rotate", -45);
+    });
+    // 오른쪽으로 45도 회전
+    $("#rotateRight").click(function() {
+        if (!$cropper.data('cropper')) return;
+        $cropper.cropper("rotate", 45);
+    });
     // 페이지를 떠날 때 Blob URL 해제
     $(window).on('beforeunload', function() {
         if (previousBlob) {
