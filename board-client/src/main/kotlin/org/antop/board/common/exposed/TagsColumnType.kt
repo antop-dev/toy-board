@@ -26,7 +26,7 @@ class TagsColumnType(
     override fun valueToDB(value: Set<String>?): Any? =
         when (value) {
             is Collection<*> -> value.joinToString(delimiter) { it }
-            null -> null
+            else -> null
         }
 
     override fun notNullValueToDB(value: Set<String>): Any = nonNullValueToString(value)
