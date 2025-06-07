@@ -14,39 +14,29 @@
 </head>
 <body>
 <div layout:fragment="content" class="container pt-5 pb-5">
-    <h2>회원 가입</h2>
-    <form hx:post="@{{url}(url=${registerProcessingUrl})}">
+    <h2>회원정보 수정</h2>
+    <form hx:post="@{/members/modify}" hx-swap="none">
+        <input type="hidden" name="memberId" th:value="${member.id}"/>
         <!--/* 폼 */-->
         <section class="mt-2 pt-4 border-top border-3 border-dark" th:fragment="form">
-            <div>
-                <label for="email" class="form-label">이메일</label>
-                <input type="email" class="form-control" id="email" name="email" required placeholder="이메일을 입력하세요.">
-            </div>
-            <div class="mt-3">
-                <label for="password1" class="form-label">비밀번호</label>
-                <input type="password" class="form-control" id="password1" name="password" required placeholder="비밀번호를 입력하세요.">
-                <div id="pswmeter" class="mt-2"></div>
-                <div id="pswmeter-message"></div>
-            </div>
-            <div class="mt-3">
-                <label for="password2" class="form-label">비밀번호 확인</label>
-                <input type="password" class="form-control" id="password2" required placeholder="비밀번호를 입력하세요.">
-            </div>
+            <!--/* 닉네임 */-->
             <div class="mt-3">
                 <label for="nickname" class="form-label">닉네임</label>
-                <input type="text" class="form-control" id="nickname" name="nickname" required placeholder="닉네임을 입력하세요.">
+                <input type="text" class="form-control" id="nickname" name="nickname" required placeholder="닉네임을 입력하세요."
+                       th:value="${member.nickname}">
             </div>
             <!-- 프로필 사진 -->
             <div class="mt-3">
                 <label class="form-label">프로필 사진</label>
-                <input type="hidden" id="avatar" name="avatar">
+                <input type="hidden" id="avatar" name="avatar" th:value="${member.avatar}">
                 <div>
                     <label for="inputImage" class="btn btn-sm btn-primary">
                         <input type="file" class="d-none" id="inputImage" name="file" accept="image/*">
                         <i class="bi bi-filetype-png"></i>
                         사진 업로드
                     </label>
-                    <button id="removeImage" type="button" class="btn btn-sm btn-outline-danger" aria-label="프로필 이미지 삭제">
+                    <button id="removeImage" type="button" class="btn btn-sm btn-outline-danger"
+                            aria-label="프로필 이미지 삭제">
                         <i class="bi bi-trash"></i>
                     </button>
                     <div class="btn-group">
@@ -66,24 +56,23 @@
                     </div>
                 </div>
                 <div class="mt-1">
-                    <img id="cropper" alt="프로필 이미지" src="" class="d-none">
+                    <img id="cropper" alt="프로필 이미지" th:src="${member.avatar}" class="d-none">
                 </div>
             </div>
+            <!--/* 비밀번호 */-->
             <div class="mt-3">
-                <label for="captcha" class="form-label">자동 등록 방지</label>
-                <div class="input-group">
-                    <img id="captcha-image" width="200" height="38"
-                         class="form-control" style="flex: none; width: 200px; padding: 0; cursor: pointer;"
-                         th:src="@{/captcha.png(w=200,h=38)}" alt="캡챠 이미지">
-                    <input type="text" id="captcha" name="captcha" class="form-control" required placeholder="표시된 코드를 입력하세요">
-                </div>
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password" required
+                       placeholder="비밀번호를 입력하세요.">
+                <div id="pswmeter" class="mt-2"></div>
+                <div id="pswmeter-message"></div>
             </div>
         </section>
         <!--/* 버튼 */-->
         <section class="pt-3 mt-4 border-top border-1 border-dark d-flex">
             <div class="ms-auto">
                 <button type="submit" class="btn btn-outline-primary rounded-0">
-                    <i class="bi bi-pencil"></i> 등록
+                    <i class="bi bi-pencil"></i> 저장
                 </button>
                 <a th:href="@{/}"
                    class="btn btn-outline-dark rounded-0">
@@ -94,31 +83,6 @@
     </form>
 </div>
 <script layout:fragment="js">
-    // 비밀번호와 비밀번호확인 값 일치 확인
-    function matchPassword(password1, password2) {
-        if (password1.value === password2.value) {
-            password2.classList.remove("border-danger");
-        } else {
-            password2.classList.add("border-danger");
-        }
-    }
-
-    // 비밀번호 강도 체크
-    passwordStrengthMeter({
-        containerElement: '#pswmeter',
-        passwordInput: '#password1',
-        showMessage: false,
-        height: 6,
-        borderRadius: 0,
-        pswMinLength: 8,
-    });
-
-    const password1 = document.getElementById("password1");
-    const password2 = document.getElementById("password2");
-
-    password1.addEventListener("input", () => matchPassword(password1, password2))
-    password2.addEventListener("input", () => matchPassword(password1, password2));
-
     // Cropper.js
     const $cropper = $('#cropper');
     // createObjectURL 을 사용하면 브라우저의 메모리를 사용한다.
@@ -163,7 +127,7 @@
                 width: 200,
                 height: 200
             },
-            ready: function() { // cropper가 준비되면 크롭 박스를 중앙에 위치시킴
+            ready: function () { // cropper가 준비되면 크롭 박스를 중앙에 위치시킴
                 const cropper = this.cropper;
                 const containerData = cropper.getContainerData();
                 const cropBoxData = cropper.getCropBoxData();
@@ -176,7 +140,7 @@
                     top: top
                 });
             },
-            crop: function() {
+            crop: function () {
                 // crop 이벤트를 사용하면 항상(초기화, 픽셀단위 이동, 등) 이벤트가 발생한다.
                 // 근데 이걸 효율적을 바꾸기 위해서는 read, crop, zoom, move 각각 이벤트를 다 걸어야한다.
                 // 그래서 그냥 crop 쓴다.
@@ -189,8 +153,36 @@
             }
         });
     });
+    // 프로파일 이미지가 이미 있다면
+    if ($cropper.attr("src")) {
+        $cropper.removeClass("d-none");
+        // 파일을 업로드한 것처럼 트리거를 건다.
+        // Base64 데이터 (예시)
+        const base64Data = $cropper.attr("src");
+        // "data:image/png;base64," 부분 제거
+        const base64 = base64Data.split(',')[1];
+        // Base64 디코딩
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        // Blob 생성
+        const blob = new Blob([byteArray], { type: "image/png" });
+        // File 객체 생성
+        const file = new File([blob], "image.png", { type: "image/png" });
+        // DataTransfer 객체 생성
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        // input 요소에 파일 할당
+        const input = document.getElementById("inputImage");
+        input.files = dataTransfer.files;
+        // change 이벤트 트리거
+        input.dispatchEvent(new Event("change"));
+    }
     // 프로필 이미지 삭제
-    $("#removeImage").click(function() {
+    $("#removeImage").click(function () {
         // Revoke the Blob URL if it exists
         if (previousBlob) {
             URL.revokeObjectURL(previousBlob);
@@ -202,29 +194,29 @@
         $("#avatar").val("")
     });
     // 좌우 뒤집기
-    $("#scaleX").click(function() {
+    $("#scaleX").click(function () {
         if (!$cropper.data('cropper')) return;
         const scaleX = $cropper.cropper("getData").scaleX;
         $cropper.cropper("scaleX", scaleX * -1);
     });
     // 상하 뒤집기
-    $("#scaleY").click(function() {
+    $("#scaleY").click(function () {
         if (!$cropper.data('cropper')) return;
         const scaleY = $cropper.cropper("getData").scaleY;
         $cropper.cropper("scaleY", scaleY * -1);
     });
     // 왼쪽으로 45도 회전
-    $("#rotateLeft").click(function() {
+    $("#rotateLeft").click(function () {
         if (!$cropper.data('cropper')) return;
         $cropper.cropper("rotate", -45);
     });
     // 오른쪽으로 45도 회전
-    $("#rotateRight").click(function() {
+    $("#rotateRight").click(function () {
         if (!$cropper.data('cropper')) return;
         $cropper.cropper("rotate", 45);
     });
     // 페이지를 떠날 때 Blob URL 해제
-    $(window).on('beforeunload', function() {
+    $(window).on('beforeunload', function () {
         if (previousBlob) {
             URL.revokeObjectURL(previousBlob);
         }
