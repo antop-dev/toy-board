@@ -1,30 +1,33 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-<nav class="py-2 bg-light border-bottom sticky-top" th:fragment="header">
+<nav class="navbar navbar-expand-lg navbar-light bg-light py-2 bg-light border-bottom sticky-top" th:fragment="header">
     <!--/*@thymesVar id="principal" type="org.antop.board.login.UserPrincipal"*/-->
     <!--/*@thymesVar id="authentication.principal" type="org.antop.board.login.UserPrincipal"*/-->
-    <div class="container d-flex flex-wrap">
-        <div class="nav me-auto"></div>
-        <ul class="nav">
-            <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
-                <img th:if="${#authentication.principal.avatar != null}" th:src="${#authentication.principal.avatar}"
-                     th:alt="${principal?.nickname}" width="30" height="30"/>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <span sec:authentication="principal.nickname" class="nav-link link-dark px-2">nickname</span>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a href="#" hx-post="/logout" hx-trigger="click" class="nav-link link-dark px-2 cursor-pointer">Sign
-                    out</a>
-            </li>
-            <li class="nav-item" sec:authorize="isAnonymous()">
-                <a th:href="@{{url}(url=${T(org.antop.board.common.constants.LoginConstant.Url).LOGIN_FORM})}"
-                   class="nav-link link-dark px-2">Sign in</a>
-            </li>
-            <li class="nav-item" sec:authorize="isAnonymous()">
-                <a th:href="@{{url}(url=${T(org.antop.board.common.constants.MemberConstant.Url).REGISTER_FORM})}"
-                   class="nav-link link-dark px-2">Sign up</a>
-            </li>
+    <div class="container">
+        <!-- 왼쪽: Home -->
+        <a class="navbar-brand" th:href="@{/}">Home</a>
+        <!-- 가운데는 비움 -->
+        <div class="collapse navbar-collapse"></div>
+        <!-- 오른쪽: 항상 보이는 Sign In / Sign Up -->
+        <ul class="navbar-nav ms-auto">
+            <th:block sec:authorize="isAuthenticated()">
+                <li class="nav-item d-flex align-items-center">
+                    <img th:if="${#authentication.principal.avatar != null}" th:src="${#authentication.principal.avatar}"
+                         th:alt="${principal?.nickname}" width="40" height="40"/>
+                    <a class="nav-link link-dark" th:href="@{/members/modify.html}" sec:authentication="principal.nickname">nickname</a>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link link-dark" href="#" hx-post="/logout" hx-trigger="click">Sign out</button>
+                </li>
+            </th:block>
+            <th:block sec:authorize="isAnonymous()">
+                <li class="nav-item">
+                    <a class="nav-link link-dark" th:href="@{/login.html}">Sign in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-dark" th:href="@{/members/register.html}">Sign up</a>
+                </li>
+            </th:block>
         </ul>
     </div>
 </nav>
