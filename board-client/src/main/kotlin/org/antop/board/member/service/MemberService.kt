@@ -61,4 +61,29 @@ class MemberService(
             member.password = passwordEncoder.encode(password)
         }
     }
+
+    /**
+     * 회원 정보를 수정합니다.
+     *
+     * @param email 회원의 이메일 주소
+     * @param nickname 새로운 닉네임
+     * @param avatar 새로운 아바타 URL (선택 사항)
+     * @return 수정된 회원 정보 DTO
+     */
+    @Throws(MemberNotFoundException::class)
+    @Transactional
+    fun modify(
+        email: String,
+        nickname: String,
+        avatar: String?,
+    ): MemberDto? {
+        val member =
+            memberRepository.findByEmail(email)?.let { member ->
+                member.nickname = nickname
+                member.avatar = avatar
+                member.modified = LocalDateTime.now()
+                member
+            }
+        return member?.toDto()
+    }
 }
