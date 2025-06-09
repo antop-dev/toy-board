@@ -17,7 +17,7 @@
                     <a class="nav-link link-dark" th:href="@{/members/modify.html}" sec:authentication="principal.nickname">nickname</a>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link link-dark" href="#" hx-post="/logout" hx-trigger="click">Sign out</button>
+                    <button type="button" class="nav-link link-dark" hx-post="/logout" hx-trigger="click">Sign out</button>
                 </li>
             </th:block>
             <th:block sec:authorize="isAnonymous()">

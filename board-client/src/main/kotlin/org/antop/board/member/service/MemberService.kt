@@ -70,6 +70,7 @@ class MemberService(
      * @param avatar 새로운 아바타 URL (선택 사항)
      * @return 수정된 회원 정보 DTO
      */
+    @Throws(MemberNotFoundException::class)
     @Transactional
     fun modify(
         email: String,
