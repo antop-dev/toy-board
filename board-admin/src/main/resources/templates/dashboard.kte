@@ -1,0 +1,10 @@
+@param name: String?
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+Hello ${name}!!
+</body>
+</html>
