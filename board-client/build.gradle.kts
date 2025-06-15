@@ -8,15 +8,15 @@ plugins {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.session:spring-session-data-redis")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.aop)
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.data.redis)
+    implementation(libs.spring.boot.starter.validation)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.session.data.redis)
+    implementation(libs.spring.boot.starter.mail)
+    implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
@@ -29,7 +29,7 @@ dependencies {
     implementation(libs.commons.codec)
     implementation(libs.commons.text)
     implementation(libs.commons.io)
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation(libs.spring.boot.starter.thymeleaf)
     implementation(libs.thymeleaf.layout.dialect)
     implementation(libs.thymeleaf.extras.springsecurity)
     implementation(libs.htmx.spring.boot)
@@ -46,17 +46,9 @@ dependencies {
     implementation(libs.sql.formatter)
     implementation(libs.captcha)
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-sonar {
-    properties {
-        property("sonar.projectKey", "antop-dev_toy-board")
-        property("sonar.organization", "antop-dev")
-        property("sonar.host.url", "https://sonarcloud.io")
-    }
+    annotationProcessor(libs.spring.boot.configuration.processor)
+    developmentOnly(libs.spring.boot.devtools)
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.kotlin.test.junit5)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
