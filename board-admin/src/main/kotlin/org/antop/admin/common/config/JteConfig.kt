@@ -18,8 +18,6 @@ class JteConfig {
      */
     @Bean
     fun jteTemplateEngine(jteProperties: JteProperties): TemplateEngine {
-        println()
-
         if (jteProperties.isDevelopmentMode && jteProperties.usePreCompiledTemplates()) {
             throw JteConfigurationException("You can't use development mode and precompiledTemplates together")
         }
