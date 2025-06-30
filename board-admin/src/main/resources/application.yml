@@ -5,11 +5,3 @@ spring:
   security:
     user:
       name: none
-
-gg:
-  jte:
-    use-precompiled-templates: true
-    development-mode: false
-    #    template-location: board-admin/src/main/jte
-    template-location: templates/
-    template-suffix: .kte

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>대시보드</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <script th:src="@{/libs/chart-4.5.0/chart.min.js}"></script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .kpi-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <header class="mb-4">
+        <h1 class="text-3xl font-bold text-gray-900">게시판 현황 대시보드</h1>
+        <p class="text-gray-500 mt-1">게시판 관련 주요 데이터를 시각적으로 분석하고 관리합니다.</p>
+    </header>
+    <section id="kpi-section">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">핵심 지표</h2>
+        <div class="grid grid-cols-4 gap-4">
+            <div id="kpi-total-boards" class="kpi-card bg-blue-500 text-white p-5 rounded-lg shadow-lg"></div>
+            <div id="kpi-total-posts" class="kpi-card bg-teal-500 text-white p-5 rounded-lg shadow-lg"></div>
+            <div id="kpi-avg-posts" class="kpi-card bg-indigo-500 text-white p-5 rounded-lg shadow-lg"></div>
+            <div id="kpi-top-board" class="kpi-card bg-rose-500 text-white p-5 rounded-lg shadow-lg"></div>
+        </div>
+    </section>
+    <section id="charts-section" class="grid grid-cols-2 gap-8">
+        <div class="flex flex-col">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">게시판별 게시글 수</h2>
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <div class="chart-container h-[400px]">
+                    <canvas id="postCountChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">게시글 수 분포</h2>
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <div class="chart-container h-[400px]">
+                    <canvas id="postDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+<script layout:fragment="js">
+    document.addEventListener('DOMContentLoaded', () => {
+        const boardData = [
+            { id: 1, name: '공지사항', description: '중요 공지사항을 게시하는 게시판입니다.', createdAt: '2024-01-15T10:00:00', postCount: 125 },
+            { id: 2, name: '자유게시판', description: '자유로운 주제로 이야기하는 게시판입니다.', createdAt: '2024-02-01T14:30:00', postCount: 5432 },
+            { id: 3, name: 'Q&A 게시판', description: '궁금한 점을 질문하고 답변하는 게시판입니다.', createdAt: '2024-03-10T09:10:00', postCount: 876 },
+            { id: 4, name: '팁과 노하우', description: '유용한 팁을 공유하는 공간입니다.', createdAt: '2024-03-20T11:00:00', postCount: 1250 },
+            { id: 5, name: '자료실', description: '각종 자료를 아카이빙합니다.', createdAt: '2024-04-05T18:00:00', postCount: 340 },
+            { id: 6, name: '개발자 포럼', description: '개발 관련 심도깊은 토론을 나눕니다.', createdAt: '2024-05-22T13:00:00', postCount: 2180 },
+            { id: 7, name: '디자인 갤러리', description: '디자인 작업을 공유하고 피드백을 받습니다.', createdAt: '2024-05-28T19:45:00', postCount: 950 },
+            { id: 8, name: '중고장터', description: '회원간 안전한 물품을 거래하는 게시판입니다.', createdAt: '2024-06-15T08:30:00', postCount: 7200 },
+            { id: 9, name: '프로젝트 팀원 모집', description: '프로젝트를 함께할 팀원을 모집합니다.', createdAt: '2024-06-20T16:00:00', postCount: 450 }
+        ];
+
+        const renderKpis = () => {
+            const totalBoards = boardData.length;
+            const totalPosts = boardData.reduce((sum, board) => sum + board.postCount, 0);
+            const avgPosts = totalPosts > 0 ? (totalPosts / totalBoards).toFixed(0) : 0;
+            const topBoard = boardData.reduce((prev, current) => (prev.postCount > current.postCount) ? prev : current);
+
+            document.getElementById('kpi-total-boards').innerHTML = `
+            <div class="text-sm font-medium uppercase">총 게시판 수</div>
+            <div class="text-3xl font-bold">${totalBoards}</div>`;
+            document.getElementById('kpi-total-posts').innerHTML = `
+            <div class="text-sm font-medium uppercase">총 게시글 수</div>
+            <div class="text-3xl font-bold">${totalPosts.toLocaleString()}</div>`;
+            document.getElementById('kpi-avg-posts').innerHTML = `
+            <div class="text-sm font-medium uppercase">평균 게시글 수</div>
+            <div class="text-3xl font-bold">${parseInt(avgPosts).toLocaleString()}</div>`;
+            document.getElementById('kpi-top-board').innerHTML = `
+            <div class="text-sm font-medium uppercase">최다 게시글 보드</div>
+            <div class="text-xl font-bold truncate">${topBoard.name}</div>
+            <div class="text-sm">${topBoard.postCount.toLocaleString()}개</div>`;
+        };
+
+        const setupCharts = () => {
+            const chartColors = [
+                'rgba(59, 130, 246, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(107, 114, 128, 0.7)',
+                'rgba(139, 92, 246, 0.7)', 'rgba(239, 68, 68, 0.7)', 'rgba(245, 158, 11, 0.7)',
+                'rgba(236, 72, 153, 0.7)', 'rgba(20, 184, 166, 0.7)', 'rgba(99, 102, 241, 0.7)'
+            ];
+
+            const wrapText = (text, maxLen) => {
+                const words = text.split('');
+                const lines = [];
+                let currentLine = '';
+                for (let i = 0; i < words.length; i++) {
+                    if (currentLine.length < maxLen) {
+                        currentLine += words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                if (currentLine) {
+                    lines.push(currentLine);
+                }
+                return lines;
+            }
+
+            // 게시글 수가 가장 큰 5개의 게시판만 필터링하고 정렬 (막대 차트)
+            const sortedBoardDataForBarChart = [...boardData].sort((a, b) => b.postCount - a.postCount).slice(0, 5);
+            const barLabels = sortedBoardDataForBarChart.map(b => b.name);
+            const barPostCounts = sortedBoardDataForBarChart.map(b => b.postCount);
+
+            const barCtx = document.getElementById('postCountChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: barLabels.map(label => wrapText(label, 10)),
+                    datasets: [{
+                        label: '게시글 수',
+                        data: barPostCounts,
+                        backgroundColor: chartColors,
+                        borderColor: chartColors.map(c => c.replace('0.7', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // 게시글 수 분포 차트 (도넛 차트): 상위 5개와 '그 외'로 그룹화
+            const sortedBoardDataForDoughnut = [...boardData].sort((a, b) => b.postCount - a.postCount);
+            const top5DoughnutData = sortedBoardDataForDoughnut.slice(0, 5);
+            const othersDoughnutData = sortedBoardDataForDoughnut.slice(5);
+
+            const doughnutLabels = top5DoughnutData.map(b => b.name);
+            const doughnutCounts = top5DoughnutData.map(b => b.postCount);
+
+            let othersPostCount = 0;
+            if (othersDoughnutData.length > 0) {
+                othersPostCount = othersDoughnutData.reduce((sum, board) => sum + board.postCount, 0);
+                doughnutLabels.push('그 외');
+                doughnutCounts.push(othersPostCount);
+            }
+
+            // 차트 색상 배열은 최소 6개 이상이어야 합니다. 부족하면 반복하거나 추가.
+            const doughnutChartColors = [
+                'rgba(59, 130, 246, 0.7)', // blue
+                'rgba(16, 185, 129, 0.7)', // emerald
+                'rgba(107, 114, 128, 0.7)', // gray
+                'rgba(139, 92, 246, 0.7)', // violet
+                'rgba(239, 68, 68, 0.7)', // red
+                'rgba(245, 158, 11, 0.7)'  // amber (for '그 외')
+            ];
+
+
+            const doughnutCtx = document.getElementById('postDistributionChart').getContext('2d');
+            new Chart(doughnutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: doughnutLabels,
+                    datasets: [{
+                        label: '게시글 분포',
+                        data: doughnutCounts,
+                        backgroundColor: doughnutChartColors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        };
+
+        renderKpis();
+        setupCharts();
+    });
+</script>
+</body>
+</html>
