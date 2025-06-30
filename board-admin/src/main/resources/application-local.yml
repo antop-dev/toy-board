@@ -1,7 +1,6 @@
 logging:
   level:
     org.springframework.web: debug
-    gg.jte: trace
 
 spring:
   datasource:
@@ -9,8 +8,3 @@ spring:
     url: jdbc:mariadb://localhost:3306/toy_board?useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Seoul
     username: antop
     password: local
-
-gg:
-  jte:
-    use-precompiled-templates: false
-    development-mode: true
