@@ -7,7 +7,6 @@ htmx-spring-boot = "3.5.0"
 exposed = "0.61.0"
 jjwt = "0.12.6"
 p6spy = "1.10.0"
-jte = "3.1.16" # 3.2.x 버전은 코틀린 2.1.x 이어야 함
 jooq = "3.19.23" # JDK 1.7
 slf4j = "2.0.17"
 
@@ -77,10 +76,6 @@ p6spy-spring-boot-starter = { module = "com.github.gavlyukovskiy:p6spy-spring-bo
 sql-formatter = { module = "com.github.vertical-blank:sql-formatter", version = "2.0.5" }
 # https://github.com/mewebstudio/java-captcha-generator
 captcha = { module = "com.mewebstudio:captcha", version = "0.1.3" }
-# https://jte.gg/
-jte-kotlin = { module = "gg.jte:jte-kotlin", version.ref = "jte" }
-jte-models = { module = "gg.jte:jte-models", version.ref = "jte" }
-jte-spring-boot-starter = { module = "gg.jte:jte-spring-boot-starter-3", version.ref = "jte" }
 # https://www.jooq.org/
 jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
@@ -98,5 +93,4 @@ kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref 
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
 sonarqube = { id = "org.sonarqube", version = "6.0.1.5171" }
-jte-gradle = { id = "gg.jte.gradle", version.ref = "jte" }
 jooq = { id = "nu.studer.jooq", version = "9.0" }

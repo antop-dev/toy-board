@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Layout page</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <link rel="stylesheet" th:href="@{/libs/pretendard-1.3.9/pretendard-std.css}" />
+    <script th:src="@{/libs/tailwindcss-3.4.16/tailwindcss.min.js}"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+<div class="min-h-screen min-w-[1200px] max-w-[1200px]">
+    <div class="w-full flex border-x bg-white">
+        <!--/* Sidebar */-->
+        <aside class="w-60 border-r">
+            <!--/* 관리자 정보 */-->
+            <div class="flex items-center justify-between px-4 py-4 border-b text-sm text-gray-700">
+                <span><strong sec:authentication="name">${sec.admin}</strong>님</span>
+                <a th:href="@{/logout}" class="text-red-500 hover:underline">로그아웃</a>
+            </div>
+            <!--/* 메뉴 */-->
+            <nav class="p-4 space-y-2 text-sm">
+                <!--/*@thymesVar id="currentUrl" type="java.lang.String"*/-->
+                <a th:href="@{/dashboard}" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/' or currentUrl == '/dashboard' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">대시보드</a>
+                <a th:href="@{/member}" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/member' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">회원 관리</a>
+                <a th:href="@{/category}" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/category' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">게시판 관리</a>
+            </nav>
+        </aside>
+        <main class="w-full p-4 sm:p-4 lg:p-4 space-y-4">
+            <th:block layout:fragment="content" />
+        </main>
+    </div>
+</div>
+</body>
+<script>
+    // HTMX + CSRF
+    document.addEventListener('htmx:config-request', (event) => {
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        event.detail.headers[csrfHeader] = csrfToken;
+    });
+</script>
+<script layout:fragment="js"></script>
+</html>
