@@ -30,9 +30,9 @@
             <!--/* 메뉴 */-->
             <nav class="p-4 space-y-2 text-sm">
                 <!--/*@thymesVar id="currentUrl" type="java.lang.String"*/-->
-                <a href="/dashboard" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/' or currentUrl == '/dashboard' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">대시보드</a>
-                <a href="/member" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/member' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">회원 관리</a>
-                <a href="/category" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/category' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">게시판 관리</a>
+                <a th:href="@{/dashboard}" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/' or currentUrl == '/dashboard' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">대시보드</a>
+                <a th:href="@{/member}" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/member' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">회원 관리</a>
+                <a th:href="@{/category}" class="block px-3 py-2 rounded" th:classappend="${currentUrl == '/category' ? 'bg-green-100 font-semibold' : 'hover:bg-green-50'}">게시판 관리</a>
             </nav>
         </aside>
         <main class="w-full p-4 sm:p-4 lg:p-4 space-y-4">
