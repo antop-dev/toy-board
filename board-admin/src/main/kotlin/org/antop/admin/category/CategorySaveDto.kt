@@ -7,7 +7,7 @@ data class CategorySaveDto(
     val statusCode: String,
     /** 글쓰기 기능 사용 여부 */
     val featureWrite: Boolean,
-    /** 비밀글 기능 사요 여부 */
+    /** 비밀글 기능 사용 여부 */
     val featureSecret: Boolean,
     /** 파일 첨부 기능 사용 여부 */
     val featureFile: Boolean,

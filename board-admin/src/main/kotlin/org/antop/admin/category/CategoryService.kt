@@ -33,7 +33,8 @@ class CategoryService(
             .selectFrom(CATEGORIES)
             .where(CATEGORIES.CATEGORY_ID.eq(categoryId))
             .fetchOne()
-            ?.toDto() ?: throw IllegalArgumentException("Category not found with id: $categoryId")
+            ?.toDto()
+            ?: throw CategoryNotFoundException(categoryId)
 
     private fun CategoriesRecord.toDto() =
         CategoryDto(
