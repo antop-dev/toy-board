@@ -1,6 +1,6 @@
-package org.antop.admin.user
+package org.antop.admin.common.security
 
-import org.springframework.security.core.userdetails.User
+import org.antop.admin.user.AdminService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -14,11 +14,6 @@ class AdminUserDetailsService(
         val admin =
             adminService.findAdmin(username)
                 ?: throw UsernameNotFoundException("User not found: $username")
-        return User
-            .builder()
-            .username(admin.id)
-            .password(admin.password)
-            .roles("ADMIN")
-            .build()
+        return LoggedUser(admin.id, admin.name, admin.username, admin.password)
     }
 }

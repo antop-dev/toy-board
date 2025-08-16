@@ -15,7 +15,8 @@ class AdminService(
             .where(ADMINS.ACCOUNT_NAME.eq(accountName))
             .fetchOne { record ->
                 AdminDto(
-                    id = record.accountName,
+                    id = record.adminId!!,
+                    username = record.accountName,
                     password = record.password,
                     name = record.adminName,
                 )
