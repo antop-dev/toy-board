@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.exposed.kotlin.datetime)
     implementation(libs.exposed.spring.boot.starter)
     implementation(libs.commons.codec)
+    implementation(libs.commons.lang3)
     implementation(libs.commons.text)
     implementation(libs.commons.io)
     implementation(libs.spring.boot.starter.thymeleaf)
@@ -51,4 +52,8 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.kotlin.test.junit5)
     testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+springBoot {
+    mainClass.set("org.antop.board.BoardApplicationKt")
 }

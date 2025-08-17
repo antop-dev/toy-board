@@ -129,3 +129,7 @@ tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
     allInputsDeclared.set(true)
     dependsOn("cleanJooq") // cleanJooq task를 먼저 실행하도록 의존성 추가
 }
+
+springBoot {
+    mainClass.set("org.antop.admin.AdminApplicationKt")
+}
