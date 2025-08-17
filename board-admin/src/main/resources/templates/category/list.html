@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>게시판 관리</title>
+    <style>
+        .status-1 {
+            --tw-text-opacity: 1;
+            color: rgb(22 101 52 / var(--tw-text-opacity, 1));
+            background-color: rgb(220 252 231);
+        }
+
+        .status-2 {
+            --tw-text-opacity: 1;
+            color: rgb(153 27 27 / var(--tw-text-opacity, 1));
+            background-color: rgb(254 226 226);
+        }
+
+        .status-3 {
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+            background-color: rgb(243 244 246);
+        }
+
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <header class="mb-4">
+        <h1 class="text-3xl font-bold text-gray-900">게시판 목록</h1>
+        <p class="text-gray-500 mt-1">게시판을 조회하고 관리합니다.</p>
+    </header>
+    <section id="board-table-section">
+        <form th:action="@{/category/list.html}" method="get">
+            <div class="flex flex-col lg:flex-row justify-between items-start mb-4 gap-4">
+                <div class="flex flex-col sm:flex-row flex-wrap gap-4 w-full lg:w-auto">
+                    <!--/* 게시판명 */-->
+                    <div class="flex items-center gap-2">
+                        <label for="name-input" class="text-sm text-gray-700 whitespace-nowrap">게시판명:</label>
+                        <input type="text" name="name" id="name-input" placeholder="게시판명 검색..."
+                               th:value="${#strings.trim(param.name)}"
+                               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-40 text-sm">
+                    </div>
+                    <!--/* 상태 */-->
+                    <div class="flex items-center gap-2 w-full sm:w-auto mt-4 sm:mt-0">
+                        <label for="status-select" class="text-sm text-gray-700 whitespace-nowrap">상태:</label>
+                        <select id="status-select" name="status"
+                                class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-32 text-sm h-[38px]">
+                            <option value="">전체</option>
+                            <option value="1" th:selected="${#strings.equals(param.status, '1')}">활성화</option>
+                            <option value="2" th:selected="${#strings.equals(param.status, '2')}">비활성화</option>
+                            <option value="3" th:selected="${#strings.equals(param.status, '3')}">보관</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-2 mt-4 lg:mt-0 w-full lg:w-auto justify-end">
+                    <!--/* 등록 */-->
+                    <a class="px-3 py-2 border rounded-lg text-sm text-blue-600 hover:bg-blue-100 transition"
+                       th:href="@{/category/form.html}">등록</a>
+                    <!--/* 검색 */-->
+                    <button type="submit"
+                            class="px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 transition">검색
+                    </button>
+                    <!--/* 목록 */-->
+                    <a class="px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100 transition"
+                       th:href="@{/category/list.html}">목록</a>
+                </div>
+            </div>
+        </form>
+        <div class="overflow-x-auto">
+            <div id="no-results" class="text-center py-10 text-gray-500" th:if="${categories.isEmpty()}">
+                검색 결과가 없습니다.
+            </div>
+            <table class="min-w-full divide-y divide-gray-200" th:unless="${categories.isEmpty()}">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-[200px]">게시판명</th>
+                    <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">기능</th>
+                    <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 tracking-wider w-[80px]">상태</th>
+                    <th class="px-2 py-3 text-right text-xs font-medium text-gray-500 tracking-wider w-[90px]">글 수</th>
+                </tr>
+                </thead>
+                <tbody id="boardTableBody" class="bg-white divide-y divide-gray-200">
+                <tr th:each="category : ${categories}">
+                    <td class="px-2 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <a th:href="@{/category/form.html(id=${category?.id})}" th:text="${category.name}" class="underline">${category.name}</a>
+                    </td>
+                    <td class="px-2 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <th:block th:each="featureName : ${category.featureNames}">
+                            <span class="inline-block px-2 py-1 mr-1 text-xs font-semibold text-gray-700 bg-gray-200 rounded"
+                                  th:text="${featureName}">${featureName}</span>
+                        </th:block>
+                    </td>
+                    <td class="px-2 py-2 whitespace-nowrap text-center">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                              th:classappend="|status-${category.statusCode}|" th:text="${category.statusName}">${category.statusName}</span>
+                    </td>
+                    <td class="px-2 py-2 whitespace-nowrap text-sm text-gray-500 text-right">1,000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</th:block>
+</body>
+</html>
