@@ -1,6 +1,6 @@
 package org.antop.admin.common.security
 
-import org.antop.admin.user.AdminService
+import org.antop.admin.user.service.AdminService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

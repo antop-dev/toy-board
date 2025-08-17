@@ -1,4 +1,4 @@
-package org.antop.admin.dto
+package org.antop.admin.user.dto
 
 data class AdminDto(
     /** 아이디 (계정명) */
