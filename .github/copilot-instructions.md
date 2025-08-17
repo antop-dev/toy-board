@@ -1,1 +1,1 @@
-When performing a code review, respond in Korean.
+For all Copilot code review interactions, provide all feedback and suggestions in Korean.
