@@ -19,6 +19,6 @@ class Admin(
     var name: String,
 ) {
     @Id
-    @Column(name = "admin_Id")
+    @Column(name = "admin_id")
     val id: Long = 0
 }

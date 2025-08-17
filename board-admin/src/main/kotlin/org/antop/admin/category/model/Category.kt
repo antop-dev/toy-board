@@ -32,7 +32,7 @@ class Category(
     /** 댓글 기능 사용 여부 */
     @Column(name = "feature_comment")
     var featureComment: Boolean = true,
-    /** 투표(좋아요, 싫어요) 기능 사요 여부 */
+    /** 투표(좋아요, 싫어요) 기능 사용 여부 */
     @Column(name = "feature_vote")
     var featureVote: Boolean = true,
     /** 공유 기능 사용 여부 */
