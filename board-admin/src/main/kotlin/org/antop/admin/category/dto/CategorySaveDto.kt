@@ -1,4 +1,4 @@
-package org.antop.admin.category
+package org.antop.admin.category.dto
 
 data class CategorySaveDto(
     /** 카테고리명 */

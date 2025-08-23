@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.sonarqube)
-    alias(libs.plugins.jooq) apply false
 }
 
 allprojects {

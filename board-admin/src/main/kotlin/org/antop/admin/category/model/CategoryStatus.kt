@@ -1,4 +1,4 @@
-package org.antop.admin.category
+package org.antop.admin.category.model
 
 enum class CategoryStatus(
     val code: String,
@@ -13,6 +13,8 @@ enum class CategoryStatus(
         /**
          * 코드값으로 상태 찾기
          */
-        fun from(code: String): CategoryStatus? = entries.firstOrNull { it.code == code }
+        fun from(code: String) =
+            entries.firstOrNull { it.code == code }
+                ?: throw IllegalArgumentException("존재하지 않는 카테고리 상태 코드입니다: $code")
     }
 }
